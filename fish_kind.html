@@ -1,0 +1,407 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>恆春海洋養殖股份有限公司</title>
+    <meta name="keywords" content="海洋,環保,自然,恆春養殖,恆春海洋養殖,屏東海洋養殖漁業,海金鯧,海鱺">
+    <meta name="description" content="恆春海洋養殖股份有限公司主要是從事高科技現代化的海上箱網養殖漁業，以生產各式高經濟價值魚類為主。目前漁場設有耐波浪及抗流速的外海可沉式箱網，以高效率、高效能的方式來生產高品質的水產品。海金鯧與海鱺為目前本漁場主要的養殖魚種。網站：http://www.seafarm.com.tw/漁場位址：屏東縣車城鄉海口村外 海服務專線：0800-001300 ">
+    <meta name="copyright" content="Renwu">
+    <meta name="author" content="恆春海洋養殖股份有限公司">
+
+    <!-- Icon -->
+    <link rel="icon" href="image/favcon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="image/favcon.ico">
+
+    <!-- Data table CSS -->
+    <!-- CSS Main -->
+    <link href="css/style.css" rel="stylesheet" />
+    <!-- ================== CSS notify樣式 ================== -->
+    <link href="css/notify/notyf.min.css" rel="stylesheet" />
+    <!-- ================== CSS sweetalert2 ================== -->
+    <link href="css/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <!-- ================== CSS 功能樣式 ================== -->
+    <link href="css/tableTools/jquery.dataTables.min.css" rel="stylesheet" />
+</head>
+
+
+<body>
+    <!--Preloader-->
+    <div class="preloader-it">
+        <div class="la-anim-1"></div>
+    </div>
+    <!--/Preloader-->
+    <div class="wrapper">
+        <!-- Top Menu Items -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <a id="toggle_nav_btn" class="toggle-left-nav-btn inline-block mr-20 pull-left" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+            <a href="index-2.html"><img class="brand-img pull-left" src="image/logo.png" alt="brand" /></a>
+            <ul class="nav navbar-right top-nav pull-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle pr-0" data-toggle="dropdown">歡迎登入系統  <img src="image/user.png" alt="user_auth" class="user-auth-img img-circle" /><span class="user-online-status"></span></a>
+                    <ul class="dropdown-menu user-auth-dropdown" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-power-off"></i> 登出</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!--Top Menu Items-->
+        <!--Left Sidebar Menu-->
+        <div class="fixed-sidebar-left">
+            <ul class="nav navbar-nav side-nav nicescroll-bar">
+                <li>
+                    <a class="active" href="#" data-toggle="collapse" data-target="#pages_dr"><i class="icon-home mr-10"></i>首頁</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#feed_dr"><i class="icon-basket-loaded mr-10"></i>投餵管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="feed_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="">新增紀錄</a>
+                        </li>
+                        <li>
+                            <a href="">上次紀錄</a>
+                        </li>
+                        <li>
+                            <a href="">修改刪除</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#transpool_dr"><i class="icon-grid mr-10"></i>轉池管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="transpool_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="">轉魚功能</a>
+                        </li>
+                        <li>
+                            <a href="">分養功能</a>
+                        </li>
+                        <li>
+                            <a href="">出魚功能</a>
+                        </li>
+                        <li>
+                            <a href="">移池功能</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#feed_dr"><i class="icon-heart mr-10"></i>添加劑管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="feed_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="">新增紀錄</a>
+                        </li>
+                        <li>
+                            <a href="">上次紀錄</a>
+                        </li>
+                        <li>
+                            <a href="">修改刪除</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><i class="icon-map mr-10"></i>後臺管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="ui_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#newfish_dr">入魚作業<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                            <ul id="newfish_dr" class="collapse">
+                                <li>
+                                    <a href="">新增紀錄</a>
+                                </li>
+                                <li>
+                                    <a href="">上次紀錄</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="">飼料</a>
+                        </li>
+                        <li>
+                            <a href="">添加劑</a>
+                        </li>
+                        <li>
+                            <a href="">魚苗供應商</a>
+                        </li>
+                        <li>
+                            <a href="">魚池管理</a>
+                        </li>
+                        <li>
+                            <a href="">日報表</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="ui_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="">日報表</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!--Left Sidebar Menu-->
+        <!-- Main Content -->
+        <div class="page-wrapper">
+            <div class="container-fluid">
+                <!-- Title -->
+                <div class="row heading-bg  bg-blue">
+
+                    <!--Breadcrumb-->
+                    <ol class="breadcrumb">
+                        <li><a href="index.html">首頁</a></li>
+                        <li><a href="#"><span>XXX pages</span></a></li>
+                        <li class="active"><span>新增魚種</span></li>
+                    </ol>
+                    <!--Breadcrumb-->
+                </div>
+                <!-- /Title -->
+                <!-- Row -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default card-view">
+                            <div class="panel-wrapper collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <div class="form-wrap">
+                                                <form class="form-horizontal" id="supplier_insert" method="post">
+                                                    <div class="form-group">
+                                                        <label for="supplier_name" class="col-sm-3 control-label">魚種名稱：</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                                <input type="text" class="form-control" id="fish_kind_name" placeholder="魚種名稱" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <div class="col-sm-offset-3 col-sm-9">
+                                                            <button type="submit" class="btn btn-success ">新增</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Row -->
+                <!-- Row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default card-view">
+                            <div class="panel-heading">
+                                <div class="pull-left">
+                                    <h6 class="panel-title txt-dark">data Table</h6>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="panel-wrapper collapse in">
+                                <div class="panel-body">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <table id="datable_1" class="table table-hover display  pb-30">
+                                                <thead>
+                                                    <tr>
+                                                        <th>魚種編號</th>
+                                                        <th>魚種名稱</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="fish_kind_view"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Row -->
+                <!-- Footer -->
+                <footer class="footer container-fluid pl-30 pr-30">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <a href="http://mportal.npust.edu.tw/bin/home.php" class="brand mr-30"><img src="image/logo-sm.png" alt="logo" /></a>
+                        </div>
+                        <div class="col-sm-7 text-right">
+                            <p>2017 &copy; 國立屏東科技大學資訊管理系</p>
+                        </div>
+                    </div>
+                </footer>
+                <!-- /Footer -->
+            </div>
+            <!-- /Main Content -->
+        </div>
+    </div>
+    <!-- /#wrapper -->
+    <!-- 彈跳視窗開始  -->
+    <div class="modal fade" id="jump-fish-kind" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">魚種名稱修改</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <form class="form-horizontal" id="supplier_insert" method="post">
+                            <div class="form-group">
+                                <label for="supplier_name" class="col-sm-5 control-label">魚種名稱：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="icon-user"></i></div>
+                                        <input type="text" class="form-control" id="modify_name" placeholder="魚種名稱" required>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" id="modify_val" value="修改" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 彈跳視窗結束  -->
+    <!-- JavaScript -->
+    <!-- jQuery -->
+    <script src="javascript/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="javascript/bootstrap.min.js"></script>
+    <!-- Data table JavaScript -->
+    <!-- Slimscroll JavaScript -->
+    <script src="javascript/jquery.slimscroll.js"></script>
+    <!-- Fancy Dropdown JS -->
+    <script src="javascript/dropdown-bootstrap-extended.js"></script>
+    <!-- Init -->
+    <script src="javascript/init.js"></script>
+    <!-- ================== JS notify控制 ================== -->
+    <script src="javascript/notify/notyf.min.js"></script>
+    <!-- ================== JS cookie ================== -->
+    <script src="javascript/cookie/js.cookie-2.1.3.min.js"></script>
+    <!-- ================== JS sweetalert2 ================== -->
+    <script src="javascript/sweetalert2/sweetalert2.min.js"></script>
+    <script src="javascript/bootstrap-select/bootstrap-select.min.js"></script>
+    <!-- Data table JavaScript -->
+    <script src="javascript/jquery.dataTables.min.js"></script>
+    <script src="javascript/dataTables-data.js"></script>
+    <script>
+        var notyf = new Notyf();//notyf.js宣告使用
+        /**表格載入資料**/
+        $.ajax({
+            url: 'database/fish_kind/fish_kind_view.ashx',
+            type: 'post',
+            dataType: 'json',
+            async: false,//啟用同步請求
+            success: function (Supplier_Json) {
+                var cssString = "";
+                for (var index in Supplier_Json) {
+                    cssString += '<tr data-toggle="modal" data-target="#jump-fish-kind" >' +
+                                    '<td>' + Supplier_Json[index].Fish_kind_id + '</td>        ' +
+                                    '<td>' + Supplier_Json[index].kind_name + '</td>   ' +
+                                    '</tr>                       '
+                }
+                $("#fish_kind_view").html(cssString);
+            },
+            error: function (e) {
+                notyf.alert('伺服器錯誤,無法載入' + e);
+            }
+        });
+        $(document).ready(function () {
+            /**供應商新增**/
+            $("#supplier_insert").submit(function (e) {
+                e.preventDefault();
+                //alert($("#supplier_classification").val() + "," + $("#supplier_sname").val() + "," + $("#supplier_name").val())//supplier_classification    supplier_sname  supplier_name
+                if ($("#supplier_classification").val() != '') {
+                    swal({
+                        title: '確認新增此魚種？',
+                        text: "新增後將無法刪除",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        allowOutsideClick: false ,//不可點背景關閉
+                        confirmButtonText: '確認！',
+                        cancelButtonText: '取消'
+                    }).then(function (isConfirm) {
+                        if (isConfirm) {
+                            $.ajax({
+                                type: 'post',
+                                url: 'database/fish_kind/fish_kind_insert.ashx',
+                                async: false,
+                                data: {
+                                    fish_kind_name: $("#fish_kind_name").val()
+                                },
+                                success: function (e) {
+                                    if (e == "success") {
+                                        swal({
+                                            type: 'success',
+                                            title: '新增供應商成功!',
+                                            allowOutsideClick: false //不可點背景關閉
+                                        }).then(function () {
+                                            location.reload();
+                                        })
+                                    } else {
+                                        notyf.alert('新增失敗');
+                                    }
+                                },
+                                error: function (e) {
+                                    notyf.alert('伺服器錯誤,無法載入' + e);
+                                }
+                            });
+                        }
+                    })
+                } else {
+                    notyf.alert('請選擇分類！');
+                }
+            });
+        });
+        /**bootstrap modal 載入資料**/
+        $('table > tbody > tr').click(function () {
+            $("#modify_name").val($.trim($(this).find("td:eq(1)").text()))
+            var id = $.trim($(this).find("td:eq(0)").text())
+            /**修改**/
+            $("#modify_val").click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'database/fish_kind/fish_kind_modify.ashx',
+                    type: 'post',
+                    data: {
+                        fish_kind_name: $("#modify_name").val(),
+                        modify_id: id
+                    },
+                    async: false,//啟用同步請求
+                    success: function (event) {
+                        if (event === "success") {
+                            swal({
+                                type: 'success',
+                                title: '修改成功!',
+                                allowOutsideClick: false //不可點背景關閉
+                            }).then(function () {
+                                location.reload();
+                            })
+                        } else {
+                            notyf.alert('修改失敗');
+                        }
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
