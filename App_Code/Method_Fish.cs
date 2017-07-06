@@ -444,15 +444,7 @@ public class Method_Fish
         return dt;
     }
     #endregion
-    #region 連動供應商的添加物名稱顯示(翔)
-    public DataTable MedicinePurchaseName_View(string a)
-    {
-        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Medicine where Fish_company_id =@Fish_company_id ");
-        cmd.Parameters.Add("@Fish_company_id", SqlDbType.Int).Value = a;
-        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
-        return dt;
-    }
-    #endregion
+ 
     #region 更新廠商時間(Renwu)
     public string company_time(string a)
     {
