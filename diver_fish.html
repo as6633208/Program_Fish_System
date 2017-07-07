@@ -367,6 +367,7 @@
         }
         var Page_Pool_id = $.UrlParam('Pool_id') ? $.UrlParam('Pool_id') : -1; //現在頁數
         var Fish_Fish_company_id = $.UrlParam('Fish_company_id') ? $.UrlParam('Fish_company_id') : -1; //現在頁數
+        alert("Fish_Fish_company_id = " + Fish_Fish_company_id.toString());
         if (Page_Pool_id == -1) {
             notyf.alert('伺服器錯誤,無法載入池號');
         } else {
@@ -438,6 +439,7 @@
                     notyf.alert('伺服器錯誤,無法載入魚群資料' + e);
                 }
             });
+           
             //供應商ajax
             $.ajax({
                 url: 'database/supplier/supplier_search.ashx',
