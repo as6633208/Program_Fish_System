@@ -444,7 +444,15 @@ public class Method_Fish
         return dt;
     }
     #endregion
- 
+    #region 供應商查詢(sen)
+    public DataTable Supplier_Search(string Fish_company_id)
+    {
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Fish_company WHERE Fish_company_id = @Fish_company_id");
+        cmd.Parameters.Add("@Fish_company_id", SqlDbType.Int, 50).Value = Fish_company_id;
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;
+    }
+    #endregion 
     #region 更新廠商時間(Renwu)
     public string company_time(string a)
     {
