@@ -257,11 +257,12 @@
             if (r != null) return unescape(r[2]); return null;
         }
         var Page_Pool_id = $.UrlParam('Pool_id') ? $.UrlParam('Pool_id') : -1; //現在頁數
+
         var cssString = "";
-        cssString += '<th style="width:30%;"><a href="feed_insert.html?Pool_id=' + Page_Pool_id + '" class="btn" style="background-color: white; border: 2px solid #4CAF50; color: black; padding: 96px 96px;text-align: center; text-decoration: none;display: inline-block;font-size: 40px;margin: 4px 2px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">投餵 </a></th>'
-        cssString += '<th style="width:30%;"><a href="diver_fish.html?Pool_id=' + Page_Pool_id + '" class="btn" style="background-color: white; border: 2px solid #008CBA; color: black; padding: 96px 96px;text-align: center; text-decoration: none;display: inline-block;font-size: 40px;margin: 4px 2px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">分養 </a></th>'
-        cssString += '<th style="width:30%;"><a href="move_fish.html?Pool_id=' + Page_Pool_id + '" class="btn" style="background-color: white; border: 2px solid #555555; color: black; padding: 96px 96px;text-align: center; text-decoration: none;display: inline-block;font-size: 40px;margin: 4px 2px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">轉池/移池 </a></th>'
-        cssString += '<th style="width:30%;"><a href="Info.html?Pool_id=' + Page_Pool_id + '" class="btn" style="background-color: white; border: 2px solid #f44336; color: black; padding: 96px 96px;text-align: center; text-decoration: none;display: inline-block;font-size: 40px;margin: 4px 2px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">出魚 (從缺) </a></th>'
+        cssString += '<th style="width:30%;"><a href="feed_insert.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="btn" style="background-color: white; border: 2px solid #4CAF50; color: black; padding: 96px 96px;text-align: center; text-decoration: none;display: inline-block;font-size: 40px;margin: 4px 2px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">投餵 </a></th>'
+        cssString += '<th style="width:30%;"><a href="diver_fish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="btn" style="background-color: white; border: 2px solid #008CBA; color: black; padding: 96px 96px;text-align: center; text-decoration: none;display: inline-block;font-size: 40px;margin: 4px 2px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">分養 </a></th>'
+        cssString += '<th style="width:30%;"><a href="move_fish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="btn" style="background-color: white; border: 2px solid #555555; color: black; padding: 96px 96px;text-align: center; text-decoration: none;display: inline-block;font-size: 40px;margin: 4px 2px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">轉池/移池 </a></th>'
+        cssString += '<th style="width:30%;"><a href="Info.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="btn" style="background-color: white; border: 2px solid #f44336; color: black; padding: 96px 96px;text-align: center; text-decoration: none;display: inline-block;font-size: 40px;margin: 4px 2px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">出魚 (從缺) </a></th>'
         $("#pool_view").html(cssString);
         //alert(Page_Pool_id); //確認Pool_ID
         if (Page_Pool_id == -1) {
@@ -333,6 +334,22 @@
                 },
                 error: function (e) {
                     notyf.alert('伺服器錯誤,無法載入魚群資料' + e);
+                }
+            });
+            var Fish_Fish_company_id = $.UrlParam('Fish_company_id') ? $.UrlParam('Fish_company_id') : -1; //現在頁數
+            alert("Fish_Fish_company_id = " + Fish_Fish_company_id.toString());
+            //供應商ajax
+            $.ajax({
+                url: 'database/supplier/supplier_search.ashx',
+                type: 'post',
+                dataType: 'json',
+                data: { Fish_company_id: Fish_Fish_company_id },
+                async: false,//啟用同步請求
+                success: function (Fish_Json) {
+                    Fish_company_company_abbreviation = Fish_Json[0]["company_abbreviation"];
+                },
+                error: function (e) {
+                    notyf.alert('伺服器錯誤,無法載入供應商簡稱' + e);
                 }
             });
 
@@ -435,6 +452,7 @@
             });
         }
         /*來源批號結束*/
+
     </script>
 </body>
 </html>

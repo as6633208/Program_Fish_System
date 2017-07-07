@@ -651,4 +651,19 @@ public class Method_Fish
     }
     #endregion
     #endregion
+    #region 魚池詳細
+    #region 魚池查供應商
+    public DataTable Supplier_ID_Fish()
+    {
+        //1. Pool表單、Fish_detail表單 >> Fish_detail_id   
+        //2. Fish_detail表單、Fish表單 >> Fish_id
+        //3. Fish表單 >> Fish_company_id
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Pool INNER JOIN Fish_detail ON (Pool.Fish_detail_id = Fish_detail.Fish_detail_id)
+                                        LEFT JOIN Fish ON (Fish_detail.Fish_id = Fish.Fish_id)
+                                        LEFT JOIN Fish_company ON (Fish.Fish_company_id = Fish_company.Fish_company_id)");
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;
+    }
+    #endregion
+    #endregion
 }

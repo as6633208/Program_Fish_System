@@ -366,6 +366,7 @@
             if (r != null) return unescape(r[2]); return null;
         }
         var Page_Pool_id = $.UrlParam('Pool_id') ? $.UrlParam('Pool_id') : -1; //現在頁數
+        var Fish_Fish_company_id = $.UrlParam('Fish_company_id') ? $.UrlParam('Fish_company_id') : -1; //現在頁數
         if (Page_Pool_id == -1) {
             notyf.alert('伺服器錯誤,無法載入池號');
         } else {
