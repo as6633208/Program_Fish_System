@@ -139,9 +139,8 @@
                 <div class="col-sm-12">
                     <table>
                         <tbody>
-                            <tr>
-                                <td style="word-break:break-all" id="pool_view"></td>
-
+                            <tr class="col-sm-12">
+                                <td align="left" valign="" id="pool_view"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -184,7 +183,7 @@
             success: function (Pool_Json) {
                 var cssString = "";
                 for (var index in Pool_Json) {
-                    cssString += '<a href="Info.html?Pool_id=' + Pool_Json[index].Pool_id + '&Fish_company_id=' + Pool_Json[index].Fish_company_id + '" class="btn" style="background-color: white; border: 2px solid #4CAF50; color: black; padding: 84px 84px;text-align: center; text-decoration: none;display: inline-block;font-size: 60px;margin: 4px 2px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">' + Pool_Json[index].Pool_id  + '</a>'
+                    cssString += '<a href="Info.html?Pool_id=' + Pool_Json[index].Pool_id + '&Fish_company_id=' + Pool_Json[index].Fish_company_id + '" class="btn" style="background-color: white; border: 4px solid #4CAF50; color: black; padding: 84px 84px;text-align: center; text-decoration: none;display: inline-block;font-size: 60px;margin:5px;-webkit-transition-duration: 0.4s; transition-duration: 0.4s; cursor: pointer;">' + Pool_Json[index].Pool_id  + '</a>'
                 }
                 $("#pool_view").html(cssString);
             },
