@@ -337,6 +337,21 @@
                 }
             }); 
        
+            //供應商ajax
+            $.ajax({
+                url: 'database/supplier/supplier_search.ashx',
+                type: 'post',
+                dataType: 'json',
+                data: { Fish_company_id: Fish_Fish_company_id },
+                async: false,//啟用同步請求
+                success: function (Fish_Json) {
+                    Fish_company_company_abbreviation = Fish_Json[0]["company_abbreviation"];
+                },
+                error: function (e) {
+                    notyf.alert('伺服器錯誤,無法載入供應商簡稱' + e);
+                }
+            });
+
             //日期操作 產卵日
             var Spawning_date = new Date(Fish_Spawning_date);
             Spawning_date_MM = ((Spawning_date.getMonth() + 1) < 10 ? '0' : '') + (Spawning_date.getMonth() + 1);//補0
