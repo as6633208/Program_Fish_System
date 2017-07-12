@@ -135,18 +135,28 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-12 col-xs-12">
-
                                             <div class="form-wrap">
                                                 <form class="form-horizontal" id="feed_insert" method="post">
-                                                    <!-- 餵養飼料資訊 -->
+                                                    <!-- 出魚資訊 -->
                                                     <div class="form-group">
                                                         <label for="out_num" class="col-sm-3 control-label">出魚數量：</label>
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                                <input type="text" class="form-control" id="Fodder_number" placeholder="隻數" required>
+                                                                <input type="text" class="form-control" id="Out_number" placeholder="隻數" required>
                                                             </div>
                                                         </div>                                                     
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputweb_31" class="col-sm-3 control-label">產卵日期</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group date" id="datepicker-disabled-past1" data-date-format="yyyy-mm-dd">
+                                                                    <input type="text" class="form-control" placeholder="請選擇日期" id="into_time1" />
+                                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="form-group mb-0">
                                                         <div class="col-sm-offset-3 col-sm-9">
@@ -200,11 +210,19 @@
     <!-- ================== JS sweetalert2 ================== -->
     <script src="javascript/sweetalert2/sweetalert2.min.js"></script>
     <script src="javascript/bootstrap-select/bootstrap-select.min.js"></script>
+    <!-- ================== JS select ================== -->
+    <script src="javascript/bootstrap-select/bootstrap-select.min.js"></script>
+    <!-- ================== JS datetimepicker ================== -->
+    <script src="javascript/datetimepicker/form-plugins.demo.min.js"></script>
+    <script src="javascript/datetimepicker/bootstrap-datepicker.js"></script>
     <!-- Data table JavaScript -->
     <script src="javascript/jquery.dataTables.min.js"></script>
     <script src="javascript/dataTables-data.js"></script>
     <script>
         var notyf = new Notyf();//notyf.js宣告使用
+        $(document).ready(function () {
+            FormPlugins.init();           
+        });
        $(document).ready(function () {
            /**出魚紀錄**/
             $("#feed_insert").submit(function (e) {

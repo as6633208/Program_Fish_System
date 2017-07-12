@@ -15,11 +15,14 @@ public class outfish_insert : IHttpHandler {
             context.Response.Write("Error");
 
         } else {
-            string a = context.Request.Form["Fish_company_id"].ToString();
+            string Pool_id = context.Request.Form["Fish_company_id"].ToString();
+            string number = context.Request.Form["Fish_company_id"].ToString();
+            string Fish_AVGweight = context.Request.Form["Fish_company_id"].ToString();
+            string Fish_detail_id = context.Request.Form["Fish_company_id"].ToString();
+            string Outside_date = context.Request.Form["Fish_company_id"].ToString();
             Method_Fish method = new Method_Fish();
-            DataTable re_ = method.MedicinePurchaseName_View(a);
-            string str_json = JsonConvert.SerializeObject(re_, Formatting.Indented);
-            context.Response.Write(str_json);//回傳資料
+            string re_ = method.Outfish_Insert(Pool_id,number,Fish_AVGweight,Fish_detail_id,Outside_date);          
+            context.Response.Write(re_);//回傳資料
         }
     }
  

@@ -674,4 +674,23 @@ public class Method_Fish
     }
     #endregion
     #endregion
+    #region 出魚操作
+    public string Outfish_Insert(string Pool_id, string number, string Fish_AVGweight, string Fish_detail_id, string Outside_date) {
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"INSERT INTO Out
+                            (Pool_id,number,Fish_AVGweight,Fish_detail_id,,Outside_date) VALUES
+                        (@Pool_id,@number,@Fish_AVGweight,@Fish_detail_id,@Outside_date)");
+        cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 50).Value = Pool_id;
+        cmd.Parameters.Add("@number", SqlDbType.Int).Value = number;
+        cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 50).Value = Fish_AVGweight;
+        cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value =Fish_detail_id;
+        cmd.Parameters.Add("@Fish_detail_id", SqlDbType.DateTime2).Value = Outside_date;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+
+
+        return "a";
+    }
+    #endregion
+
 }
