@@ -358,7 +358,9 @@
                                                 error: function (e) {
                                                     notyf.alert('123伺服器錯誤，無法載入')
                                                 }
-                                                })
+                                            })
+
+                                            //餵養記錄新增
                                             $.ajax({
                                                 url: 'database/feed/feed_insert.ashx',
                                                 type: 'post',
