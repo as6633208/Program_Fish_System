@@ -7,10 +7,10 @@ public class feed_insert : IHttpHandler {
 
     public void ProcessRequest (HttpContext context) {
         string Fodder_id = context.Request.Form["Fodder_id"].ToString();
-        string Pool_id = "A1";
-        string Fish_detail_id = "1";
+        string Pool_id =context.Request.Form["Pool_id"].ToString();
+        string Fish_detail_id = context.Request.Form["Fish_detail_id"].ToString();
         string Fodder_number = context.Request.Form["Fodder_number"].ToString();
-        string date = DateTime.Now.ToShortDateString();
+        string date = context.Request.Form["data"].ToString();
         string Bait = context.Request.Form["Bait"].ToString();
         string Medicine_id =context.Request.Form["Medicine_id"].ToString();
         string medicine_number = context.Request.Form["medicine_number"].ToString();

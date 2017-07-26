@@ -505,6 +505,7 @@ public class Method_Fish
         cmd.Parameters.Add("@number", SqlDbType.Int).Value = number;
         cmd.Parameters.Add("@Move_date", SqlDbType.DateTime2).Value = into_time2;
         cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
+
         //int check_num = Fish.SqlHelper.cmdCheck(cmd);
         //result = (check_num != 0) ? "success" : "fail";
         //if (result == "success") {
