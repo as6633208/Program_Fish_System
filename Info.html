@@ -365,6 +365,7 @@
         var Fish_company_company_abbreviation = -1;//魚群供應商簡稱 5
         var Fish_Fish_kind_id = -1;//魚種編號
         var Fush_Pool_Pool_number = -1;//魚池數量
+        var Fish_detail_number = -1;//魚群細節編號數量
         //抓網址變數
         $.UrlParam = function (name) {
             //宣告正規表達式
@@ -384,8 +385,9 @@
         cssString += '<a href="feed_insert.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button1">投餵 </a>'
         cssString += '<a href="diver_fish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button2" >分養 </a>'
         cssString += '<a href="move_fish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button3" >轉池/移池 </a>'
-        cssString += '<a href="outfish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button4" >出魚  </a>'
+        cssString += '<a href="outfish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + ' "class="button button4" >出魚  </a>'
         cssString += '<a href="outfish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button5" >測量  </a>'
+        cssString += '<input type="button" id="out_all" class="button button5" value="清空魚池">'
         $("#pool_view").html(cssString);
         //alert(Page_Pool_id); //確認Pool_ID
         if (Page_Pool_id == -1) {
@@ -435,6 +437,7 @@
                     Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
                     Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
                     Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
+                    Fish_detail_number = Fish_detail_Json[0]["number"];
                 },
                 error: function (e) {
                     notyf.alert('伺服器錯誤,無法載入魚群細節' + e);
@@ -572,9 +575,98 @@
                     notyf.alert('伺服器錯誤,無法載入魚種' + e);
                 }
             });
-        }
+        }        
         /*來源批號結束*/
+        //清空魚池         
+            /**新增魚種**/
+            $("#out_all").click(function (e) {
+                e.preventDefault();   
+                    swal({
+                        title: "確認清空「" + Page_Pool_id + "池」?將會紀錄損失" + Fush_Pool_Pool_number + "隻魚",
+                        text: "清空後將無法修改",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        allowOutsideClick: false,//不可點背景關閉
+                        confirmButtonText: '確認！',
+                        cancelButtonText: '取消'
+                    }).then(function (isConfirm) {
+                        if (isConfirm) {
+                            //新增損失紀錄
+                            $.ajax({
+                                type: 'post',
+                                url: 'database/measuring/Inventory.ashx',
+                                async: false,
+                                data: {
+                                    Pool_id: Page_Pool_id,                                  
+                                    Fish_detail_id: Fish_detail_id,
+                                    number: Fush_Pool_Pool_number
+                                },
+                                success: function (e) {
+                                    if (e == "success") {
+                                       console.log("success")
+                                    } else {
+                                        console.log("Inventory error")
+                                    }
+                                },
+                                error: function (e) {
+                                    notyf.alert('伺服器錯誤,無法載入' + e);
+                                }
+                            });
+                            //更新魚群細節
+                            $.ajax({
+                                type: 'post',
+                                url: 'database/Fish_detail/Fish_detail_update.ashx',
+                                async: false,
+                                data: {                             
+                                    Fish_detail_id: Fish_detail_id,
+                                    number:Fish_detail_number- Fush_Pool_Pool_number
+                                },
+                                success: function (e) {
+                                    if (e == "success") {
+                                        console.log("success")
+                                    } else {
+                                        console.log("Inventory error")
+                                    }
+                                },
+                                error: function (e) {
+                                    notyf.alert('伺服器錯誤,無法載入' + e);
+                                }
+                            });
 
+                            //更新魚池狀態
+                            $.ajax({
+                                type: 'post',
+                                url: 'database/pool/pool_update.ashx',
+                                async: false,
+                                data: {
+                                    Pool_id: Page_Pool_id,
+                                    Pool_status: 'false',
+                                    number:'0',
+                                    Fish_detail_id: '0'                             
+                                },
+                                success: function (e) {
+                                    if (e == "success") {
+                                        swal({
+                                            type: 'success',
+                                            title: '清空魚池成功!',
+                                            allowOutsideClick: false //不可點背景關閉
+                                        }).then(function () {
+                                            location.reload();
+                                        })
+                                    } else {
+                                        notyf.alert('清空魚池失敗');
+                                    }
+                                },
+                                error: function (e) {
+                                    notyf.alert('伺服器錯誤,無法載入' + e);
+                                }
+                            });
+                           
+                        }
+                    })
+                });        
     </script>
 </body>
 

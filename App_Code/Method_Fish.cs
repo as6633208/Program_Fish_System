@@ -154,7 +154,7 @@ public class Method_Fish
         return result;
     }
     #endregion
-    #region 新增損益紀錄(建)//尚未使用
+    #region 新增損益紀錄(建)
     public string Inventory(string a, int b, int c, int d, string e)
     {
         //a=池編號 b=魚池細節編號 c=分養池加總的數量 d=被分養池原本數量 e日期
@@ -186,7 +186,7 @@ public class Method_Fish
         return result;
     }
     #endregion
-    #region 測量後更新魚池資料(建)
+    #region 測量後更新魚群細節資料(建)
     public string Measuring_UP_FishDetail(int Fish_detail_id, string Fish_AVGweight, int number)
     {
         string result = "";
@@ -430,6 +430,7 @@ public class Method_Fish
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value = Fish_detail_id;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
+        
 
     }
     #endregion
