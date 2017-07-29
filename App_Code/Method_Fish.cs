@@ -574,6 +574,17 @@ public class Method_Fish
         return result;
     }
     #endregion
+    #region 餵食資料查詢
+    public DataTable feed_view(string Pool_id, string Fish_detail_id)
+    {
+  
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Feed  WHERE (Pool_id = @Pool_id) AND ( Fish_detail_id=@Fish_detail_id)");
+        cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
+        cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 50).Value = Fish_detail_id;
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;  
+    }
+    #endregion
     #endregion
     #region 魚群操作(sen)
     #region 魚群細節查詢(sen)

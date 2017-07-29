@@ -295,6 +295,38 @@
                         </div>
                     </div>
                 </div>
+                <!---Table--->
+                     <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default card-view">
+                            <div class="panel-wrapper collapse in">
+                                <div class="panel-body">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <table id="datable_1" class="table table-hover display  pb-30">
+                                                <thead>
+                                                    <tr>
+                                                        <th>飼料名稱</th>
+                                                        <th>餵食數量</th>
+                                                        <th>添加物名稱</th>
+                                                        <th>使用數量</th>
+                                                        <th>生餌</th>
+                                                        <th>紀錄日期</th>
+                                                        <th>刪除</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="supplier_view"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <!---Table--->
+
                 <!-- Footer -->
                 <footer class="footer container-fluid pl-30 pr-30">
                     <div class="row">
@@ -355,7 +387,13 @@
         var Fish_company_company_abbreviation = -1;//魚群供應商簡稱 5
         var Fish_Fish_kind_id = -1;//魚種編號
         var Fush_Pool_Pool_number = -1;//魚池數量
+        var feed_id = '';//catch feed_id
+        var medicine_id = '';//catch medicine_id
+        var feed_name = '';//catch feed name
+        var medicine_name = '';//catch maeicine_name
+        var notyf = new Notyf();//notyf.js宣告使用
         //抓網址變數
+      
         $.UrlParam = function (name) {
             //宣告正規表達式
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -575,12 +613,39 @@
             });
             /*來源批號結束*/
         }
-        var feed_id = '';//catch feed_id
-        var medicine_id = '';//catch medicine_id
-        var feed_name = '';//catch feed name
-        var medicine_name = '';//catch maeicine_name
-        var notyf = new Notyf();//notyf.js宣告使用
-       $(document).ready(function () {
+        //表格資料載入
+        $.ajax({
+            url: 'database/feed/feed_select.ashx',
+            type: 'post',
+            dataType: 'json',
+            async: false,//啟用同步請求
+            data: {
+                Pool_id: Page_Pool_id,
+                Fish_detail_id: Fish_detail_id
+            },
+            success: function (feed_json) {
+                var cssString = "";             
+                for (var index in feed_json) {
+                    cssString +=    '<tr>'+
+                                    '<td>' + feed_json[index].Fodder_id + '</td>        ' +
+                                    '<td>' + feed_json[index].Fodder_number + '</td>         ' +
+                                    '<td>' + feed_json[index].Medicine_id + '</td>           ' +
+                                    '<td>' + feed_json[index].medicine_number + '</td>       ' +
+                                    '<td>' + feed_json[index].Bait + '</td>                  ' +
+                                    '<td>' + feed_json[index].date + '</td>                  ' +
+                                    '<td><input type="button" id="del" name="' + feed_json[index].Feed_id + '" value="刪除""></td> '+
+                                    '</tr>'
+                }
+                $("#supplier_view").html(cssString);
+            },
+            error: function (e) {
+                notyf.alert('伺服器錯誤,無法載入' + e);
+            }
+        });
+        $("#del").click(function (e) {
+            console.log($("#del").name)
+        })
+       $(document).ready(function() {
             /**投餵紀錄新增**/
             $("#feed_insert").submit(function (e) {
                 e.preventDefault();
