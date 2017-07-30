@@ -137,8 +137,8 @@ public class Method_Fish
         cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
         cmd.Parameters.Add("@date", SqlDbType.DateTime2, 7).Value = date;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
-        result = (check_num != 0) ? "success" : "fail";
-        //抓取原本的數量      
+        result = (check_num != 0) ? "success" : "fail";        
+        //抓取原本的數量 
         SqlCommand cmd2 = new SqlCommand(@"SELECT Pool_number From Pool WHERE Pool_id = @Pool_id");
         cmd2.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd2);
@@ -151,7 +151,7 @@ public class Method_Fish
         }
         //更新魚群細節資料
         Measuring_UP_FishDetail(Fish_detail_id, Fish_AVGweight, number);
-        return result;
+       return result;   
     }
     #endregion
     #region 新增損益紀錄(建)
@@ -569,6 +569,18 @@ public class Method_Fish
             WHERE (Medicine_id = @Medicine_id)");
         cmd.Parameters.Add("@Medicine_id", SqlDbType.Int).Value = Medicine_id;
         cmd.Parameters.Add("@number", SqlDbType.Int).Value = number;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+        return result;
+    }
+    #endregion
+    #region 餵食紀錄刪除
+    public string feed_delete(string feed_id)
+    {
+        //Update Products Set ProductName = ProductName + ',6' Where ProductID = 1
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"Delete Feed  WHERE (Feed_id = @feed_id)");
+        cmd.Parameters.Add("@feed_id", SqlDbType.Int).Value = feed_id;       
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;

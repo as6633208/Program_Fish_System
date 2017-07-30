@@ -20,113 +20,12 @@
     <link href="css/notify/notyf.min.css" rel="stylesheet" />
     <!-- ================== CSS sweetalert2 ================== -->
     <link href="css/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
-    <style>
-        .button {
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            padding: 96px 96px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 40px;
-            margin: 4px 2px;
-            -webkit-transition-duration: 0.4s; /* Safari */
-            transition-duration: 0.4s;
-            cursor: pointer;
-        }
-
-            .button:active {
-                background-color: #3e8e41;
-                box-shadow: 0 5px #666;
-                transform: translateY(4px);
-            }
-
-        .button1 {
-            background-color: white;
-            color: black;
-            border: 4px solid #555555;
-        }
-
-            .button1:hover {
-                background-color: #4CAF50;
-                color: white;
-            }
-
-            .button1:active {
-                background-color: #3e8e41;
-                box-shadow: 0 5px #666;
-                transform: translateY(4px);
-            }
-
-        .button2 {
-            background-color: white;
-            color: black;
-            border: 4px solid #555555;
-        }
-
-            .button2:hover {
-                background-color: #FF8800;
-                color: white;
-            }
-
-            .button2:active {
-                background-color: #3e8e41;
-                box-shadow: 0 4px #666;
-                transform: translateY(4px);
-            }
-
-        .button3 {
-            background-color: white;          
-            color: black;
-            border: 4px solid #555555;
-        }
-
-            .button3:hover {
-                background-color: #f44336;
-                color: white;
-            }
-
-            .button3:active {
-                background-color: #3e8e41;
-                box-shadow: 0 5px #666;
-                transform: translateY(4px);
-            }
-
-        .button4 {
-            background-color: white;
-            color: black;
-            border: 4px solid #555555;
-        }
-
-            .button4:hover {
-                background-color: #7744FF;
-                color: white;
-            }
-
-            .button4:active {
-                background-color: #3e8e41;
-                box-shadow: 0 5px #666;
-                transform: translateY(4px);
-            }      
-              .button5 {
-            background-color: white;
-            color: black;
-            border: 4px solid #555555;
-        }
-
-            .button5:hover {
-                background-color: 	#0066FF;
-                color: white;
-            }
-
-            .button5:active {
-                background-color: #3e8e41;
-                box-shadow: 0 5px #666;
-                transform: translateY(4px);
-            }
-    </style>
+    <!-- ================== CSS bootstrap-select ================== -->
+    <link href="css/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <!-- ================== CSS 功能樣式 ================== -->
+    <link href="css/tableTools/jquery.dataTables.min.css" rel="stylesheet" />
 </head>
+
 
 <body>
     <!--Preloader-->
@@ -226,24 +125,12 @@
                     <ol class="breadcrumb">
                         <li><a href="blank.html">首頁</a></li>
                         <li><a href="blank.html"><span>魚池總覽</span></a></li>
-                        <li class="active"><span>魚池詳細</span></li>
+                        <li><a href="#"><span>魚池詳細</span></a></li>
+                        <li class="active"><span>投餵</span></li>
                     </ol>
                     <!--Breadcrumb-->
                 </div>
                 <!-- /Title -->
-                <!-- Footer -->
-                <footer class="footer container-fluid pl-30 pr-30">
-                    <div class="row">
-                        <div class="col-sm-5">
-                            <a href="http://mportal.npust.edu.tw/bin/home.php" class="brand mr-30"><img src="image/logo-sm.png" alt="logo" /></a>
-                        </div>
-                        <div class="col-sm-7 text-right">
-                            <p>2017 &copy; 國立屏東科技大學資訊管理系</p>
-                        </div>
-                    </div>
-                </footer>
-                <!-- /Footer -->
-                <!-- 魚池細節-->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel panel-default card-view">
@@ -298,22 +185,56 @@
                         </div>
                     </div>
                 </div>
-                <!-- 魚池細節結束-->
-                <!-- 功能按鈕：分養、出魚-->
+                <!-- /Title -->
+                <!-- Row -->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel panel-default card-view">
                             <div class="panel-wrapper collapse in">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="col-sm-12">
-                                            <table>
-                                                <tbody>
-                                                    <tr class="col-sm-12">
-                                                        <td id="pool_view"></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <div class="col-sm-12 col-xs-12">
+
+                                            <div class="form-wrap">
+                                                <form class="form-horizontal" id="Measuring" method="post">
+                                                    <!-- 測量資訊 -->
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">測量日期</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group date" id="datepicker-disabled-past1" data-date-format="yyyy-mm-dd">
+                                                                    <input type="text" class="form-control" placeholder="請選擇日期" id="Measuring_time" />
+                                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>                                                
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">魚隻數量：</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                                <input type="text" class="form-control" id="Measuring_number" placeholder="隻" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>                           
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">魚隻平均重量：</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                                <input type="text" class="form-control" id="Measuring_Fish_AVGweight" placeholder="KG" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>                              
+                                                  
+                                                    <div class="form-group mb-0">
+                                                        <div class="col-sm-offset-3 col-sm-9">
+                                                            <button type="submit" class="btn btn-success ">新增</button>
+                                                        </div>
+                                                    </div>                                              
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -321,20 +242,38 @@
                         </div>
                     </div>
                 </div>
-                <!-- 功能按鈕結束-->
-                <!-- /Main Content -->
+                <!---Table--->
+             
+
+                <!---Table--->
+                <!-- 彈跳視窗開始  -->
+               
+                <!-- 彈跳視窗結束  -->
+                <!-- Footer -->
+                <footer class="footer container-fluid pl-30 pr-30">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <a href="http://mportal.npust.edu.tw/bin/home.php" class="brand mr-30"><img src="image/logo-sm.png" alt="logo" /></a>
+                        </div>
+                        <div class="col-sm-7 text-right">
+                            <p>2017 &copy; 國立屏東科技大學資訊管理系</p>
+                        </div>
+                    </div>
+                </footer>
+                <!-- /Footer -->
             </div>
+            <!-- /Main Content -->
         </div>
     </div>
     <!-- /#wrapper -->
+    <!-- 彈跳視窗開始  -->
+    <!-- 彈跳視窗結束  -->
     <!-- JavaScript -->
     <!-- jQuery -->
     <script src="javascript/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="javascript/bootstrap.min.js"></script>
     <!-- Data table JavaScript -->
-    <script src="javascript/jquery.dataTables.min.js"></script>
-    <script src="javascript/dataTables-data.js"></script>
     <!-- Slimscroll JavaScript -->
     <script src="javascript/jquery.slimscroll.js"></script>
     <!-- Fancy Dropdown JS -->
@@ -347,9 +286,14 @@
     <script src="javascript/cookie/js.cookie-2.1.3.min.js"></script>
     <!-- ================== JS sweetalert2 ================== -->
     <script src="javascript/sweetalert2/sweetalert2.min.js"></script>
+    <!-- ================== JS datetimepicker ================== -->
+    <script src="javascript/datetimepicker/form-plugins.demo.min.js"></script>
+    <script src="javascript/datetimepicker/bootstrap-datepicker.js"></script>
+    <script src="javascript/bootstrap-select/bootstrap-select.min.js"></script>
+    <!-- Data table JavaScript -->
+    <script src="javascript/jquery.dataTables.min.js"></script>
+    <script src="javascript/dataTables-data.js"></script>
     <script>
-        var notyf = new Notyf();//notyf.js宣告使用
-        //魚池id
         var Fish_Pool_id;
         //魚池資料變數
         var Fish_detail_id = -1; //魚群細節編號
@@ -365,8 +309,15 @@
         var Fish_company_company_abbreviation = -1;//魚群供應商簡稱 5
         var Fish_Fish_kind_id = -1;//魚種編號
         var Fush_Pool_Pool_number = -1;//魚池數量
-        var Fish_detail_number = -1;//魚群細節編號數量
+        var feed_id = '';//catch feed_id
+        var medicine_id = '';//catch medicine_id
+        var feed_name = '';//catch feed name
+        var medicine_name = '';//catch maeicine_name
+        var notyf = new Notyf();//notyf.js宣告使用
+        var bt_id = [];//抓取餵食資料刪除按鈕編號
+        var bt_detail = [];
         //抓網址變數
+
         $.UrlParam = function (name) {
             //宣告正規表達式
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -381,15 +332,7 @@
         }
         var Page_Pool_id = $.UrlParam('Pool_id') ? $.UrlParam('Pool_id') : -1; //現在頁數
         var Fish_Fish_company_id = $.UrlParam('Fish_company_id') ? $.UrlParam('Fish_company_id') : -1; //現在頁數
-        var cssString = "";
-        cssString += '<a href="feed_insert.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button1">投餵 </a>'
-        cssString += '<a href="diver_fish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button2" >分養 </a>'
-        cssString += '<a href="move_fish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button3" >轉池/移池 </a>'
-        cssString += '<a href="outfish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + ' "class="button button4" >出魚  </a>'
-        cssString += '<a href="Measuring.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button5" >測量  </a>'
-        cssString += '<input type="button" id="out_all" class="button button5" value="清空魚池">'
-        $("#pool_view").html(cssString);
-        //alert(Page_Pool_id); //確認Pool_ID
+        //alert("Fish_Fish_company_id = " + Fish_Fish_company_id.toString());
         if (Page_Pool_id == -1) {
             notyf.alert('伺服器錯誤,無法載入池號');
         } else {
@@ -420,11 +363,13 @@
                         $('#pool_number').html(Pool_Json[Json_Pool_id]["Pool_number"] + "隻");
                         Fush_Pool_Pool_number = Pool_Json[Json_Pool_id]["Pool_number"];
                     }
+
                 },
                 error: function (e) {
                     notyf.alert('伺服器錯誤,無法載入池號' + e);
                 }
             });
+
             //魚群細節ajax
             $.ajax({
                 url: 'database/Fish_detail/Fish_detail_view.ashx',
@@ -437,7 +382,6 @@
                     Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
                     Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
                     Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
-                    Fish_detail_number = Fish_detail_Json[0]["number"];
                 },
                 error: function (e) {
                     notyf.alert('伺服器錯誤,無法載入魚群細節' + e);
@@ -477,7 +421,6 @@
                     notyf.alert('伺服器錯誤,無法載入供應商簡稱' + e);
                 }
             });
-
             //日期操作 產卵日
             var Spawning_date = new Date(Fish_Spawning_date);
             Spawning_date_MM = ((Spawning_date.getMonth() + 1) < 10 ? '0' : '') + (Spawning_date.getMonth() + 1);//補0
@@ -502,6 +445,10 @@
             /*批號結束*/
 
             /*來源批號開始*/
+
+            $(document).ready(function () {
+                FormPlugins.init();
+            });
 
             //魚群細節ajax
             $.ajax({
@@ -539,7 +486,20 @@
                     notyf.alert('伺服器錯誤,無法載入魚群資料' + e);
                 }
             });
-
+            //供應商ajax
+            $.ajax({
+                url: 'database/supplier/supplier_search.ashx',
+                type: 'post',
+                dataType: 'json',
+                data: { Fish_company_id: Fish_Fish_company_id },
+                async: false,//啟用同步請求
+                success: function (Fish_Json) {
+                    Fish_company_company_abbreviation = Fish_Json[0]["company_abbreviation"];
+                },
+                error: function (e) {
+                    notyf.alert('伺服器錯誤,無法載入供應商簡稱' + e);
+                }
+            });
             //日期操作 產卵日
             var Spawning_date = new Date(Fish_Spawning_date);
             Spawning_date_MM = ((Spawning_date.getMonth() + 1) < 10 ? '0' : '') + (Spawning_date.getMonth() + 1);//補0
@@ -575,99 +535,72 @@
                     notyf.alert('伺服器錯誤,無法載入魚種' + e);
                 }
             });
-        }        
-        /*來源批號結束*/
-        //清空魚池         
-            /**新增魚種**/
-            $("#out_all").click(function (e) {
-                e.preventDefault();   
-                    swal({
-                        title: "確認清空「" + Page_Pool_id + "池」?將會紀錄損失" + Fush_Pool_Pool_number + "隻魚",
-                        text: "清空後將無法修改",
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        allowOutsideClick: false,//不可點背景關閉
-                        confirmButtonText: '確認！',
-                        cancelButtonText: '取消'
-                    }).then(function (isConfirm) {
-                        if (isConfirm) {
-                            //新增損失紀錄
-                            $.ajax({
-                                type: 'post',
-                                url: 'database/measuring/Inventory.ashx',
-                                async: false,
-                                data: {
-                                    Pool_id: Page_Pool_id,                                  
-                                    Fish_detail_id: Fish_detail_id,
-                                    number: Fush_Pool_Pool_number
-                                },
-                                success: function (e) {
-                                    if (e == "success") {
-                                       console.log("success")
-                                    } else {
-                                        console.log("Inventory error")
-                                    }
-                                },
-                                error: function (e) {
-                                    notyf.alert('伺服器錯誤,無法載入' + e);
+            /*來源批號結束*/
+        }      
+        $(document).ready(function () {
+            FormPlugins.init();
+        });
+        $(document).ready(function () {
+            /**測量紀錄新增**/
+            $("#Measuring").submit(function (e) {
+                e.preventDefault();
+                var difference = $("#Measuring_number").val() - Fush_Pool_Pool_number;
+                if (difference > 0) {
+                    difference = "此筆記錄增加" + difference+"隻魚"
+                }
+                if (difference < 0) {
+                    difference = "此筆紀錄減少" + difference*-1 + "隻魚"
+                }
+                swal({                   
+                    title: '確認新增此筆測量紀錄？' + difference,
+                    text: "新增後將無法刪除",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    allowOutsideClick: false,//不可點背景關閉
+                    confirmButtonText: '確認！',
+                    cancelButtonText: '取消'
+                }).then(function (isConfirm) {
+                    if (isConfirm) {
+                        /**測量紀錄新增**/
+                        $.ajax({
+                            url: 'database/measuring/measuring_insert.ashx',
+                            type: 'post',
+                            async: false,
+                            data: {
+                                Pool_id: Page_Pool_id,
+                                Fish_detail_id: Fish_detail_id,
+                                number: $("#Measuring_number").val(),
+                                Measuring_Fish_AVGweight: $("#Measuring_Fish_AVGweight").val(),                              
+                                date: $("#Measuring_time").val()
+                            },
+                            success: function (e) {
+                                if (e == "success") {
+                                    swal({
+                                        type: 'success',
+                                        title: '新增測量記錄成功!',
+                                        allowOutsideClick: false //不可點背景關閉
+                                    }).then(function () {
+                                        location.reload();
+                                    })
+                                } else {
+                                    notyf.alert('新增失敗');
                                 }
-                            });
-                            //更新魚群細節
-                            $.ajax({
-                                type: 'post',
-                                url: 'database/Fish_detail/Fish_detail_update.ashx',
-                                async: false,
-                                data: {                             
-                                    Fish_detail_id: Fish_detail_id,
-                                    number:Fish_detail_number- Fush_Pool_Pool_number
-                                },
-                                success: function (e) {
-                                    if (e == "success") {
-                                        console.log("success")
-                                    } else {
-                                        console.log("Inventory error")
-                                    }
-                                },
-                                error: function (e) {
-                                    notyf.alert('伺服器錯誤,無法載入' + e);
-                                }
-                            });
+                                console.log(Fish_detail_id)
+                            },
+                            error: function (e) {
+                                notyf.alert('伺服器錯誤,無法載入' + e);
+                            }
+                        });
+                    }
+                })
+            });
+        });
+        /**bootstrap modal 載入資料**/       
+   
 
-                            //更新魚池狀態
-                            $.ajax({
-                                type: 'post',
-                                url: 'database/pool/pool_update.ashx',
-                                async: false,
-                                data: {
-                                    Pool_id: Page_Pool_id,
-                                    Pool_status: 'false',
-                                    number:'0',
-                                    Fish_detail_id: '0'                             
-                                },
-                                success: function (e) {
-                                    if (e == "success") {
-                                        swal({
-                                            type: 'success',
-                                            title: '清空魚池成功!',
-                                            allowOutsideClick: false //不可點背景關閉
-                                        }).then(function () {
-                                            location.reload();
-                                        })
-                                    } else {
-                                        notyf.alert('清空魚池失敗');
-                                    }
-                                },
-                                error: function (e) {
-                                    notyf.alert('伺服器錯誤,無法載入' + e);
-                                }
-                            });
-                           
-                        }
-                    })
-                });        
     </script>
 </body>
-
 </html>
+
