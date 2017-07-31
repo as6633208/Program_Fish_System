@@ -203,7 +203,7 @@
                                                         </div>                                                     
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="exampleInputweb_31" class="col-sm-3 control-label">出魚日期</label>
+                                                        <label for="exampleInputweb_31" class="col-sm-3 control-label">出魚日期：</label>
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <div class="input-group date" id="datepicker-disabled-past1" data-date-format="yyyy-mm-dd">
@@ -236,6 +236,94 @@
                         </div>
                     </div>
                 </div>
+                <!---Table--->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default card-view">
+                            <div class="panel-wrapper collapse in">
+                                <div class="panel-body">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <table id="datable_1" class="table table-hover display  pb-30">
+                                                <thead>
+                                                    <tr>
+                                                        <th>出魚編號</th>                                                        
+                                                        <th>出魚數量</th>
+                                                        <th>平均重量</th>
+                                                        <th>出魚日期</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="supplier_view"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!---Table--->
+                <!-- 彈跳視窗開始  -->
+                <div class="modal fade" id="jump-Out" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">出魚紀錄查看</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="panel-body">
+                                    <form class="form-horizontal" id="supplier_insert" method="post">
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">出魚記錄編號：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_Outside_id" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">出魚數量：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_Out_number" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">平均魚重：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_Out_Fish_AVGweight" disabled>
+                                                </div>
+                                            </div>
+                                        </div>                                       
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">紀錄日期：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_date" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" id="modify_del" value="刪除" />
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 彈跳視窗結束  -->
                 <!-- Footer -->
                 <footer class="footer container-fluid pl-30 pr-30">
                     <div class="row">
@@ -515,7 +603,79 @@
                 }
             });
             /*來源批號結束*/
+            //表格資料載入
+            $.ajax({
+                url: 'database/outfish/outfish_view.ashx',
+                type: 'post',
+                dataType: 'json',
+                async: false,//啟用同步請求
+                data: {
+                    Pool_id: Page_Pool_id,
+                    Fish_detail_id: Fish_detail_id
+                },
+                success: function (Out_json) {
+                    var cssString = "";
+                    for (var index in Out_json) {
+                        cssString += '<tr data-toggle="modal" data-target="#jump-Out">' +
+                                         '<td>' + Out_json[index].Outside_id + '</td>        ' +
+                                        '<td>' + Out_json[index].number + '</td>        ' +
+                                        '<td>' + Out_json[index].Fish_AVGweight + '</td>         ' +
+                                        '<td>' + Out_json[index].Outside_date + '</td>           ' +
+                                        '</tr>'
 
+                    }
+
+                    $("#supplier_view").html(cssString);
+                },
+                error: function (e) {
+                    notyf.alert('伺服器錯誤,無法載入' + e);
+                }
+            });
+            /**bootstrap modal 載入資料**/
+            $('table > tbody > tr').click(function () {
+                $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
+                $("#modify_Out_number").val($.trim($(this).find("td:eq(1)").text()))
+                $("#modify_Out_Fish_AVGweight").val($.trim($(this).find("td:eq(2)").text()))
+                $("#modify_date").val($.trim($(this).find("td:eq(3)").text()))
+                var Table_Outside_id = $.trim($(this).find("td:eq(0)").text())
+                var Table_Out_number = $.trim($(this).find("td:eq(1)").text())
+                var Table_Out_Fish_AVGweight = $.trim($(this).find("td:eq(2)").text())
+                var Table_Mdate = $.trim($(this).find("td:eq(3)").text())         
+                /**刪除**/
+                var fish_total = parseInt(Table_Out_number) + parseInt(Fush_Pool_Pool_number);
+                $("#modify_del").click(function (e) {
+                    e.preventDefault();
+                    console.log(fish_total)
+                    //出魚紀錄刪除(包含魚群細節加回)
+                    $.ajax({
+                        url: 'database/outfish/outfish_delete.ashx',
+                        type: 'post',
+                        data: {
+                            Out_id: Table_Outside_id,
+                            Fish_detail_id:Fish_detail_id,
+                            total: fish_total,
+                            Pool_id: Page_Pool_id
+                        },
+                        async: false,//啟用同步請求
+                        success: function (event) {
+                            if (event === "success") {
+                                swal({
+                                    type: 'success',
+                                    title: '修改成功!',
+                                    allowOutsideClick: false //不可點背景關閉
+                                }).then(function () {
+                                    location.reload();
+                                })
+                            } else {
+                                notyf.alert('修改失敗');
+                            }
+                        },
+                        error: function (e) {
+                            notyf.alert('伺服器錯誤,無法載入');
+                        }
+                    });
+                });
+            });
             $(document).ready(function () {
                 FormPlugins.init();
             });
@@ -573,6 +733,7 @@
                 });
             });
         }
+
     </script>
 </body>
 </html>

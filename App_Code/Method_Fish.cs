@@ -700,6 +700,7 @@ public class Method_Fish
     #endregion
     #endregion
     #region 出魚操作
+    #region 出魚記錄新增
     public string Outfish_Insert(string Pool_id, string number, string Fish_AVGweight, string Fish_detail_id, string Outside_date) {
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Out
@@ -714,6 +715,44 @@ public class Method_Fish
         result = (check_num != 0) ? "success" : "fail";
         return result;
     }
+    #endregion
+    #region 出魚查詢
+    public DataTable Outfish_View(string Pool_id, string Fish_detail_id)
+    {
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Out  WHERE (Pool_id = @Pool_id) AND ( Fish_detail_id=@Fish_detail_id)");
+        cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
+        cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 50).Value = Fish_detail_id;
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;
+    }
+    #endregion
+    #region 出魚紀錄刪除
+    public string Out_delete(string Out_id, string Fish_detail_id, string total,string Pool_id)
+    {
+        //Update Products Set ProductName = ProductName + ',6' Where ProductID = 1
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"Delete Out  WHERE (Outside_id = @Out_id)");
+        cmd.Parameters.Add("@Out_id", SqlDbType.Int).Value = Out_id;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+        string re_ = Fish_detail_update(Int32.Parse(Fish_detail_id), Int32.Parse(total));
+        string re_2 = Measuring_UP_Pool(Pool_id, Int32.Parse(total));
+        if (Equals(re_, "success"))
+        {
+            if (Equals(re_2, "success"))
+            {
+                return result;
+            }
+            else {
+                 return "fail";
+            }           
+        }
+        else {
+            return "fail";
+        }
+       
+    }
+    #endregion
     #endregion
 
 }

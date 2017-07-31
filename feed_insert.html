@@ -742,8 +742,6 @@
             $("#modify_del").click(function (e) {
                 e.preventDefault();
                 //飼料用量復原
-                console.log(Table_Fodder_number)
-                console.log(Table_medicine_number)
                 $.ajax({
                     url: 'database/feed/feed_fodder_cut.ashx',
                     type: 'post',
