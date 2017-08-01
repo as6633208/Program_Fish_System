@@ -45,7 +45,7 @@
         .button1 {
             background-color: #99FF99;
             color: black;
-            border: 4px solid #555555;
+            border: 4px solid #555555;           
         }
 
             .button1:hover {
@@ -60,14 +60,14 @@
             }
 
         .button2 {
-            background-color: #FFEE99;
+            background-color: #FFDDAA;
             color: black;
-            border: 4px solid #555555;
-            padding: 96px 87px;
+            border: 4px solid #555555;   
+            padding: 96px 87px;         
         }
 
             .button2:hover {
-                background-color: #FF8800;
+                background-color:#FF8800;
                 color: white;
             }
 
@@ -127,13 +127,13 @@
                 transform: translateY(4px);
             }
               .button6 {
-            background-color: #AAAAAA;
+            background-color: #FFDDAA;
             color: black;
             border: 4px solid #555555;
         }
 
             .button6:hover {
-                background-color: #444444;
+                background-color:#FF8800;
                 color: white;
             }
 
@@ -399,11 +399,11 @@
         var Page_Pool_id = $.UrlParam('Pool_id') ? $.UrlParam('Pool_id') : -1; //現在頁數
         var Fish_Fish_company_id = $.UrlParam('Fish_company_id') ? $.UrlParam('Fish_company_id') : -1; //現在頁數
         var cssString = "";
-        cssString += '<a href="feed_insert.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button1">投餵 </a>'
-        cssString += '<a href="diver_fish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button5" >分養 </a>'
+        cssString += '<a href="feed_insert.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button5">投餵 </a>'
+        cssString += '<a href="diver_fish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button1" >分養 </a>'
         cssString += '<a href="move_fish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button2" >轉池/移池 </a>'
-        cssString += '<a href="outfish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + ' "class="button button1" >出魚  </a>'
-        cssString += '<a href="Measuring.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button5" >測量  </a>'
+        cssString += '<a href="outfish.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + ' "class="button button5" >出魚  </a>'
+        cssString += '<a href="Measuring.html?Pool_id=' + Page_Pool_id + '&Fish_company_id=' + Fish_Fish_company_id + '" class="button button1" >測量  </a>'
         cssString += '<input type="button" id="out_all" class="button button6" value="清空魚池">'
         $("#pool_view").html(cssString);
         //alert(Page_Pool_id); //確認Pool_ID
