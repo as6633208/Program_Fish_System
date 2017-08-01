@@ -607,75 +607,81 @@
             });
 
             //魚群細節ajax
-            $.ajax({
-                url: 'database/Fish_detail/Fish_detail_view.ashx',
-                type: 'post',
-                dataType: 'json',
-                data: { Fish_detail_id: Fish_detail_Origin_Fish_detail_id },
-                async: false,//啟用同步請求
-                success: function (Fish_detail_Json) {
-                    Fish_detail_Fish_id = Fish_detail_Json[0]["Fish_id"];
-                    Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
-                    Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
-                    Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入魚群細節' + e);
-                }
-            });
-            //魚群ajax
-            $.ajax({
-                url: 'database/Fish/Fish_view.ashx',
-                type: 'post',
-                dataType: 'json',
-                data: { Fish_id: Fish_detail_Fish_id },
-                async: false,//啟用同步請求
-                success: function (Fish_Json) {
-                    Fish_Spawning_date = Fish_Json[0]["Spawning_date"];
-                    Fish_Insert_fry_date = Fish_Json[0]["Insert_fry_date"];
-                    Fish_Insert_year = Fish_Json[0]["Insert_year"];
-                    Fish_Fry_weight = Fish_Json[0]["Fry_weight"];
-                    Fish_Fish_company_id = Fish_Json[0]["Fish_company_id"];
-                    Fish_Fish_kind_id = Fish_Json[0]["Fish_kind_id"];
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入魚群資料' + e);
-                }
-            });
-            //供應商ajax
-            $.ajax({
-                url: 'database/supplier/supplier_search.ashx',
-                type: 'post',
-                dataType: 'json',
-                data: { Fish_company_id: Fish_Fish_company_id },
-                async: false,//啟用同步請求
-                success: function (Fish_Json) {
-                    Fish_company_company_abbreviation = Fish_Json[0]["company_abbreviation"];
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入供應商簡稱' + e);
-                }
-            });
-            //日期操作 產卵日
-            var Spawning_date = new Date(Fish_Spawning_date);
-            Spawning_date_MM = ((Spawning_date.getMonth() + 1) < 10 ? '0' : '') + (Spawning_date.getMonth() + 1);//補0
-            Spawning_date_DD = (Spawning_date.getDate() < 10 ? '0' : '') + Spawning_date.getDate();
-            Spawning_date = Spawning_date_MM + '' + Spawning_date_DD;
-            //日期操作 入苗日
-            var fry_date = new Date(Fish_Insert_fry_date);
-            fry_date_MM = ((fry_date.getMonth() + 1 < 10 ? '0' : '')) + (fry_date.getMonth() + 1);
-            fry_date_DD = (fry_date.getDate() < 10 ? '0' : '') + fry_date.getDate();
-            fry_date = fry_date_MM + '' + fry_date_DD;
-            //日期操作 移動日
-            var Move_date = new Date(Fish_detail_Move_date);
-            Move_date_MM = ((Move_date.getMonth() + 1 < 10 ? '0' : '')) + (Move_date.getMonth() + 1);
-            Move_date_DD = (Move_date.getDate() < 10 ? '0' : '') + Move_date.getDate();
-            //移入日期顯示
-            $('#insert_date').html(Move_date.getFullYear() + '-' + Move_date_MM + '-' + Move_date_DD);
-            Move_date = Move_date_MM + '' + Move_date_DD;
-            //批號顯示
-            $('#source_batch').html(Spawning_date + '-' + fry_date + '-' + Fish_Insert_year + '-' + Fish_Fry_weight + '-'
-                + Fish_company_company_abbreviation + '-' + Fish_detail_Fish_size + '-' + Move_date);
+            if (Fish_detail_Origin_Fish_detail_id == '0') {
+                $('#source_batch').html('無');
+            }
+            else {
+                $.ajax({
+                    url: 'database/Fish_detail/Fish_detail_view.ashx',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { Fish_detail_id: Fish_detail_Origin_Fish_detail_id },
+                    async: false,//啟用同步請求
+                    success: function (Fish_detail_Json) {
+                        Fish_detail_Fish_id = Fish_detail_Json[0]["Fish_id"];
+                        Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
+                        Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
+                        Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入魚群細節' + e);
+                    }
+                });
+                //魚群ajax
+                $.ajax({
+                    url: 'database/Fish/Fish_view.ashx',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { Fish_id: Fish_detail_Fish_id },
+                    async: false,//啟用同步請求
+                    success: function (Fish_Json) {
+                        Fish_Spawning_date = Fish_Json[0]["Spawning_date"];
+                        Fish_Insert_fry_date = Fish_Json[0]["Insert_fry_date"];
+                        Fish_Insert_year = Fish_Json[0]["Insert_year"];
+                        Fish_Fry_weight = Fish_Json[0]["Fry_weight"];
+                        Fish_Fish_company_id = Fish_Json[0]["Fish_company_id"];
+                        Fish_Fish_kind_id = Fish_Json[0]["Fish_kind_id"];
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入魚群資料' + e);
+                    }
+                });
+                //供應商ajax
+                $.ajax({
+                    url: 'database/supplier/supplier_search.ashx',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { Fish_company_id: Fish_Fish_company_id },
+                    async: false,//啟用同步請求
+                    success: function (Fish_Json) {
+                        Fish_company_company_abbreviation = Fish_Json[0]["company_abbreviation"];
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入供應商簡稱' + e);
+                    }
+                });
+                //日期操作 產卵日
+                var Spawning_date = new Date(Fish_Spawning_date);
+                Spawning_date_MM = ((Spawning_date.getMonth() + 1) < 10 ? '0' : '') + (Spawning_date.getMonth() + 1);//補0
+                Spawning_date_DD = (Spawning_date.getDate() < 10 ? '0' : '') + Spawning_date.getDate();
+                Spawning_date = Spawning_date_MM + '' + Spawning_date_DD;
+                //日期操作 入苗日
+                var fry_date = new Date(Fish_Insert_fry_date);
+                fry_date_MM = ((fry_date.getMonth() + 1 < 10 ? '0' : '')) + (fry_date.getMonth() + 1);
+                fry_date_DD = (fry_date.getDate() < 10 ? '0' : '') + fry_date.getDate();
+                fry_date = fry_date_MM + '' + fry_date_DD;
+                //日期操作 移動日
+                var Move_date = new Date(Fish_detail_Move_date);
+                Move_date_MM = ((Move_date.getMonth() + 1 < 10 ? '0' : '')) + (Move_date.getMonth() + 1);
+                Move_date_DD = (Move_date.getDate() < 10 ? '0' : '') + Move_date.getDate();
+                //移入日期顯示
+                $('#insert_date').html(Move_date.getFullYear() + '-' + Move_date_MM + '-' + Move_date_DD);
+                Move_date = Move_date_MM + '' + Move_date_DD;
+                //批號顯示
+                $('#source_batch').html(Spawning_date + '-' + fry_date + '-' + Fish_Insert_year + '-' + Fish_Fry_weight + '-'
+                    + Fish_company_company_abbreviation + '-' + Fish_detail_Fish_size + '-' + Move_date);
+            }
+          
 
             //魚群種類ajax
             $.ajax({
