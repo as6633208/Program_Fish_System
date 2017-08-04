@@ -13,8 +13,10 @@ public class Measuring_insert : IHttpHandler {
         int number =Int32.Parse(context.Request.Form["number"].ToString());
         string Fish_AVGweight = context.Request.Form["Measuring_Fish_AVGweight"].ToString(); 
         string date =context.Request.Form["date"].ToString();
+        string before_number =context.Request.Form["Fish_detail_before_number"].ToString();
+        string before_Fish_AVGweight =context.Request.Form["Fish_detail_before_Fish_AVGweight"].ToString();
         Method_Fish method = new Method_Fish();
-        string re_ = method.Measuring_insert(Pool_id,Fish_detail_id,number,Fish_AVGweight,date);
+        string re_ = method.Measuring_insert(Pool_id,Fish_detail_id,number,Fish_AVGweight,date,before_number,before_Fish_AVGweight);
         context.Response.Write(re_);//查看有無資料
 
     }

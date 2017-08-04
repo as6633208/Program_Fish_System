@@ -191,7 +191,6 @@
                                         <div class="col-sm-12 col-xs-12">
                                             <div class="form-wrap">
                                                 <form class="form-horizontal" id="Out_fish" method="post">
-
                                                     <!-- 出魚資訊 -->
                                                     <div class="form-group">
                                                         <label for="out_num" class="col-sm-3 control-label">出魚數量：</label>
@@ -281,7 +280,7 @@
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Outside_id" disabled>
+                                                    <input type="text" class="form-control" id="modify_Outside_id" >
                                                 </div>
                                             </div>
                                         </div>
@@ -290,7 +289,7 @@
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Out_number" disabled>
+                                                    <input type="text" class="form-control" id="modify_Out_number" >
                                                 </div>
                                             </div>
                                         </div>
@@ -299,7 +298,7 @@
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Out_Fish_AVGweight" disabled>
+                                                    <input type="text" class="form-control" id="modify_Out_Fish_AVGweight" >
                                                 </div>
                                             </div>
                                         </div>                                       
@@ -308,7 +307,7 @@
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_date" disabled>
+                                                    <input type="text" class="form-control" id="modify_date" >
                                                 </div>
                                             </div>
                                         </div>
@@ -317,6 +316,7 @@
 
                             </div>
                             <div class="modal-footer">
+                                <input type="button" class="btn btn-default" id="modify_UP" value="修改" />
                                 <input type="button" class="btn btn-default" id="modify_del" value="刪除" />
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                             </div>
@@ -388,6 +388,10 @@
         var Fish_company_company_abbreviation = -1;//魚群供應商簡稱 5
         var Fish_Fish_kind_id = -1;//魚種編號
         var Fush_Pool_Pool_number = -1;//魚池數量
+        var Table_Outside_id = "";
+        var Table_Out_number = "";
+        var Table_Out_Fish_AVGweight = "";
+        var Table_date = "";
         //抓網址變數
         $.UrlParam = function (name) {
             //宣告正規表達式
@@ -434,13 +438,13 @@
                         $('#pool_number').html(Pool_Json[Json_Pool_id]["Pool_number"] + "隻");
                         Fush_Pool_Pool_number = Pool_Json[Json_Pool_id]["Pool_number"];
                     }
-                   
+
                 },
                 error: function (e) {
                     notyf.alert('伺服器錯誤,無法載入池號' + e);
                 }
             });
-           
+
             //魚群細節ajax
             $.ajax({
                 url: 'database/Fish_detail/Fish_detail_view.ashx',
@@ -590,7 +594,7 @@
                 //批號顯示
                 $('#source_batch').html(Spawning_date + '-' + fry_date + '-' + Fish_Insert_year + '-' + Fish_Fry_weight + '-'
                     + Fish_company_company_abbreviation + '-' + Fish_detail_Fish_size + '-' + Move_date);
-
+            }
                 //魚群種類ajax
                 $.ajax({
                     url: 'database/fish_kind/fish_kind_search.ashx',
@@ -605,7 +609,7 @@
                         notyf.alert('伺服器錯誤,無法載入魚種' + e);
                     }
                 });
-            }
+            
             /*來源批號結束*/
             //表格資料載入
             $.ajax({
@@ -621,11 +625,11 @@
                     var cssString = "";
                     for (var index in Out_json) {
                         cssString += '<tr data-toggle="modal" data-target="#jump-Out">' +
-                                         '<td>' + Out_json[index].Outside_id + '</td>        ' +
-                                        '<td>' + Out_json[index].number + '</td>        ' +
-                                        '<td>' + Out_json[index].Fish_AVGweight + '</td>         ' +
-                                        '<td>' + Out_json[index].Outside_date + '</td>           ' +
-                                        '</tr>'
+                            '<td>' + Out_json[index].Outside_id + '</td>        ' +
+                            '<td>' + Out_json[index].number + '</td>        ' +
+                            '<td>' + Out_json[index].Fish_AVGweight + '</td>         ' +
+                            '<td>' + Out_json[index].Outside_date.slice(0, 10) + '</td>           ' +
+                            '</tr>'
 
                     }
 
@@ -641,22 +645,21 @@
                 $("#modify_Out_number").val($.trim($(this).find("td:eq(1)").text()))
                 $("#modify_Out_Fish_AVGweight").val($.trim($(this).find("td:eq(2)").text()))
                 $("#modify_date").val($.trim($(this).find("td:eq(3)").text()))
-                var Table_Outside_id = $.trim($(this).find("td:eq(0)").text())
-                var Table_Out_number = $.trim($(this).find("td:eq(1)").text())
-                var Table_Out_Fish_AVGweight = $.trim($(this).find("td:eq(2)").text())
-                var Table_Mdate = $.trim($(this).find("td:eq(3)").text())         
-                /**刪除**/
+                Table_Outside_id = $.trim($(this).find("td:eq(0)").text())
+                Table_Out_number = $.trim($(this).find("td:eq(1)").text())
+                Table_Out_Fish_AVGweight = $.trim($(this).find("td:eq(2)").text())
+                Table_date = $.trim($(this).find("td:eq(3)").text())
                 var fish_total = parseInt(Table_Out_number) + parseInt(Fush_Pool_Pool_number);
                 $("#modify_del").click(function (e) {
                     e.preventDefault();
-                    console.log(fish_total)
-                    //出魚紀錄刪除(包含魚群細節加回)
+                    //出魚紀錄刪除及修改(包含魚群細節加回)
+                    /**刪除**/
                     $.ajax({
                         url: 'database/outfish/outfish_delete.ashx',
                         type: 'post',
                         data: {
                             Out_id: Table_Outside_id,
-                            Fish_detail_id:Fish_detail_id,
+                            Fish_detail_id: Fish_detail_id,
                             total: fish_total,
                             Pool_id: Page_Pool_id
                         },
@@ -665,13 +668,13 @@
                             if (event === "success") {
                                 swal({
                                     type: 'success',
-                                    title: '修改成功!',
+                                    title: '刪除成功!',
                                     allowOutsideClick: false //不可點背景關閉
                                 }).then(function () {
                                     location.reload();
                                 })
                             } else {
-                                notyf.alert('修改失敗');
+                                notyf.alert('刪除失敗');
                             }
                         },
                         error: function (e) {
@@ -679,64 +682,103 @@
                         }
                     });
                 });
-            });
-            $(document).ready(function () {
-                FormPlugins.init();
-            });
-            $(document).ready(function () {
-                /**出魚紀錄**/
-                $("#Out_fish").submit(function (e) {
-                    e.preventDefault();                   
-                    swal({
-                        title: '確認新增此筆出魚紀錄？',
-                        text: "新增後將無法刪除",
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        allowOutsideClick: false,//不可點背景關閉
-                        confirmButtonText: '確認！',
-                        cancelButtonText: '取消'
-                    }).then(function (isConfirm) {
-                       
-                        if (isConfirm) {
-                            /**出魚紀錄新增**/
-                            $.ajax({
-                                url: 'database/outfish/outfish_insert.ashx',
-                                type: 'post',                               
-                                async: false,
-                                data: {
-                                    Pool_id: Page_Pool_id,
-                                    Out_number: $("#Out_number").val(),
-                                    Fish_AVGweight: $("#Avg_Weight").val(),
-                                    Fish_detail_id: Fish_detail_id,
-                                    Outside_date: $("#Out_time").val(),
-                                    old_number: Fush_Pool_Pool_number
-
-                                },
-                                success: function (e) {
-                                    if (e == "success") {
-                                        swal({
-                                            type: 'success',
-                                            title: '新增出魚資訊成功!',
-                                            allowOutsideClick: false //不可點背景關閉
-                                        }).then(function () {
-                                            location.reload();
-                                        })
-                                    } else {
-                                        notyf.alert('新增失敗');
-                                    }
-                                    console.log(Fish_detail_id)
-                                },
-                                error: function (e) {
-                                    notyf.alert('伺服器錯誤,無法載入' + e);
+                    /**修改**/
+                $("#modify_UP").click(function (e) {
+                    var new_OUT_nubmer = document.getElementById('modify_Out_number').value;
+                    var new_Out_Fish_AVGweight = document.getElementById('modify_Out_Fish_AVGweight').value;
+                    var fish_total = parseInt(Table_Out_number) - parseInt(new_OUT_nubmer) + parseInt(Fush_Pool_Pool_number);
+                        console.log(fish_total)
+                        //出魚紀錄修改(包含更新魚群細節及池內資訊)                   
+                        $.ajax({
+                            url: 'database/outfish/outfish_Update.ashx',
+                            type: 'post',
+                            data: {
+                                Out_id: Table_Outside_id,
+                                Fish_detail_id: Fish_detail_id,
+                                Out_nubmer: new_OUT_nubmer,
+                                Out_Fish_AVGweight: new_Out_Fish_AVGweight,
+                                total: fish_total,
+                                Pool_id: Page_Pool_id
+                            },
+                            async: false,//啟用同步請求
+                            success: function (event) {
+                                if (event === "success") {
+                                    swal({
+                                        type: 'success',
+                                        title: '修改成功!',
+                                        allowOutsideClick: false //不可點背景關閉
+                                    }).then(function () {
+                                        location.reload();
+                                    })
+                                } else {
+                                    notyf.alert('修改失敗');
                                 }
-                            });
-                        }
-                    })
-                });
+                            },
+                            error: function (e) {
+                                notyf.alert('伺服器錯誤,無法載入');
+                            }
+                        });
+                    });
+             
             });
-        }
+                $(document).ready(function () {
+                    FormPlugins.init();
+                })
+                $(document).ready(function () {
+                    /**出魚紀錄**/
+                    $("#Out_fish").submit(function (e) {
+                        e.preventDefault();
+                        swal({
+                            title: '確認新增此筆出魚紀錄？',
+                            text: "",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            allowOutsideClick: false,//不可點背景關閉
+                            confirmButtonText: '確認！',
+                            cancelButtonText: '取消'
+                        }).then(function (isConfirm) {
+
+                            if (isConfirm) {
+                                /**出魚紀錄新增**/
+                                $.ajax({
+                                    url: 'database/outfish/outfish_insert.ashx',
+                                    type: 'post',
+                                    async: false,
+                                    data: {
+                                        Pool_id: Page_Pool_id,
+                                        Out_number: $("#Out_number").val(),
+                                        Fish_AVGweight: $("#Avg_Weight").val(),
+                                        Fish_detail_id: Fish_detail_id,
+                                        Outside_date: $("#Out_time").val(),
+                                        old_number: Fush_Pool_Pool_number
+
+                                    },
+                                    success: function (e) {
+                                        if (e == "success") {
+                                            swal({
+                                                type: 'success',
+                                                title: '新增出魚資訊成功!',
+                                                allowOutsideClick: false //不可點背景關閉
+                                            }).then(function () {
+                                                location.reload();
+                                            })
+                                        } else {
+                                            notyf.alert('新增失敗');
+                                        }
+                                        console.log(Fish_detail_id)
+                                    },
+                                    error: function (e) {
+                                        notyf.alert('伺服器錯誤,無法載入' + e);
+                                    }
+                                });
+                            }
+                        })
+                    });
+                });
+            }
+                
 
     </script>
 </body>

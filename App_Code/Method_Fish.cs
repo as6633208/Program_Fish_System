@@ -124,18 +124,20 @@ public class Method_Fish
     #endregion
     #region 測量及損益操作
     #region 測量新增(建)
-    public string Measuring_insert(string Pool_id, int Fish_detail_id, int number, string Fish_AVGweight, string date)
+    public string Measuring_insert(string Pool_id, int Fish_detail_id, int number, string Fish_AVGweight, string date, string before_number,string before_Fish_AVGweight)
     {
         int old_fish_number;
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Measuring
-                            (Pool_id, Fish_detail_id, number, Fish_AVGweight,date) VALUES
-                        (@Pool_id,@Fish_detail_id,@number,@Fish_AVGweight,@date)");
+                            (Pool_id, Fish_detail_id, number, Fish_AVGweight,date,before_number,before_Fish_AVGweight) VALUES
+                        (@Pool_id,@Fish_detail_id,@number,@Fish_AVGweight,@date,@before_number,@before_Fish_AVGweight)");
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value = Fish_detail_id;
         cmd.Parameters.Add("@number", SqlDbType.Int).Value = number;
         cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
         cmd.Parameters.Add("@date", SqlDbType.DateTime2, 7).Value = date;
+        cmd.Parameters.Add("@before_number", SqlDbType.NVarChar, 10).Value = before_number;
+        cmd.Parameters.Add("@before_Fish_AVGweight", SqlDbType.NVarChar, 10).Value = before_Fish_AVGweight;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";        
         //抓取原本的數量 
@@ -199,6 +201,17 @@ public class Method_Fish
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
+    }
+    #endregion
+    #region 測量資料查詢
+    public DataTable measuring_view(string Pool_id, string Fish_detail_id)
+    {
+
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Measuring WHERE (Pool_id = @Pool_id) AND ( Fish_detail_id=@Fish_detail_id)");
+        cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
+        cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 50).Value = Fish_detail_id;
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;
     }
     #endregion
     #endregion
@@ -751,6 +764,37 @@ public class Method_Fish
             return "fail";
         }
        
+    }
+    #endregion
+    #region 出魚紀錄修改
+    public string Out_Update(string Out_id, string Fish_detail_id, string total, string Pool_id,string out_number,string Out_Fish_AVGweight)
+    {
+        //Update Products Set ProductName = ProductName + ',6' Where ProductID = 1
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"UPDATE Out SET number=@number , Fish_AVGweight=@Fish_AVGweight WHERE (Outside_id = @Out_id)");
+          cmd.Parameters.Add("@Out_id", SqlDbType.Int).Value = Out_id;
+        cmd.Parameters.Add("@number", SqlDbType.Int).Value = out_number;
+        cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.Int).Value = Out_Fish_AVGweight;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+        string re_ = Fish_detail_update(Int32.Parse(Fish_detail_id), Int32.Parse(total));
+        string re_2 = Measuring_UP_Pool(Pool_id, Int32.Parse(total));
+        if (Equals(re_, "success"))
+        {
+            if (Equals(re_2, "success"))
+            {
+                return result;
+            }
+            else
+            {
+                return "fail";
+            }
+        }
+        else
+        {
+            return "fail";
+        }
+
     }
     #endregion
     #endregion

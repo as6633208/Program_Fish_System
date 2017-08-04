@@ -243,11 +243,94 @@
                     </div>
                 </div>
                 <!---Table--->
-             
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default card-view">
+                            <div class="panel-wrapper collapse in">
+                                <div class="panel-body">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <table id="datable_1" class="table table-hover display  pb-30">
+                                                <thead>
+                                                    <tr>
+                                                        <th>測量編號</th>
+                                                        <th>測量後數量</th>
+                                                        <th>測量後平均重量</th>
+                                                        <th>測量日期</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="supplier_view"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!---Table--->
                 <!-- 彈跳視窗開始  -->
-               
+                <div class="modal fade" id="jump-measuring" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">測量記錄查看</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="panel-body">
+                                    <form class="form-horizontal" id="supplier_insert" method="post">
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">出魚記錄編號：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_Outside_id">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">出魚數量：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_Out_number">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">平均魚重：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_Out_Fish_AVGweight">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">紀錄日期：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" id="modify_UP" value="修改" />
+                                <input type="button" class="btn btn-default" id="modify_del" value="刪除" />
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- 彈跳視窗結束  -->
                 <!-- Footer -->
                 <footer class="footer container-fluid pl-30 pr-30">
@@ -316,6 +399,7 @@
         var notyf = new Notyf();//notyf.js宣告使用
         var bt_id = [];//抓取餵食資料刪除按鈕編號
         var bt_detail = [];
+        var Fish_detail_Fish_AVGweight = '';
         //抓網址變數
 
         $.UrlParam = function (name) {
@@ -382,6 +466,8 @@
                     Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
                     Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
                     Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
+                    Fish_detail_Fish_AVGweight = Fish_detail_Json[0]["Fish_AVGweight"];
+                    console.log(Fish_detail_Fish_AVGweight)
                 },
                 error: function (e) {
                     notyf.alert('伺服器錯誤,無法載入魚群細節' + e);
@@ -401,6 +487,7 @@
                     Fish_Fry_weight = Fish_Json[0]["Fry_weight"];
                     Fish_Fish_company_id = Fish_Json[0]["Fish_company_id"];
                     Fish_Fish_kind_id = Fish_Json[0]["Fish_kind_id"];
+                  
                 },
                 error: function (e) {
                     notyf.alert('伺服器錯誤,無法載入魚群資料' + e);
@@ -536,11 +623,118 @@
                 }
             });
             /*來源批號結束*/
-        }      
+        }
+        //表格資料載入
+        $.ajax({
+            url: 'database/measuring/measuring_view.ashx',
+            type: 'post',
+            dataType: 'json',
+            async: false,//啟用同步請求
+            data: {
+                Pool_id: Page_Pool_id,
+                Fish_detail_id: Fish_detail_id
+            },
+            success: function (measuring_json) {
+                var cssString = "";
+                for (var index in measuring_json) {
+                    cssString += '<tr data-toggle="modal" data-target="#jump-Out">' +
+                        '<td>' + measuring_json[index].Measuring_id + '</td>        ' +
+                        '<td>' + measuring_json[index].number + '</td>        ' +
+                        '<td>' + measuring_json[index].Fish_AVGweight + '</td>         ' +
+                        '<td>' + measuring_json[index].date.slice(0, 10) + '</td>           ' +
+                        '</tr>'
+                }
+                $("#supplier_view").html(cssString);
+            },
+            error: function (e) {
+                notyf.alert('伺服器錯誤,無法載入' + e);
+            }
+        });
+        $('table > tbody > tr').click(function () {
+            $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
+            $("#modify_Out_number").val($.trim($(this).find("td:eq(1)").text()))
+            $("#modify_Out_Fish_AVGweight").val($.trim($(this).find("td:eq(2)").text()))
+            $("#modify_date").val($.trim($(this).find("td:eq(3)").text()))
+            Table_Outside_id = $.trim($(this).find("td:eq(0)").text())
+            Table_Out_number = $.trim($(this).find("td:eq(1)").text())
+            Table_Out_Fish_AVGweight = $.trim($(this).find("td:eq(2)").text())
+            Table_date = $.trim($(this).find("td:eq(3)").text())
+            var fish_total = parseInt(Table_Out_number) + parseInt(Fush_Pool_Pool_number);
+            $("#modify_del").click(function (e) {
+                e.preventDefault();
+                //出魚紀錄刪除及修改(包含魚群細節加回)
+                /**刪除**/
+                $.ajax({
+                    url: 'database/outfish/outfish_delete.ashx',
+                    type: 'post',
+                    data: {
+                        Out_id: Table_Outside_id,
+                        Fish_detail_id: Fish_detail_id,
+                        total: fish_total,
+                        Pool_id: Page_Pool_id
+                    },
+                    async: false,//啟用同步請求
+                    success: function (event) {
+                        if (event === "success") {
+                            swal({
+                                type: 'success',
+                                title: '刪除成功!',
+                                allowOutsideClick: false //不可點背景關閉
+                            }).then(function () {
+                                location.reload();
+                            })
+                        } else {
+                            notyf.alert('刪除失敗');
+                        }
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入');
+                    }
+                });
+            });
+            /**修改**/
+            $("#modify_UP").click(function (e) {
+                var new_OUT_nubmer = document.getElementById('modify_Out_number').value;
+                var new_Out_Fish_AVGweight = document.getElementById('modify_Out_Fish_AVGweight').value;
+                var fish_total = parseInt(Table_Out_number) - parseInt(new_OUT_nubmer) + parseInt(Fush_Pool_Pool_number);
+                console.log(fish_total)
+                //出魚紀錄修改(包含更新魚群細節及池內資訊)                   
+                $.ajax({
+                    url: 'database/outfish/outfish_Update.ashx',
+                    type: 'post',
+                    data: {
+                        Out_id: Table_Outside_id,
+                        Fish_detail_id: Fish_detail_id,
+                        Out_nubmer: new_OUT_nubmer,
+                        Out_Fish_AVGweight: new_Out_Fish_AVGweight,
+                        total: fish_total,
+                        Pool_id: Page_Pool_id
+                    },
+                    async: false,//啟用同步請求
+                    success: function (event) {
+                        if (event === "success") {
+                            swal({
+                                type: 'success',
+                                title: '修改成功!',
+                                allowOutsideClick: false //不可點背景關閉
+                            }).then(function () {
+                                location.reload();
+                            })
+                        } else {
+                            notyf.alert('修改失敗');
+                        }
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入');
+                    }
+                });
+            });
+
+        });
         $(document).ready(function () {
             FormPlugins.init();
         });
-        $(document).ready(function () {
+                $(document).ready(function () {
             /**測量紀錄新增**/
             $("#Measuring").submit(function (e) {
                 e.preventDefault();
@@ -573,7 +767,10 @@
                                 Fish_detail_id: Fish_detail_id,
                                 number: $("#Measuring_number").val(),
                                 Measuring_Fish_AVGweight: $("#Measuring_Fish_AVGweight").val(),                              
-                                date: $("#Measuring_time").val()
+                                date: $("#Measuring_time").val(),
+                                Fish_detail_before_number: Fush_Pool_Pool_number,
+                                Fish_detail_before_Fish_AVGweight: Fish_detail_Fish_AVGweight
+
                             },
                             success: function (e) {
                                 if (e == "success") {
