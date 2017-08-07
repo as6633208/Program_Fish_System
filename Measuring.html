@@ -270,68 +270,7 @@
                 </div>
 
                 <!---Table--->
-                <!-- 彈跳視窗開始  -->
-                <div class="modal fade" id="jump-measuring" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <h4 class="modal-title" id="myModalLabel">測量記錄查看</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="panel-body">
-                                    <form class="form-horizontal" id="supplier_insert" method="post">
-                                        <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">出魚記錄編號：</label>
-                                            <div class="col-sm-7">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Outside_id">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">出魚數量：</label>
-                                            <div class="col-sm-7">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Out_number">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">平均魚重：</label>
-                                            <div class="col-sm-7">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Out_Fish_AVGweight">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">紀錄日期：</label>
-                                            <div class="col-sm-7">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_date">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <input type="button" class="btn btn-default" id="modify_UP" value="修改" />
-                                <input type="button" class="btn btn-default" id="modify_del" value="刪除" />
-                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 彈跳視窗結束  -->
+               
                 <!-- Footer -->
                 <footer class="footer container-fluid pl-30 pr-30">
                     <div class="row">
@@ -531,83 +470,81 @@
 
             /*批號結束*/
 
-            /*來源批號開始*/
-
-            $(document).ready(function () {
-                FormPlugins.init();
-            });
-
-            //魚群細節ajax
-            $.ajax({
-                url: 'database/Fish_detail/Fish_detail_view.ashx',
-                type: 'post',
-                dataType: 'json',
-                data: { Fish_detail_id: Fish_detail_Origin_Fish_detail_id },
-                async: false,//啟用同步請求
-                success: function (Fish_detail_Json) {
-                    Fish_detail_Fish_id = Fish_detail_Json[0]["Fish_id"];
-                    Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
-                    Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
-                    Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入魚群細節' + e);
-                }
-            });
-            //魚群ajax
-            $.ajax({
-                url: 'database/Fish/Fish_view.ashx',
-                type: 'post',
-                dataType: 'json',
-                data: { Fish_id: Fish_detail_Fish_id },
-                async: false,//啟用同步請求
-                success: function (Fish_Json) {
-                    Fish_Spawning_date = Fish_Json[0]["Spawning_date"];
-                    Fish_Insert_fry_date = Fish_Json[0]["Insert_fry_date"];
-                    Fish_Insert_year = Fish_Json[0]["Insert_year"];
-                    Fish_Fry_weight = Fish_Json[0]["Fry_weight"];
-                    Fish_Fish_company_id = Fish_Json[0]["Fish_company_id"];
-                    Fish_Fish_kind_id = Fish_Json[0]["Fish_kind_id"];
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入魚群資料' + e);
-                }
-            });
-            //供應商ajax
-            $.ajax({
-                url: 'database/supplier/supplier_search.ashx',
-                type: 'post',
-                dataType: 'json',
-                data: { Fish_company_id: Fish_Fish_company_id },
-                async: false,//啟用同步請求
-                success: function (Fish_Json) {
-                    Fish_company_company_abbreviation = Fish_Json[0]["company_abbreviation"];
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入供應商簡稱' + e);
-                }
-            });
-            //日期操作 產卵日
-            var Spawning_date = new Date(Fish_Spawning_date);
-            Spawning_date_MM = ((Spawning_date.getMonth() + 1) < 10 ? '0' : '') + (Spawning_date.getMonth() + 1);//補0
-            Spawning_date_DD = (Spawning_date.getDate() < 10 ? '0' : '') + Spawning_date.getDate();
-            Spawning_date = Spawning_date_MM + '' + Spawning_date_DD;
-            //日期操作 入苗日
-            var fry_date = new Date(Fish_Insert_fry_date);
-            fry_date_MM = ((fry_date.getMonth() + 1 < 10 ? '0' : '')) + (fry_date.getMonth() + 1);
-            fry_date_DD = (fry_date.getDate() < 10 ? '0' : '') + fry_date.getDate();
-            fry_date = fry_date_MM + '' + fry_date_DD;
-            //日期操作 移動日
-            var Move_date = new Date(Fish_detail_Move_date);
-            Move_date_MM = ((Move_date.getMonth() + 1 < 10 ? '0' : '')) + (Move_date.getMonth() + 1);
-            Move_date_DD = (Move_date.getDate() < 10 ? '0' : '') + Move_date.getDate();
-            //移入日期顯示
-            $('#insert_date').html(Move_date.getFullYear() + '-' + Move_date_MM + '-' + Move_date_DD);
-            Move_date = Move_date_MM + '' + Move_date_DD;
-            //批號顯示
-            $('#source_batch').html(Spawning_date + '-' + fry_date + '-' + Fish_Insert_year + '-' + Fish_Fry_weight + '-'
-                + Fish_company_company_abbreviation + '-' + Fish_detail_Fish_size + '-' + Move_date);
-
+            if (Fish_detail_Origin_Fish_detail_id == '0') {
+                $('#source_batch').html('無');
+            }
+            else {
+                //魚群細節ajax
+                $.ajax({
+                    url: 'database/Fish_detail/Fish_detail_view.ashx',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { Fish_detail_id: Fish_detail_Origin_Fish_detail_id },
+                    async: false,//啟用同步請求
+                    success: function (Fish_detail_Json) {
+                        Fish_detail_Fish_id = Fish_detail_Json[0]["Fish_id"];
+                        Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
+                        Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
+                        Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入魚群細節' + e);
+                    }
+                });
+                //魚群ajax
+                $.ajax({
+                    url: 'database/Fish/Fish_view.ashx',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { Fish_id: Fish_detail_Fish_id },
+                    async: false,//啟用同步請求
+                    success: function (Fish_Json) {
+                        Fish_Spawning_date = Fish_Json[0]["Spawning_date"];
+                        Fish_Insert_fry_date = Fish_Json[0]["Insert_fry_date"];
+                        Fish_Insert_year = Fish_Json[0]["Insert_year"];
+                        Fish_Fry_weight = Fish_Json[0]["Fry_weight"];
+                        Fish_Fish_company_id = Fish_Json[0]["Fish_company_id"];
+                        Fish_Fish_kind_id = Fish_Json[0]["Fish_kind_id"];
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入魚群資料' + e);
+                    }
+                });
+                //供應商ajax
+                $.ajax({
+                    url: 'database/supplier/supplier_search.ashx',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { Fish_company_id: Fish_Fish_company_id },
+                    async: false,//啟用同步請求
+                    success: function (Fish_Json) {
+                        Fish_company_company_abbreviation = Fish_Json[0]["company_abbreviation"];
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入供應商簡稱' + e);
+                    }
+                });
+                //日期操作 產卵日
+                var Spawning_date = new Date(Fish_Spawning_date);
+                Spawning_date_MM = ((Spawning_date.getMonth() + 1) < 10 ? '0' : '') + (Spawning_date.getMonth() + 1);//補0
+                Spawning_date_DD = (Spawning_date.getDate() < 10 ? '0' : '') + Spawning_date.getDate();
+                Spawning_date = Spawning_date_MM + '' + Spawning_date_DD;
+                //日期操作 入苗日
+                var fry_date = new Date(Fish_Insert_fry_date);
+                fry_date_MM = ((fry_date.getMonth() + 1 < 10 ? '0' : '')) + (fry_date.getMonth() + 1);
+                fry_date_DD = (fry_date.getDate() < 10 ? '0' : '') + fry_date.getDate();
+                fry_date = fry_date_MM + '' + fry_date_DD;
+                //日期操作 移動日
+                var Move_date = new Date(Fish_detail_Move_date);
+                Move_date_MM = ((Move_date.getMonth() + 1 < 10 ? '0' : '')) + (Move_date.getMonth() + 1);
+                Move_date_DD = (Move_date.getDate() < 10 ? '0' : '') + Move_date.getDate();
+                //移入日期顯示
+                $('#insert_date').html(Move_date.getFullYear() + '-' + Move_date_MM + '-' + Move_date_DD);
+                Move_date = Move_date_MM + '' + Move_date_DD;
+                //批號顯示
+                $('#source_batch').html(Spawning_date + '-' + fry_date + '-' + Fish_Insert_year + '-' + Fish_Fry_weight + '-'
+                    + Fish_company_company_abbreviation + '-' + Fish_detail_Fish_size + '-' + Move_date);
+            }
             //魚群種類ajax
             $.ajax({
                 url: 'database/fish_kind/fish_kind_search.ashx',
@@ -616,12 +553,13 @@
                 data: { Fish_kind_id: Fish_Fish_kind_id },
                 async: false,//啟用同步請求
                 success: function (Fish_kind_Json) {
-                    $('#fish_kind').html(Fish_kind_Json[0]["kind_name"]);
+                    $('#fish_kind').html(Fish_kind_Json[0]["kind_name"]);               
                 },
                 error: function (e) {
                     notyf.alert('伺服器錯誤,無法載入魚種' + e);
                 }
             });
+    
             /*來源批號結束*/
         }
         //表格資料載入
@@ -650,6 +588,7 @@
                 notyf.alert('伺服器錯誤,無法載入' + e);
             }
         });
+        /*
         $('table > tbody > tr').click(function () {
             $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
             $("#modify_Out_number").val($.trim($(this).find("td:eq(1)").text()))
@@ -664,7 +603,7 @@
                 e.preventDefault();
                 //出魚紀錄刪除及修改(包含魚群細節加回)
                 /**刪除**/
-                $.ajax({
+               /* $.ajax({
                     url: 'database/outfish/outfish_delete.ashx',
                     type: 'post',
                     data: {
@@ -693,7 +632,7 @@
                 });
             });
             /**修改**/
-            $("#modify_UP").click(function (e) {
+           /* $("#modify_UP").click(function (e) {
                 var new_OUT_nubmer = document.getElementById('modify_Out_number').value;
                 var new_Out_Fish_AVGweight = document.getElementById('modify_Out_Fish_AVGweight').value;
                 var fish_total = parseInt(Table_Out_number) - parseInt(new_OUT_nubmer) + parseInt(Fush_Pool_Pool_number);
@@ -730,7 +669,7 @@
                 });
             });
 
-        });
+        });*/
         $(document).ready(function () {
             FormPlugins.init();
         });

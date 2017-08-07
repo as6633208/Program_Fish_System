@@ -615,13 +615,27 @@
             });
         }
         /*來源批號結束*/
-        //清空魚池         
-            /**新增魚種**/
+        //清空魚池             
             $("#out_all").click(function (e) {
-                e.preventDefault();   
+                e.preventDefault();
+                if (Fush_Pool_Pool_number != 0) {
                     swal({
-                        title: "確認清空「" + Page_Pool_id + "池」?將會紀錄損失" + Fush_Pool_Pool_number + "隻魚",
-                        text: "清空後將無法修改",
+                        title: Page_Pool_id + "池，尚有" + Fush_Pool_Pool_number + "隻魚，請至測量功能更新實際狀況。",
+                        text: "",
+                        type: 'warning',                       
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        allowOutsideClick: false,//不可點背景關閉                        
+                        cancelButtonText: '取消'
+                    }).then(function (isConfirm) {
+                        if (isConfirm) {      
+                        }
+                    })
+                }
+                else {
+                    swal({
+                        title:"確認清空"+ Page_Pool_id + "池",
+                        text: "確認後將無法更改",
                         type: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -631,49 +645,6 @@
                         cancelButtonText: '取消'
                     }).then(function (isConfirm) {
                         if (isConfirm) {
-                            //新增損失紀錄
-                            $.ajax({
-                                type: 'post',
-                                url: 'database/measuring/Inventory.ashx',
-                                async: false,
-                                data: {
-                                    Pool_id: Page_Pool_id,                                  
-                                    Fish_detail_id: Fish_detail_id,
-                                    number: Fush_Pool_Pool_number
-                                },
-                                success: function (e) {
-                                    if (e == "success") {
-                                       console.log("success")
-                                    } else {
-                                        console.log("Inventory error")
-                                    }
-                                },
-                                error: function (e) {
-                                    notyf.alert('伺服器錯誤,無法載入' + e);
-                                }
-                            });
-                            //更新魚群細節
-                            $.ajax({
-                                type: 'post',
-                                url: 'database/Fish_detail/Fish_detail_update.ashx',
-                                async: false,
-                                data: {                             
-                                    Fish_detail_id: Fish_detail_id,
-                                    number:Fish_detail_number- Fush_Pool_Pool_number
-                                },
-                                success: function (e) {
-                                    if (e == "success") {
-                                        console.log("success")
-                                    } else {
-                                        console.log("Inventory error")
-                                    }
-                                },
-                                error: function (e) {
-                                    notyf.alert('伺服器錯誤,無法載入' + e);
-                                }
-                            });
-
-                            //更新魚池狀態
                             $.ajax({
                                 type: 'post',
                                 url: 'database/pool/pool_update.ashx',
@@ -681,8 +652,8 @@
                                 data: {
                                     Pool_id: Page_Pool_id,
                                     Pool_status: 'false',
-                                    number:'0',
-                                    Fish_detail_id: '0'                             
+                                    number: '0',
+                                    Fish_detail_id: '0'
                                 },
                                 success: function (e) {
                                     if (e == "success") {
@@ -701,9 +672,51 @@
                                     notyf.alert('伺服器錯誤,無法載入' + e);
                                 }
                             });
-                           
                         }
                     })
+                }
+                  
+                /*新增損失紀錄
+                          $.ajax({
+                              type: 'post',
+                              url: 'database/measuring/Inventory.ashx',
+                              async: false,
+                              data: {
+                                  Pool_id: Page_Pool_id,                                  
+                                  Fish_detail_id: Fish_detail_id,
+                                  number: Fush_Pool_Pool_number
+                              },
+                              success: function (e) {
+                                  if (e == "success") {
+                                     console.log("success")
+                                  } else {
+                                      console.log("Inventory error")
+                                  }
+                              },
+                              error: function (e) {
+                                  notyf.alert('伺服器錯誤,無法載入' + e);
+                              }
+                          });
+                          //更新魚群細節
+                          $.ajax({
+                              type: 'post',
+                              url: 'database/Fish_detail/Fish_detail_update.ashx',
+                              async: false,
+                              data: {                             
+                                  Fish_detail_id: Fish_detail_id,
+                                  number:Fish_detail_number- Fush_Pool_Pool_number
+                              },
+                              success: function (e) {
+                                  if (e == "success") {
+                                      console.log("success")
+                                  } else {
+                                      console.log("Inventory error")
+                                  }
+                              },
+                              error: function (e) {
+                                  notyf.alert('伺服器錯誤,無法載入' + e);
+                              }
+                          });*/
                 });        
     </script>
 </body>
