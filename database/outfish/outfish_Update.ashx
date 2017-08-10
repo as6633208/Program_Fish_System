@@ -13,9 +13,12 @@ public class outfish_Update : IHttpHandler {
     string Pool_id=context.Request.Form["Pool_id"].ToString();
     string Out_nubmer=context.Request.Form["Out_nubmer"].ToString();
     string Out_Fish_AVGweight=context.Request.Form["Out_Fish_AVGweight"].ToString();
+    string Waistline = context.Request.Form["Waistline"].ToString();
+    string bust = context.Request.Form["bust"].ToString();
+    string Tail = context.Request.Form["Tail"].ToString();
 
         Method_Fish metod = new Method_Fish();
-        string re_ = metod.Out_Update(Out_id,Fish_detail_id,total,Pool_id,Out_nubmer,Out_Fish_AVGweight);
+        string re_ = metod.Out_Update(Out_id,Fish_detail_id,total,Pool_id,Out_nubmer,Out_Fish_AVGweight,Waistline,bust,Tail);
         context.Response.Write(re_);
     }
  

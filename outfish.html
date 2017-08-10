@@ -221,6 +221,33 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="form-group">
+                                                        <label for="out_num" class="col-sm-3 control-label">平均腰圍：</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                                <input type="text" class="form-control" id="Waistline" placeholder="cm" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="out_num" class="col-sm-3 control-label">平均胸圍：</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                                <input type="text" class="form-control" id="bust" placeholder="cm" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="out_num" class="col-sm-3 control-label">平均尾圍：</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                                <input type="text" class="form-control" id="Tail" placeholder="cm" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="form-group mb-0">
                                                         <div class="col-sm-offset-3 col-sm-9">
                                                             <button type="submit" class="btn btn-success ">新增</button>
@@ -246,10 +273,14 @@
                                             <table id="datable_1" class="table table-hover display  pb-30">
                                                 <thead>
                                                     <tr>
+                                                        <th>出魚日期</th>
                                                         <th>出魚編號</th>                                                        
                                                         <th>出魚數量</th>
                                                         <th>平均重量</th>
-                                                        <th>出魚日期</th>
+                                                        <th>平均腰圍</th>
+                                                        <th>平均胸圍</th>
+                                                        <th>平均尾圍</th>
+                                                    
                                                     </tr>
                                                 </thead>
                                                 <tbody id="supplier_view"></tbody>
@@ -276,6 +307,15 @@
                                 <div class="panel-body">
                                     <form class="form-horizontal" id="supplier_insert" method="post">
                                         <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">紀錄日期：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="supplier_name" class="col-sm-5 control-label">出魚記錄編號：</label>
                                             <div class="col-sm-7">
                                                 <div class="input-group">
@@ -301,16 +341,35 @@
                                                     <input type="text" class="form-control" id="modify_Out_Fish_AVGweight" >
                                                 </div>
                                             </div>
-                                        </div>                                       
+                                        </div>                 
                                         <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">紀錄日期：</label>
+                                            <label for="supplier_name" class="col-sm-5 control-label">平均腰圍：</label>
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_date" >
+                                                    <input type="text" class="form-control" id="modify_Out_Fish_Waistline">
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>     
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">平均胸圍：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_Out_Fish_bust">
+                                                </div>
+                                            </div>
+                                        </div>     
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-5 control-label">平均尾圍：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_Out_Fish_Tail">
+                                                </div>
+                                            </div>
+                                        </div>                           
+                                        
                                     </form>
                                 </div>
 
@@ -625,10 +684,13 @@
                     var cssString = "";
                     for (var index in Out_json) {
                         cssString += '<tr data-toggle="modal" data-target="#jump-Out">' +
+                            '<td>' + Out_json[index].Outside_date.slice(0, 10) + '</td>           ' +
                             '<td>' + Out_json[index].Outside_id + '</td>        ' +
                             '<td>' + Out_json[index].number + '</td>        ' +
                             '<td>' + Out_json[index].Fish_AVGweight + '</td>         ' +
-                            '<td>' + Out_json[index].Outside_date.slice(0, 10) + '</td>           ' +
+                            '<td>' + Out_json[index].Waistline + '</td>           ' +
+                            '<td>' + Out_json[index].bust + '</td>           ' +
+                            '<td>' + Out_json[index].Tail + '</td>           ' +
                             '</tr>'
 
                     }
@@ -641,15 +703,19 @@
             });
             /**bootstrap modal 載入資料**/
             $('table > tbody > tr').click(function () {
-                $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
-                $("#modify_Out_number").val($.trim($(this).find("td:eq(1)").text()))
-                $("#modify_Out_Fish_AVGweight").val($.trim($(this).find("td:eq(2)").text()))
-                $("#modify_date").val($.trim($(this).find("td:eq(3)").text()))
-                Table_Outside_id = $.trim($(this).find("td:eq(0)").text())
-                Table_Out_number = $.trim($(this).find("td:eq(1)").text())
-                Table_Out_Fish_AVGweight = $.trim($(this).find("td:eq(2)").text())
-                Table_date = $.trim($(this).find("td:eq(3)").text())
+                $("#modify_date").val($.trim($(this).find("td:eq(0)").text()))
+                $("#modify_Outside_id").val($.trim($(this).find("td:eq(1)").text()))
+                $("#modify_Out_number").val($.trim($(this).find("td:eq(2)").text()))
+                $("#modify_Out_Fish_AVGweight").val($.trim($(this).find("td:eq(3)").text()))              
+                $("#modify_Out_Fish_Waistline").val($.trim($(this).find("td:eq(4)").text()))
+                $("#modify_Out_Fish_bust").val($.trim($(this).find("td:eq(5)").text()))
+                $("#modify_Out_Fish_Tail").val($.trim($(this).find("td:eq(6)").text()))
+                Table_Outside_id = $.trim($(this).find("td:eq(1)").text())
+                Table_Out_number = $.trim($(this).find("td:eq(2)").text())
+                Table_Out_Fish_AVGweight = $.trim($(this).find("td:eq(4)").text())
+                Table_date = $.trim($(this).find("td:eq(0)").text())
                 var fish_total = parseInt(Table_Out_number) + parseInt(Fush_Pool_Pool_number);
+ 
                 $("#modify_del").click(function (e) {
                     e.preventDefault();
                     //出魚紀錄刪除及修改(包含魚群細節加回)
@@ -686,8 +752,11 @@
                 $("#modify_UP").click(function (e) {
                     var new_OUT_nubmer = document.getElementById('modify_Out_number').value;
                     var new_Out_Fish_AVGweight = document.getElementById('modify_Out_Fish_AVGweight').value;
-                    var fish_total = parseInt(Table_Out_number) - parseInt(new_OUT_nubmer) + parseInt(Fush_Pool_Pool_number);
-                        console.log(fish_total)
+                    var new_Out_Fish_Waistline = document.getElementById('modify_Out_Fish_Waistline').value;
+                    var new_Out_Fish_bust = document.getElementById('modify_Out_Fish_bust').value;
+                    var new_Out_Fish_Tail = document.getElementById('modify_Out_Fish_Tail').value;
+                    var fish_total = parseInt(Table_Out_number) - parseInt(new_OUT_nubmer) + parseInt(Fush_Pool_Pool_number);        
+                    console.log(fish_total)
                         //出魚紀錄修改(包含更新魚群細節及池內資訊)                   
                         $.ajax({
                             url: 'database/outfish/outfish_Update.ashx',
@@ -697,6 +766,9 @@
                                 Fish_detail_id: Fish_detail_id,
                                 Out_nubmer: new_OUT_nubmer,
                                 Out_Fish_AVGweight: new_Out_Fish_AVGweight,
+                                Waistline: new_Out_Fish_Waistline,
+                                bust: new_Out_Fish_bust,
+                                Tail: new_Out_Fish_Tail,
                                 total: fish_total,
                                 Pool_id: Page_Pool_id
                             },
@@ -750,6 +822,9 @@
                                         Pool_id: Page_Pool_id,
                                         Out_number: $("#Out_number").val(),
                                         Fish_AVGweight: $("#Avg_Weight").val(),
+                                        Waistline: $("#Waistline").val(),
+                                        bust: $("#bust").val(),
+                                        Tail: $("#Tail").val(),
                                         Fish_detail_id: Fish_detail_id,
                                         Outside_date: $("#Out_time").val(),
                                         old_number: Fush_Pool_Pool_number

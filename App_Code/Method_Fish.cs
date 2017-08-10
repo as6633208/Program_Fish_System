@@ -603,7 +603,17 @@ public class Method_Fish
     public DataTable feed_view(string Pool_id, string Fish_detail_id)
     {
   
-        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Feed  WHERE (Pool_id = @Pool_id) AND ( Fish_detail_id=@Fish_detail_id)");
+        SqlCommand cmd = new SqlCommand(@"SELECT Feed.Feed_id, Feed.Fodder_id, Fish_company.company_name AS F_Comp_name, Fodder.Fodder_name, 
+                                                 Feed.Pool_id, Feed.Fish_detail_id, Feed.Fodder_number, Feed.date, Feed.Bait, Feed.Medicine_id, 
+                                                 Fish_company_1.company_name AS M_Comp_name, Medicine.Medicine_name, Feed.medicine_number, 
+                                                 Medicine.Fish_company_id
+                                                 FROM Feed
+                                                 INNER JOIN
+                                                 Fodder ON Feed.Fodder_id = Fodder.Fodder_id INNER JOIN
+                                                 Medicine ON Feed.Medicine_id = Medicine.Medicine_id INNER JOIN
+                                                 Fish_company ON Fodder.Fish_company_id = Fish_company.Fish_company_id INNER JOIN
+                                                 Fish_company AS Fish_company_1 ON Medicine.Fish_company_id = Fish_company_1.Fish_company_id 
+                                                 WHERE (Pool_id = @Pool_id) AND ( Fish_detail_id=@Fish_detail_id)");
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 50).Value = Fish_detail_id;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
@@ -714,16 +724,21 @@ public class Method_Fish
     #endregion
     #region 出魚操作
     #region 出魚記錄新增
-    public string Outfish_Insert(string Pool_id, string number, string Fish_AVGweight, string Fish_detail_id, string Outside_date) {
+    public string Outfish_Insert(string Pool_id, string number, string Fish_AVGweight, string Waistline, string bust, string Tail, string Fish_detail_id, string Outside_date) {
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Out
-                            (Pool_id,number,Fish_AVGweight,Fish_detail_id,Outside_date) VALUES
-                        (@Pool_id,@number,@Fish_AVGweight,@Fish_detail_id,@Outside_date)");
+                            (Pool_id,number,Fish_AVGweight,Waistline,bust,Tail,Fish_detail_id,Outside_date) VALUES
+                        (@Pool_id,@number,@Fish_AVGweight,@Waistline,@bust,@Tail,@Fish_detail_id,@Outside_date)");
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 50).Value = Pool_id;
         cmd.Parameters.Add("@number", SqlDbType.Int,10).Value = number;
         cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 50).Value = Fish_AVGweight;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int,10).Value =Fish_detail_id;
         cmd.Parameters.Add("@Outside_date", SqlDbType.DateTime2,10).Value = Outside_date;
+        cmd.Parameters.Add("@Waistline", SqlDbType.NVarChar, 10).Value = Waistline;
+        cmd.Parameters.Add("@bust", SqlDbType.NVarChar, 10).Value = bust;
+        cmd.Parameters.Add("@Tail", SqlDbType.NVarChar, 10).Value = Tail;
+
+
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
@@ -767,14 +782,17 @@ public class Method_Fish
     }
     #endregion
     #region 出魚紀錄修改
-    public string Out_Update(string Out_id, string Fish_detail_id, string total, string Pool_id,string out_number,string Out_Fish_AVGweight)
+    public string Out_Update(string Out_id, string Fish_detail_id, string total, string Pool_id,string out_number,string Out_Fish_AVGweight,string Waistline,string bust,string Tail)
     {
         //Update Products Set ProductName = ProductName + ',6' Where ProductID = 1
         string result = "";
-        SqlCommand cmd = new SqlCommand(@"UPDATE Out SET number=@number , Fish_AVGweight=@Fish_AVGweight WHERE (Outside_id = @Out_id)");
+        SqlCommand cmd = new SqlCommand(@"UPDATE Out SET number=@number,Waistline=@Waistline,bust=@bust,Tail=@Tail, Fish_AVGweight=@Fish_AVGweight WHERE (Outside_id = @Out_id)");
           cmd.Parameters.Add("@Out_id", SqlDbType.Int).Value = Out_id;
-        cmd.Parameters.Add("@number", SqlDbType.Int).Value = out_number;
-        cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.Int).Value = Out_Fish_AVGweight;
+         cmd.Parameters.Add("@number", SqlDbType.Int).Value = out_number;
+         cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.Int).Value = Out_Fish_AVGweight;
+        cmd.Parameters.Add("@Waistline", SqlDbType.NVarChar, 10).Value = Waistline;
+        cmd.Parameters.Add("@bust", SqlDbType.NVarChar, 10).Value = bust;
+        cmd.Parameters.Add("@Tail", SqlDbType.NVarChar, 10).Value = Tail;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         string re_ = Fish_detail_update(Int32.Parse(Fish_detail_id), Int32.Parse(total));

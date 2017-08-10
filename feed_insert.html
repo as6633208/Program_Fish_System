@@ -306,13 +306,16 @@
                                             <table id="datable_1" class="table table-hover display  pb-30">
                                                 <thead>
                                                     <tr>
+                                                        <th>紀錄日期</th>
                                                         <th>餵食編號</th>
+                                                        <th>供應商</th>
                                                         <th>飼料名稱</th>
                                                         <th>餵食數量</th>
+                                                        <th>供應商</th>
                                                         <th>添加物名稱</th>
                                                         <th>使用數量</th>
                                                         <th>生餌</th>
-                                                        <th>紀錄日期</th>                                                     
+                                                                                                         
                                                     </tr>
                                                 </thead>
                                                 <tbody id="supplier_view"></tbody>
@@ -340,56 +343,78 @@
                                 <div class="panel-body">
                                     <form class="form-horizontal" id="supplier_insert" method="post">
                                         <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">餵食飼料名稱：</label>
-                                            <div class="col-sm-7">
+                                            <label for="fodder_company" class="col-sm-2 control-label">飼料供應商：</label>
+                                            <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Fodder_id" disabled>
+                                                    <select class="selectpicker" data-style="btn-primary btn-outline" id="jump_fodder_company" onchange="changed_fodder_company(this)">
+                                                        <option value="Null" selected disabled>請選擇飼料供應商</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">餵食數量：</label>
-                                            <div class="col-sm-7">
+                                            <label for="fodder_name" class="col-sm-2 control-label">飼料名稱：</label>
+                                            <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Fodder_number" disabled>
-                                                </div>
-                                            </div>
-                                        </div>
-                                         <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">添加物名稱：</label>
-                                            <div class="col-sm-7">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Medicine_id" disabled>
+                                                    <select class="selectpicker" data-style="btn-primary btn-outline" id="jump_fodder_name" onchange="changed_fodder_name(this)">
+                                                        <option value="Null" selected>請選擇飼料</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">添加物數量：</label>
+                                            <label for="supplier_name" class="col-sm-3 control-label">餵食數量：</label>
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_medicine_number"  disabled>
+                                                    <input type="text" class="form-control" id="modify_Fodder_number" >
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">生餌數量：</label>
-                                            <div class="col-sm-7">
+                                            <label for="medicine_company" class="col-sm-3 control-label">添加物供應商名稱：</label>
+                                            <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Bait" disabled>
+                                                    <select class="selectpicker" data-style="btn-primary btn-outline" id="jump_medicine_company" onchange="changed_medicine_company(this)">
+                                                        <option value="Null" selected>請選擇添加物供商</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="supplier_name" class="col-sm-5 control-label">紀錄日期：</label>
+                                            <label for="medicine_name" class="col-sm-3 control-label">添加物名稱：</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <select class="selectpicker" data-style="btn-primary btn-outline" id="jump_medicine_name" onchange="changed_medicine_name(this)">
+                                                        <option value="Null" selected>請選擇添加物</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-3 control-label">添加物數量：</label>
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_date" disabled>
+                                                    <input type="text" class="form-control" id="modify_medicine_number" >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-3 control-label">生餌數量：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_Bait" >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="supplier_name" class="col-sm-3 control-label">紀錄日期：</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="icon-user"></i></div>
+                                                    <input type="text" class="form-control" id="modify_date" >
                                                 </div>
                                             </div>
                                         </div>
@@ -473,6 +498,7 @@
         var bt_id = [];//抓取餵食資料刪除按鈕編號
         var bt_detail = [];
         var medicine = '0';
+        var select_f_comp = '0';
         //抓網址變數
       
         $.UrlParam = function (name) {
@@ -714,18 +740,19 @@
                 var cssString = "";             
                 for (var index in feed_json) {
                     cssString += '<tr data-toggle="modal" data-target="#jump-feed">' +
-                                     '<td>' + feed_json[index].Feed_id + '</td>        ' +
-                                    '<td>' + feed_json[index].Fodder_id + '</td>        ' +
+                                    '<td>' + feed_json[index].date.slice(0, 10) + '</td>     ' +
+                                    '<td>' + feed_json[index].Feed_id + '</td>               ' +
+                                    '<td>' + feed_json[index].F_Comp_name + '</td>               ' +
+                                    '<td>' + feed_json[index].Fodder_name + '</td>               ' +
                                     '<td>' + feed_json[index].Fodder_number + '</td>         ' +
-                                    '<td>' + feed_json[index].Medicine_id + '</td>           ' +
+                                    '<td>' + feed_json[index].M_Comp_name + '</td>           ' +
+                                    '<td>' + feed_json[index].Medicine_name + '</td>           ' +
                                     '<td>' + feed_json[index].medicine_number + '</td>       ' +
-                                    '<td>' + feed_json[index].Bait + '</td>                  ' +
-                                    '<td>' + feed_json[index].date.slice(0, 10) + '</td>                  ' +
+                                    '<td>' + feed_json[index].Bait + '</td>                  ' +                                   
                                     '</tr>'            
                   
                 }
-            
-                $("#supplier_view").html(cssString);
+                $("#supplier_view").html(cssString);               
             },
             error: function (e) {
                 notyf.alert('伺服器錯誤,無法載入' + e);
@@ -733,17 +760,38 @@
         });
         /**bootstrap modal 載入資料**/
         $('table > tbody > tr').click(function () {
-            $("#modify_Fodder_id").val($.trim($(this).find("td:eq(1)").text()))
-            $("#modify_Fodder_number").val($.trim($(this).find("td:eq(2)").text()))
-            $("#modify_Medicine_id").val($.trim($(this).find("td:eq(3)").text()))
-            $("#modify_medicine_number").val($.trim($(this).find("td:eq(4)").text()))
-            $("#modify_Bait").val($.trim($(this).find("td:eq(5)").text()))
-            $("#modify_date").val($.trim($(this).find("td:eq(6)").text()))        
-            var Table_Feed_id = $.trim($(this).find("td:eq(0)").text())
-            var Table_Fodder_id = $.trim($(this).find("td:eq(1)").text())
-            var Table_Fodder_number = $.trim($(this).find("td:eq(2)").text())
-            var Table_Medicine_id = $.trim($(this).find("td:eq(3)").text())
-            var Table_medicine_number = $.trim($(this).find("td:eq(4)").text())
+            // 0-日期 1-餵食編號 2-供應商 3-飼料名稱 4-餵食數量 5-供應商 6-添加物名稱 7-使用數量 8-生餌
+         //   $("#modify_Fodder_id").val($.trim($(this).find("td:eq(1)").text()))
+            $("#jump_fodder_company").val($.trim($(this).find("td:eq(2)").text()))         
+            $("#jump_fodder_name").val($.trim($(this).find("td:eq(3)").text()))
+            $("#modify_Fodder_number").val($.trim($(this).find("td:eq(4)").text()))
+            $("#jump_medicine_company").val($.trim($(this).find("td:eq(5)").text()))
+            $("#jump_medicine_name").val($.trim($(this).find("td:eq(6)").text()))
+            $("#modify_medicine_number").val($.trim($(this).find("td:eq(7)").text()))
+            $("#modify_Bait").val($.trim($(this).find("td:eq(8)").text()))
+            $("#modify_date").val($.trim($(this).find("td:eq(0)").text()))
+            var Table_Feed_id = $.trim($(this).find("td:eq(1)").text())
+            var Table_Fodder_id = $.trim($(this).find("td:eq(2)").text())
+            var Table_Fodder_number = $.trim($(this).find("td:eq(3)").text())
+            var Table_Medicine_id = $.trim($(this).find("td:eq(4)").text())
+            var Table_medicine_number = $.trim($(this).find("td:eq(5)").text())
+            //查詢飼料及添加物ID
+          /*  $.ajax({//抓取飼料ID
+                url: 'database/feedPurchase/feedPurchase_select_Id.ashx',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    supplier: $("#fodder_company").val(),
+                    feed: feed_name
+                },
+                async: false,//啟用同步請求,
+                success: function (select) {
+                    Table_Fodder_id = select[0].Fodder_id
+                },
+                error: function (e) {
+                    notyf.alert('伺服器錯誤,無法載入' + e);
+                }
+            });*/
             /**刪除**/
 
             $("#modify_del").click(function (e) {
@@ -770,7 +818,7 @@
                         notyf.alert('123伺服器錯誤，無法載入')
                     }
                 });
-                //添加物用量還原
+                //添加物用量更新
                 $.ajax({
                     url: 'database/feed/feed_medicine_cut.ashx',
                     type: 'post',
@@ -804,13 +852,13 @@
                         if (event === "success") {
                             swal({
                                 type: 'success',
-                                title: '修改成功!',
+                                title: '刪除成功!',
                                 allowOutsideClick: false //不可點背景關閉
                             }).then(function () {
                                 location.reload();
                             })
                         } else {
-                            notyf.alert('修改失敗');
+                            notyf.alert('刪除失敗');
                         }
                     },
                     error: function (e) {
@@ -818,7 +866,79 @@
                     }
                 });
             });
-        });
+        });/*
+        $("#modify_del").click(function (e) {
+            e.preventDefault();
+            //飼料用量更新
+            $.ajax({
+                url: 'database/feed/feed_fodder_cut.ashx',
+                type: 'post',
+                data: {
+                    Fodder_id: Table_Fodder_id,
+                    Fodder_number: '-' + Table_Fodder_number
+                },
+                async: false,
+                success: function (e) {
+                    if (e == 'success') {
+                        console.log('success')
+                    }
+
+                    else {
+                        notyf.alert('伺服器錯誤，無法載入')
+                    }
+                },
+                error: function (e) {
+                    notyf.alert('123伺服器錯誤，無法載入')
+                }
+            });
+            //添加物用量更新
+            $.ajax({
+                url: 'database/feed/feed_medicine_cut.ashx',
+                type: 'post',
+                data: {
+                    Medicine_id: Table_Medicine_id,
+                    medicine_number: '-' + Table_medicine_number
+                },
+                async: false,
+                success: function (e) {
+                    if (e == 'success') {
+                        console.log('success')
+                    }
+
+                    else {
+                        notyf.alert('伺服器錯誤，無法載入')
+                    }
+                },
+                error: function (e) {
+                    notyf.alert('123伺服器錯誤，無法載入')
+                }
+            });
+            //餵食紀錄更新
+            $.ajax({
+                url: 'database/feed/feed_delete.ashx',
+                type: 'post',
+                data: {
+                    Feed_id: Table_Feed_id
+                },
+                async: false,//啟用同步請求
+                success: function (event) {
+                    if (event === "success") {
+                        swal({
+                            type: 'success',
+                            title: '修改成功!',
+                            allowOutsideClick: false //不可點背景關閉
+                        }).then(function () {
+                            location.reload();
+                        })
+                    } else {
+                        notyf.alert('修改失敗');
+                    }
+                },
+                error: function (e) {
+                    notyf.alert('伺服器錯誤,無法載入');
+                }
+            });
+        });     */
        $(document).ready(function() {
             /**投餵紀錄新增**/
             $("#feed_insert").submit(function (e) {
@@ -891,8 +1011,7 @@
                                    },
                                    async: false,
                                    success: function (e) {
-                                       if (e == 'success') {
-                                           console.log('success')
+                                       if (e == 'success') {                                         
                                        }
 
                                        else {
@@ -917,8 +1036,7 @@
                                   },
                                   async: false,
                                   success: function (e) {
-                                      if (e == 'success') {
-                                          console.log('success')
+                                      if (e == 'success') {                                      
                                       }
 
                                       else {
@@ -959,8 +1077,7 @@
                                    }
                                },
                                error: function (e) {
-                                   console.log(e.responseText)
-                                   notyf.alert('伺服器錯誤,無法載入' + e);
+                                 notyf.alert('伺服器錯誤,無法載入' + e);
                                }
                            })
                         }
@@ -977,8 +1094,11 @@
             success: function (select) {
                 for (var index in select) {
                     var s = document.getElementById('fodder_company');//取得id給予值
+                    var jump_s = document.getElementById('jump_fodder_company');
                     var new_option = new Option(select[index].company_name, select[index].Fish_company_id);
-                    s.options.add(new_option);                    
+                    var jump_new_option = new Option(select[index].company_name, select[index].Fish_company_id);
+                    s.options.add(new_option);    
+                    jump_s.options.add(jump_new_option);    
                 }
             },
             error: function (e) {
@@ -992,9 +1112,13 @@
             async: false,//啟用同步請求
             success: function (select) {
                 for (var index in select) {
-                    var s = document.getElementById('medicine_company');//取得id給予值
+                    //取得id給予值
+                    var s = document.getElementById('medicine_company');
+                    var s_jump = document.getElementById('jump_medicine_company');
                     var new_option = new Option(select[index].company_name, select[index].Fish_company_id);
+                    var jump_new_option = new Option(select[index].company_name, select[index].Fish_company_id);
                     s.options.add(new_option);
+                    s_jump.options.add(jump_new_option);
                 }
             },
             error: function (e) {
@@ -1012,28 +1136,37 @@
                 success: function (fodder_name_Json) {
                     if (fodder_name_Json != "") {
                         var id = document.getElementById('fodder_name');
+                        var jump_id = document.getElementById('jump_fodder_name');
                         $('#fodder_name').empty();
                         $('#fodder_name').append('<option value="" selsected disabled>請選擇分類</option>');
+                        $('#jump_fodder_name').empty();
+                        $('#jump_fodder_name').append('<option value="" selsected disabled>請選擇分類</option>');
                         for (var index in fodder_name_Json) {
                             var new_option = new Option(fodder_name_Json[index].Fodder_name, fodder_name_Json[index].Fodder_id);
+                            var jump_new_option = new Option(fodder_name_Json[index].Fodder_name, fodder_name_Json[index].Fodder_id);
                             id.options.add(new_option);
-                            console.log(new_option);
+                            jump_id.options.add(jump_new_option)                                           
                             $('#fodder_name').selectpicker('refresh');//refresh
+                            $('#jump_fodder_name').selectpicker('refresh');//refresh
                         }
                     } else {
                         $('#fodder_name').empty();//清空
                         $('#fodder_name').append('<option value="" selsected disabled>請選擇分類</option>');
                         $('#fodder_name').selectpicker('refresh');//refresh
-                    }              
+                        $('#jump_fodder_name').empty();//清空
+                        $('#jump_fodder_name').append('<option value="" selsected disabled>請選擇分類</option>');
+                        $('#jump_fodder_name').selectpicker('refresh');//refresh
+                    }             
+                   
                 },
                 error: function (e) {
                     notyf.alert('伺服器錯誤,無法載入' + e)
                 }
             });
-        }
+                  }
         function changed_fodder_name(select) {
-            console.log($('#fodder_name option:selected').text())
-            feed_name = $('#fodder_name option:selected').text()
+            feed_name = $('#fodder_name option:selected').text()    
+            jump_feed_name = $('#jump_fodder_name option:selected').text()          
         }
 
         //添加物下拉式連動選單
@@ -1046,19 +1179,33 @@
                 async: false,//啟用同步請求
                 success: function (medicine_company_Json) {
                     if (medicine_company_Json != "") {
-                        var id = document.getElementById('medicine_name');//取得id給予值                 
+                        var id = document.getElementById('medicine_name');//取得id給予值 
+                        var jump_id = document.getElementById('jump_medicine_name');
+                        //頁面
                         $('#medicine_name').empty();//清空
                         $('#medicine_name').append('<option value="" selected>請選擇添加物供應商分類</option>');
+                        //彈跳視窗
+                        $('#jump_medicine_name').empty();//清空
+                        $('#jump_medicine_name').append('<option value="" selected>請選擇添加物供應商分類</option>');
                         for (var index in medicine_company_Json) {
-                            var new_option = new Option(medicine_company_Json[index].Medicine_name, medicine_company_Json[index].Fodder_id);
-                            id.options.add(new_option);
-                            console.log(new_option);
+                            //頁面
+                            var new_option = new Option(medicine_company_Json[index].Medicine_name, medicine_company_Json[index].Fodder_id);                           
+                            id.options.add(new_option);                      
                             $('#medicine_name').selectpicker('refresh');//refresh
+                            //彈跳視窗
+                            var jump_new_option = new Option(medicine_company_Json[index].Medicine_name, medicine_company_Json[index].Fodder_id);
+                            jump_id.options.add(jump_new_option);                 
+                            $('#jump_medicine_name').selectpicker('refresh');//refresh
                         }
                     } else {
+                        //頁面
                         $('#medicine_name').empty();//清空
                         $('#medicine_name').append('<option value="" selected>請選擇分類</option>');
                         $('#medicine_name').selectpicker('refresh');//refresh
+                        //彈跳視窗
+                        $('#jump_medicine_name').empty();//清空
+                        $('#jump_medicine_name').append('<option value="" selected>請選擇分類</option>');
+                        $('#jump_medicine_name').selectpicker('refresh');//refresh
                     }             
                 },
                 error: function (e) {
@@ -1066,9 +1213,9 @@
                 }
             });
         }
-        function changed_medicine_name(select) {
-            console.log($('#medicine_name option:selected').text())
+        function changed_medicine_name(select) {      
             medicine_name = $('#medicine_name option:selected').text()
+            jump_medicine_name = $('#jump_medicine_name option:selected').text()
         }
       
     </script>
