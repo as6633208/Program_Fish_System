@@ -620,6 +620,13 @@ public class Method_Fish
         return dt;  
     }
     #endregion
+    public DataTable feed_view_one(string feed_id)
+    {
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Feed  WHERE (Feed_id = @feed_id) ");
+        cmd.Parameters.Add("@feed_id", SqlDbType.Int, 10).Value = feed_id;      
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;
+    }
     #endregion
     #region 魚群操作(sen)
     #region 魚群細節查詢(sen)

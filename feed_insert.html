@@ -770,30 +770,108 @@
             $("#modify_medicine_number").val($.trim($(this).find("td:eq(7)").text()))
             $("#modify_Bait").val($.trim($(this).find("td:eq(8)").text()))
             $("#modify_date").val($.trim($(this).find("td:eq(0)").text()))
+            
             var Table_Feed_id = $.trim($(this).find("td:eq(1)").text())
-            var Table_Fodder_id = $.trim($(this).find("td:eq(2)").text())
-            var Table_Fodder_number = $.trim($(this).find("td:eq(3)").text())
-            var Table_Medicine_id = $.trim($(this).find("td:eq(4)").text())
-            var Table_medicine_number = $.trim($(this).find("td:eq(5)").text())
-            //查詢飼料及添加物ID
-          /*  $.ajax({//抓取飼料ID
-                url: 'database/feedPurchase/feedPurchase_select_Id.ashx',
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    supplier: $("#fodder_company").val(),
-                    feed: feed_name
-                },
-                async: false,//啟用同步請求,
-                success: function (select) {
-                    Table_Fodder_id = select[0].Fodder_id
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入' + e);
-                }
-            });*/
-            /**刪除**/
+            var Table_Fodder_id = '0';
+            var Table_medicine_id = '0';
+            
+            var Table_Fodder_comp = $.trim($(this).find("td:eq(2)").text())
+            var Table_Fodder_name = $.trim($(this).find("td:eq(3)").text())
+            var Table_Fodder_number = $.trim($(this).find("td:eq(4)").text())
+            var Table_Medicine_comp = $.trim($(this).find("td:eq(5)").text())
+            var Table_medicine_name = $.trim($(this).find("td:eq(6)").text())
+            var Table_medicine_number = $.trim($(this).find("td:eq(7)").text())
+            
+            /**修改**/
+            $("#modify_UP").click(function (e) {
+                e.preventDefault();
+                //抓取飼料及添加物ID
+                $.ajax({
+                    url: 'database/feed/feed_select_one.ashx',
+                    type: 'post',
+                    data: {
+                        feed_id: Table_Feed_id
+                    },
+                    async: false,
+                    success: function (selecr_one_json) {                   
+                        Table_Fodder_id = selecr_one_json[0]["Fodder_id"];
+                        Table_medicine_id = selecr_one_json[0]["Medicine_id"];                        
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤，無法載入')
+                    }
+                });
+                //飼料用量復原
+                $.ajax({
+                    url: 'database/feed/feed_fodder_cut.ashx',
+                    type: 'post',
+                    data: {
+                        Fodder_id: Table_Fodder_id,
+                        Fodder_number: '-' + Table_Fodder_number
+                    },
+                    async: false,
+                    success: function (e) {
+                        if (e == 'success') {
+                            console.log('success')
+                        }
 
+                        else {
+                            notyf.alert('伺服器錯誤，無法載入')
+                        }
+                    },
+                    error: function (e) {
+                        notyf.alert('123伺服器錯誤，無法載入')
+                    }
+                });
+                //添加物用量更新
+                $.ajax({
+                    url: 'database/feed/feed_medicine_cut.ashx',
+                    type: 'post',
+                    data: {
+                        Medicine_id: Table_medicine_id,
+                        medicine_number: '-' + Table_medicine_number
+                    },
+                    async: false,
+                    success: function (e) {
+                        if (e == 'success') {
+                            console.log('success')
+                        }
+
+                        else {
+                            notyf.alert('伺服器錯誤，無法載入')
+                        }
+                    },
+                    error: function (e) {
+                        notyf.alert('123伺服器錯誤，無法載入')
+                    }
+                });
+                //餵食紀錄刪除
+                $.ajax({
+                    url: 'database/feed/feed_delete.ashx',
+                    type: 'post',
+                    data: {
+                        Feed_id: Table_Feed_id
+                    },
+                    async: false,//啟用同步請求
+                    success: function (event) {
+                        if (event === "success") {
+                            swal({
+                                type: 'success',
+                                title: '刪除成功!',
+                                allowOutsideClick: false //不可點背景關閉
+                            }).then(function () {
+                                location.reload();
+                            })
+                        } else {
+                            notyf.alert('刪除失敗');
+                        }
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入');
+                    }
+                });
+            });
+            /**刪除**/
             $("#modify_del").click(function (e) {
                 e.preventDefault();
                 //飼料用量復原
@@ -866,79 +944,8 @@
                     }
                 });
             });
-        });/*
-        $("#modify_del").click(function (e) {
-            e.preventDefault();
-            //飼料用量更新
-            $.ajax({
-                url: 'database/feed/feed_fodder_cut.ashx',
-                type: 'post',
-                data: {
-                    Fodder_id: Table_Fodder_id,
-                    Fodder_number: '-' + Table_Fodder_number
-                },
-                async: false,
-                success: function (e) {
-                    if (e == 'success') {
-                        console.log('success')
-                    }
-
-                    else {
-                        notyf.alert('伺服器錯誤，無法載入')
-                    }
-                },
-                error: function (e) {
-                    notyf.alert('123伺服器錯誤，無法載入')
-                }
-            });
-            //添加物用量更新
-            $.ajax({
-                url: 'database/feed/feed_medicine_cut.ashx',
-                type: 'post',
-                data: {
-                    Medicine_id: Table_Medicine_id,
-                    medicine_number: '-' + Table_medicine_number
-                },
-                async: false,
-                success: function (e) {
-                    if (e == 'success') {
-                        console.log('success')
-                    }
-
-                    else {
-                        notyf.alert('伺服器錯誤，無法載入')
-                    }
-                },
-                error: function (e) {
-                    notyf.alert('123伺服器錯誤，無法載入')
-                }
-            });
-            //餵食紀錄更新
-            $.ajax({
-                url: 'database/feed/feed_delete.ashx',
-                type: 'post',
-                data: {
-                    Feed_id: Table_Feed_id
-                },
-                async: false,//啟用同步請求
-                success: function (event) {
-                    if (event === "success") {
-                        swal({
-                            type: 'success',
-                            title: '修改成功!',
-                            allowOutsideClick: false //不可點背景關閉
-                        }).then(function () {
-                            location.reload();
-                        })
-                    } else {
-                        notyf.alert('修改失敗');
-                    }
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入');
-                }
-            });
-        });     */
+        });
+       
        $(document).ready(function() {
             /**投餵紀錄新增**/
             $("#feed_insert").submit(function (e) {
