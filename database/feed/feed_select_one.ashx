@@ -11,14 +11,14 @@ using Newtonsoft.Json.Linq;
 public class feed_select_one : IHttpHandler {
 
     public void ProcessRequest (HttpContext context) {
-     
 
-            string feed_id = context.Request.Form["feed_id"].ToString();
-            Method_Fish method = new Method_Fish();
-            DataTable re_ = method.feed_view_one(feed_id);
-            string str_json = JsonConvert.SerializeObject(re_, Formatting.Indented);
-            context.Response.Write(str_json);//回傳資料
-        
+
+        string feed_id = context.Request.Form["feed_id"].ToString();
+        Method_Fish method = new Method_Fish();
+        DataTable re_ = method.feed_view_one(feed_id);
+        string str_json = JsonConvert.SerializeObject(re_, Formatting.Indented);
+        context.Response.Write(str_json);//回傳資料
+
     }
 
     public bool IsReusable {

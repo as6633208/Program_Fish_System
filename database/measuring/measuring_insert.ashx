@@ -1,7 +1,10 @@
 ﻿<%@ WebHandler Language="C#" Class="Measuring_insert" %>
-
 using System;
 using System.Web;
+using System.Data;
+using System.Data.SqlClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class Measuring_insert : IHttpHandler {
 
@@ -17,6 +20,7 @@ public class Measuring_insert : IHttpHandler {
         string before_Fish_AVGweight =context.Request.Form["Fish_detail_before_Fish_AVGweight"].ToString();
         Method_Fish method = new Method_Fish();
         string re_ = method.Measuring_insert(Pool_id,Fish_detail_id,number,Fish_AVGweight,date,before_number,before_Fish_AVGweight);
+        string str_json = JsonConvert.SerializeObject(re_, Formatting.Indented);
         context.Response.Write(re_);//查看有無資料
 
     }

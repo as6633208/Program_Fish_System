@@ -129,8 +129,8 @@ public class Method_Fish
         int old_fish_number;
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Measuring
-                            (Pool_id, Fish_detail_id, number, Fish_AVGweight,date,before_number,before_Fish_AVGweight) VALUES
-                        (@Pool_id,@Fish_detail_id,@number,@Fish_AVGweight,@date,@before_number,@before_Fish_AVGweight)");
+                            (Pool_id, Fish_detail_id, number, Fish_AVGweight,date,before_number,before_Fish_AVGweight) OUTPUT INSERTED.Measuring_id VALUES 
+                        (@Pool_id,@Fish_detail_id,@number,@Fish_AVGweight,@date,@before_number,@before_Fish_AVGweight)");    
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value = Fish_detail_id;
         cmd.Parameters.Add("@number", SqlDbType.Int).Value = number;
@@ -138,8 +138,8 @@ public class Method_Fish
         cmd.Parameters.Add("@date", SqlDbType.DateTime2, 7).Value = date;
         cmd.Parameters.Add("@before_number", SqlDbType.NVarChar, 10).Value = before_number;
         cmd.Parameters.Add("@before_Fish_AVGweight", SqlDbType.NVarChar, 10).Value = before_Fish_AVGweight;
-        int check_num = Fish.SqlHelper.cmdCheck(cmd);
-        result = (check_num != 0) ? "success" : "fail";        
+        int Measuring_id = Fish.SqlHelper.Return_IDENTITY(cmd);
+        result = (Measuring_id != 0) ? "success" : "fail";        
         //抓取原本的數量 
         SqlCommand cmd2 = new SqlCommand(@"SELECT Pool_number From Pool WHERE Pool_id = @Pool_id");
         cmd2.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
@@ -148,7 +148,7 @@ public class Method_Fish
         //判斷是否有損益 數量不為零的狀態，有損益存在必須新增，數量不變則不用
         if (number - old_fish_number != 0)
         {
-            Inventory(Pool_id, Fish_detail_id, number, old_fish_number, date);
+            Inventory(Pool_id, Fish_detail_id, number, old_fish_number, date, Measuring_id);
             Measuring_UP_Pool(Pool_id, number);
         }
         //更新魚群細節資料
@@ -157,18 +157,19 @@ public class Method_Fish
     }
     #endregion
     #region 新增損益紀錄(建)
-    public string Inventory(string a, int b, int c, int d, string e)
+    public string Inventory(string a, int b, int c, int d, string e,int f)
     {
         //a=池編號 b=魚池細節編號 c=分養池加總的數量 d=被分養池原本數量 e日期
         int number = c - d;
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Inventory
-                            (Pool_id, Fish_detail_id, Loss_or_Profit_Num, date) VALUES
-                        (@Pool_id,@Fish_detail_id,@Loss_or_Profit_Num,@date)");
+                            (Pool_id, Fish_detail_id, Loss_or_Profit_Num, date,Measuring_id) VALUES
+                        (@Pool_id,@Fish_detail_id,@Loss_or_Profit_Num,@date,@Measuring_id)");
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = a;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value = b;
         cmd.Parameters.Add("@Loss_or_Profit_Num", SqlDbType.Int).Value = number;
         cmd.Parameters.Add("@date", SqlDbType.DateTime2, 7).Value = e;
+        cmd.Parameters.Add("@Measuring_id", SqlDbType.Int).Value = f;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
@@ -207,7 +208,7 @@ public class Method_Fish
     public DataTable measuring_view(string Pool_id, string Fish_detail_id)
     {
 
-        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Measuring WHERE (Pool_id = @Pool_id) AND ( Fish_detail_id=@Fish_detail_id)");
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Measuring WHERE (Pool_id = @Pool_id) AND ( Fish_detail_id=@Fish_detail_id) ORDER BY date ");
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 50).Value = Fish_detail_id;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
@@ -620,6 +621,7 @@ public class Method_Fish
         return dt;  
     }
     #endregion
+    #region 餵食資料查詢(單一)
     public DataTable feed_view_one(string feed_id)
     {
         SqlCommand cmd = new SqlCommand(@"SELECT * FROM Feed  WHERE (Feed_id = @feed_id) ");
@@ -627,6 +629,7 @@ public class Method_Fish
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
         return dt;
     }
+    #endregion
     #endregion
     #region 魚群操作(sen)
     #region 魚群細節查詢(sen)
