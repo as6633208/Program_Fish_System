@@ -307,7 +307,7 @@ public class Method_Fish
     }
     #endregion
     #region 飼料進貨新增 FeedPurchase 歷史表(翔)
-    public string FeedPurchase_Insert(string a, string b)
+    public string FeedPurchase_Insert(string a, string b, string c)
     {
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Feed_Purchase
@@ -315,7 +315,7 @@ public class Method_Fish
                         (@Fodder_id, @feedPurchase_number, @feedPurchase_date)");     
         cmd.Parameters.Add("@Fodder_id", SqlDbType.Int).Value = a;
         cmd.Parameters.Add("@feedPurchase_number", SqlDbType.Int).Value = b;
-        cmd.Parameters.Add("@feedPurchase_date", SqlDbType.DateTime2, 7).Value = DateTime.Now.ToShortDateString();
+        cmd.Parameters.Add("@feedPurchase_date", SqlDbType.DateTime2, 7).Value = c;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
@@ -373,7 +373,7 @@ public class Method_Fish
     #endregion
     #region 添加物操作
     #region 添加物進貨新增 MedicinePurchase 歷史表(翔)
-    public string MedicinePurchase_Insert(string a, string b)
+    public string MedicinePurchase_Insert(string a, string b, string c)
     {
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Medicine_Purchase
@@ -381,7 +381,7 @@ public class Method_Fish
                         (@Medicine_id, @MedicinePurchase_number, @MedicinePurchase_date)");
         cmd.Parameters.Add("@Medicine_id", SqlDbType.Int).Value = a;
         cmd.Parameters.Add("@MedicinePurchase_number", SqlDbType.Int).Value = b;
-        cmd.Parameters.Add("@MedicinePurchase_date", SqlDbType.DateTime2, 7).Value = DateTime.Now.ToShortDateString();
+        cmd.Parameters.Add("@MedicinePurchase_date", SqlDbType.DateTime2, 7).Value = c;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
