@@ -54,7 +54,7 @@
                                         <div class="row">
                                             <div class="col-sm-12 col-xs-12">
                                                 <div class="form-wrap">
-                                                    <form action="#"  id="form1">
+                                                    <form action="#" id="form1">
                                                         <div class="form-group">
                                                             <label class="control-label col-md-3">帳號</label>
                                                             <div class="input-group">
@@ -71,14 +71,15 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="control-label col-md-4">驗證碼</label>
-                                                        <div class="input-group">
+                                                            <div class="input-group">
                                                                 <input type="text" class="form-control" required="" id="txt_input" maxlength="4" placeholder="輸入驗證碼">
-                                                                <div class="input-group-addon"><img src="ValidateNumber.ashx" alt="驗證碼" onclick="form1.imgCode.src='ValidateNumber.ashx?' + Math.random();" name="imgCode" /> </div>                                                            </div>
+                                                                <div class="input-group-addon"><img src="ValidateNumber.ashx" alt="驗證碼" onclick="form1.imgCode.src='ValidateNumber.ashx?' + Math.random();" name="imgCode" /> </div>
+                                                            </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <input type="submit" class="btn btn-primary btn-block" value="登入" />
+                                                            <input type="submit" class="btn btn-primary btn-block" value="登入"  />
                                                             <img src="image/background/logo-1.png" />
-                                                         </div>
+                                                        </div>
                                                     </form>
                                                 </div>
                                             </div>
@@ -145,14 +146,14 @@
             if (validateResult == false) {
                 jQuery("#span_result").html("驗證碼輸入不正確");
                 notyf.alert('輸入錯誤，登入失敗');
-            } 
+            }
             //回傳true Or false
             return validateResult;
         }
         $(document).ready(function () {
             $("#form1").submit(function (e) {
                 e.preventDefault();
-                if (isPassValidateCode()) {//驗證成功                   
+                if (isPassValidateCode()) {//驗證成功
                     $.ajax({
                         type: 'post',
                         url: 'database/login.ashx',
@@ -163,7 +164,7 @@
                             password: $("#login_password").val()
                         },
                         success: function (e) {
-                            if (Number(e) > 0) {
+                            if (e.length > 0) {
                                 swal({
                                     type: 'success',
                                     title: '登入成功!',
@@ -174,14 +175,15 @@
                             } else {
                                 notyf.alert('輸入錯誤，登入失敗');
                             }
-                            Cookies.set('user', "login_admin", { expires: 1 });//設置cookie一天時間
+                            Cookies.set('user', e[0].Account, { expires: 1 });//設置cookie一天時間
+                            Cookies.set('authority', e[0].authority, { expires: 1 });//設置cookie一天時間
                         },
                         error: function (e) {
                             notyf.alert('伺服器錯誤,無法載入');
                         }
                     });
                 }
-               
+
             });
         });
     </script>

@@ -150,4 +150,5 @@ var kenny = function(){
 	$('.nicescroll-bar').slimscroll({height:'100%',color: '#3cb878'});
 	$('.message-nicescroll-bar').slimscroll({height:'320px',color: '#3cb878'});
 };
+
 /***** Kenny function end *****/

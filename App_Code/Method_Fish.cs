@@ -17,16 +17,68 @@ public class Method_Fish
     {
         conn = new SqlConnection(Fish_sql);
     }
+    #region 帳戶操作方法
+
     #region 登入判斷
     public DataTable Login(string a, string b)
     {
-        SqlCommand cmd = new SqlCommand(@"SELECT COUNT(*) AS count FROM Admin_List WHERE (Password = @a) AND (Account = @b)");
-        //SqlCommand cmd = new SqlCommand(@"SELECT * FROM Admin_List WHERE (Password = @a) AND (Account = @b)");
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Admin_List WHERE (Account = @a) AND (Password = @b)");
         cmd.Parameters.Add("@a", SqlDbType.NVarChar, 50).Value = a;
         cmd.Parameters.Add("@b", SqlDbType.NVarChar, 50).Value = b;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
         return dt;
     }
+    #endregion
+    #region 帳戶顯示
+    public DataTable Login()
+    {
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Admin_List");
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;
+    }
+    #endregion
+    #region 新增用戶
+    public string Account_Insert(string a, string b, string c)
+    {
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"INSERT INTO Admin_List
+                            (Account, Password, authority) VALUES
+                        (@Account,@Password,@authority)");
+        cmd.Parameters.Add("@Account", SqlDbType.NVarChar, 50).Value = a;
+        cmd.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = b;
+        cmd.Parameters.Add("@authority", SqlDbType.Int).Value = c;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+        return result;
+    }
+    #endregion
+    #region 修改用戶
+    public string Account_Modify(string a, string b, string c, string d)
+    {
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"UPDATE Admin_List SET
+        Account = @Account, Password = @Password ,authority=@authority
+            WHERE (Admin_id = @Admin_id)");
+        cmd.Parameters.Add("@Account", SqlDbType.NVarChar, 50).Value = a;
+        cmd.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = b;
+        cmd.Parameters.Add("@authority", SqlDbType.Int).Value = c;
+        cmd.Parameters.Add("@Admin_id", SqlDbType.Int).Value = d;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+        return result;
+    }
+    #endregion
+    #region 刪除用戶
+    public string Account_Delete(string a)
+    {
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"DELETE FROM Admin_List WHERE (Admin_id = @Original_Admin_id)");
+        cmd.Parameters.Add("@Original_Admin_id", SqlDbType.Int).Value = a;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+        return result;
+    }
+    #endregion
     #endregion
     #region 供應商操作
     #region 供應商新增
