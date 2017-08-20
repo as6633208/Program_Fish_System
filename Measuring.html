@@ -685,17 +685,10 @@
                 $(document).ready(function () {
             /**測量紀錄新增**/
             $("#Measuring").submit(function (e) {
-                e.preventDefault();
-                var difference = $("#Measuring_number").val() - Fush_Pool_Pool_number;
-                if (difference > 0) {
-                    difference = "此筆記錄增加" + difference+"隻魚"
-                }
-                if (difference < 0) {
-                    difference = "此筆紀錄減少" + difference*-1 + "隻魚"
-                }
+                e.preventDefault();              
                 swal({                   
-                    title: '確認新增此筆測量紀錄？' + difference,
-                    text: "新增後將無法刪除",
+                    title: '確認新增此筆測量紀錄？' ,
+                    text: "",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
