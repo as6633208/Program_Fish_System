@@ -259,10 +259,11 @@
                                             <table id="datable_1" class="table table-hover display  pb-30">
                                                 <thead>
                                                     <tr>
+                                                        <th>測量日期</th>
                                                         <th>測量編號</th>
                                                         <th>測量後數量</th>
                                                         <th>測量後平均重量</th>
-                                                        <th>測量日期</th>
+                                                       
                                                     </tr>
                                                 </thead>
                                                 <tbody id="supplier_view"></tbody>
@@ -570,6 +571,8 @@
     
             /*來源批號結束*/
         }
+        var last_one = 0;
+        var last_time;
         //表格資料載入
         $.ajax({
             url: 'database/measuring/measuring_view.ashx',
@@ -585,18 +588,24 @@
                 console.log(measuring_json)
                 for (var index in measuring_json) {
                     cssString += '<tr data-toggle="modal" data-target="#jump-Out">' +
+                        '<td>' + measuring_json[index].date.slice(0, 10) + '</td>           ' +
                         '<td>' + measuring_json[index].Measuring_id + '</td>        ' +
                         '<td>' + measuring_json[index].number + '</td>        ' +
-                        '<td>' + measuring_json[index].Fish_AVGweight + '</td>         ' +
-                        '<td>' + measuring_json[index].date.slice(0, 10) + '</td>           ' +
+                        '<td>' + measuring_json[index].Fish_AVGweight + '</td>         ' +                   
                         '</tr>'
+                    last_one++;
                 }
+
+            lasr_time= measuring_json[last_one - 1].date.slice(0, 10)
                 $("#supplier_view").html(cssString);
             },
             error: function (e) {
                 notyf.alert('伺服器錯誤,無法載入' + e);
             }
         });
+    
+         
+        
         /*
         $('table > tbody > tr').click(function () {
             $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
@@ -686,16 +695,9 @@
             /**測量紀錄新增**/
             $("#Measuring").submit(function (e) {
                 e.preventDefault();
-                var difference = $("#Measuring_number").val() - Fush_Pool_Pool_number;
-                if (difference > 0) {
-                    difference = "此筆記錄增加" + difference+"隻魚"
-                }
-                if (difference < 0) {
-                    difference = "此筆紀錄減少" + difference*-1 + "隻魚"
-                }
                 swal({                   
-                    title: '確認新增此筆測量紀錄？' + difference,
-                    text: "新增後將無法刪除",
+                    title: '確認新增此筆測量紀錄？' ,
+                    text: "",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

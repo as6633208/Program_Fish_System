@@ -180,6 +180,19 @@ public class Method_Fish
     {
         int old_fish_number;
         string result = "";
+        DataTable select;
+        select = measuring_view(Pool_id, (Fish_detail_id).ToString());
+        DateTime index_time = Convert.ToDateTime(date);
+        for (int i = 0; i < Int32.Parse(select.Rows.ToString()); i++) {
+            DateTime select_time = Convert.ToDateTime(select.Rows[i][0].ToString());
+            if (select_time > index_time)
+            {
+                Console.Write("大於");
+            }
+            else {
+                Console.Write("小於");
+            }
+        }
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Measuring
                             (Pool_id, Fish_detail_id, number, Fish_AVGweight,date,before_number,before_Fish_AVGweight) OUTPUT INSERTED.Measuring_id VALUES 
                         (@Pool_id,@Fish_detail_id,@number,@Fish_AVGweight,@date,@before_number,@before_Fish_AVGweight)");    
@@ -264,6 +277,8 @@ public class Method_Fish
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 50).Value = Fish_detail_id;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        int a = dt.Rows.Count-1;
+        string b =dt.Rows[a][0].ToString();
         return dt;
     }
     #endregion
