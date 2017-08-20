@@ -11,8 +11,8 @@ public class Inventory : IHttpHandler {
         string number = context.Request.Form["number"].ToString();
         string date = DateTime.Now.ToShortDateString();
         Method_Fish method = new Method_Fish();
-       string re_ = method.Inventory(pool_id, Int32.Parse(fish_detail_id), 0, Int32.Parse(number), date);
-     / context.Response.Write(re_);   
+        string re_ = method.Inventory(pool_id, Int32.Parse(fish_detail_id), 0, Int32.Parse(number), date);
+        context.Response.Write(re_);   
     }
 
     public bool IsReusable {
