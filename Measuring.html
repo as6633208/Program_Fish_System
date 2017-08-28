@@ -259,10 +259,10 @@
                                             <table id="datable_1" class="table table-hover display  pb-30">
                                                 <thead>
                                                     <tr>
+                                                        <th>測量日期</th>
                                                         <th>測量編號</th>
                                                         <th>測量後數量</th>
-                                                        <th>測量後平均重量</th>
-                                                        <th>測量日期</th>
+                                                        <th>測量後平均重量</th>                                                        
                                                     </tr>
                                                 </thead>
                                                 <tbody id="supplier_view"></tbody>
@@ -295,6 +295,76 @@
     </div>
     <!-- /#wrapper -->
     <!-- 彈跳視窗開始  -->
+    <div class="modal fade" id="jump-Measuring" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">測量紀錄查看</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <form class="form-horizontal" id="supplier_insert" method="post">
+                          <div class="form-group">
+                                <label for="modify_Measuring_id" class="col-sm-3 control-label">測量編號：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="icon-user"></i></div>
+                                        <input type="text" class="form-control" id="modify_Measuring_id">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="number" class="col-sm-3 control-label">測後數量：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="icon-user"></i></div>
+                                        <input type="text" class="form-control" id="modify_Measuring_number">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Fish_AVGweight" class="col-sm-3 control-label">測後重量：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="icon-user"></i></div>
+                                        <input type="text" class="form-control" id="modify_Measuring_Fish_AVGweight">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="before_number" class="col-sm-3 control-label">測前數量：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="icon-user"></i></div>
+                                        <input type="text" class="form-control" id="modify_Measuring_before_number">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="before_Fish_AVGweight" class="col-sm-3 control-label">測前重量：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="icon-user"></i></div>
+                                        <input type="text" class="form-control" id="modify_Measuring_before_Fish_AVGweight" >
+                                    </div>
+                                </div>
+                            </div>
+                         
+                        </form>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" id="modify_UP" value="修改" />
+                    <input type="button" class="btn btn-default" id="modify_del" value="刪除" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- 彈跳視窗結束  -->
     <!-- JavaScript -->
     <!-- jQuery -->
@@ -584,11 +654,12 @@
                 var cssString = "";
                 console.log(measuring_json)
                 for (var index in measuring_json) {
-                    cssString += '<tr data-toggle="modal" data-target="#jump-Out">' +
+                    cssString += '<tr data-toggle="modal" data-target="#jump-Measuring">' +
+                        '<td>' + measuring_json[index].date.slice(0, 10) + '</td>           ' +
                         '<td>' + measuring_json[index].Measuring_id + '</td>        ' +
                         '<td>' + measuring_json[index].number + '</td>        ' +
                         '<td>' + measuring_json[index].Fish_AVGweight + '</td>         ' +
-                        '<td>' + measuring_json[index].date.slice(0, 10) + '</td>           ' +
+                
                         '</tr>'
                 }
                 $("#supplier_view").html(cssString);
@@ -596,9 +667,29 @@
             error: function (e) {
                 notyf.alert('伺服器錯誤,無法載入' + e);
             }
-        });
-        /*
+        });        
         $('table > tbody > tr').click(function () {
+            var Measuring_id = $.trim($(this).find("td:eq(1)").text());
+            $.ajax({
+                url: 'database/measuring/measuring_view_one.ashx',
+                type: 'post',
+                dataType: 'json',
+                async: false,//啟用同步請求
+                data: {
+                    Measuring_id: Measuring_id
+                },
+                success: function (measuring_view_one_json) {
+                    $("#modify_Measuring_id").val = measuring_view_one_json[0]["Measuring_id"];
+                    $("#modify_Measuring_number").val = measuring_view_one_json[0]["number"];
+                    $("#modify_Measuring_Fish_AVGweight").val= measuring_view_one_json[0]["Fish_AVGweight"];
+                    $("#modify_Measuring_before_number").val = measuring_view_one_json[0]["before_number"];
+                    $("#modify_Measuring_before_Fish_AVGweight").value = measuring_view_one_json[0]["before_Fish_AVGweight"];
+                },
+                error: function (e) {
+                    notyf.alert('伺服器錯誤,無法載入' + e);
+                }
+            });
+        });/*
             $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
             $("#modify_Out_number").val($.trim($(this).find("td:eq(1)").text()))
             $("#modify_Out_Fish_AVGweight").val($.trim($(this).find("td:eq(2)").text()))

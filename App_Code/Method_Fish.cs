@@ -370,6 +370,15 @@ public class Method_Fish
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
         return dt;
     }
+    #region 測量資料查詢(單筆)
+    public DataTable measuring_view_one(string Measuring_id)    {
+
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Measuring WHERE (Measuring_id = @Measuring_id)  ");
+        cmd.Parameters.Add("@Measuring_id", SqlDbType.Int, 50).Value = Measuring_id;
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;
+    }
+    #endregion
     #endregion
     #endregion
     #region 飼料操作
