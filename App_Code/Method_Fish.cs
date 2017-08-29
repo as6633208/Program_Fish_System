@@ -183,6 +183,7 @@ public class Method_Fish
         //呼叫所有測量記錄
         DataTable select = measuring_view(Pool_id, Fish_detail_id.ToString());
         Console.Write(select);
+        //判斷是否為全新紀錄
         if (select.Rows.Count<1)
         {
 
@@ -253,22 +254,14 @@ public class Method_Fish
             }
             else
             {
-                SqlCommand cmd = new SqlCommand(@"INSERT INTO Measuring
-                            (Pool_id, Fish_detail_id, number, Fish_AVGweight,date,before_number,before_Fish_AVGweight) OUTPUT INSERTED.Measuring_id VALUES 
-                        (@Pool_id,@Fish_detail_id,@number,@Fish_AVGweight,@date,@before_number,@before_Fish_AVGweight)");
-                cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
-                cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value = Fish_detail_id;
-                cmd.Parameters.Add("@number", SqlDbType.Int).Value = number;
-                cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
-                cmd.Parameters.Add("@date", SqlDbType.DateTime2, 7).Value = date;
-                cmd.Parameters.Add("@before_number", SqlDbType.NVarChar, 10).Value = before_number;
-                cmd.Parameters.Add("@before_Fish_AVGweight", SqlDbType.NVarChar, 10).Value = before_Fish_AVGweight;
-                int Measuring_id = Fish.SqlHelper.Return_IDENTITY(cmd);
-                result = (Measuring_id != 0) ? "success" : "fail";
-                var new_position = 0;
+                 var new_position = 0;
                 for (int i = 0; i < select.Rows.Count; i++)
                 {
-                    DateTime select_time = Convert.ToDateTime((select.Rows[i][5].ToString()).Substring(0, 10));
+
+                    //日期切割
+                    string[] select_time_spilt;
+                    select_time_spilt = select.Rows[i][5].ToString().Split(' ');
+                    DateTime select_time = Convert.ToDateTime(select_time_spilt[0]);
                     if (now_date > select_time)
                     {
                     }
@@ -278,12 +271,25 @@ public class Method_Fish
                         break;
                     }
                 }
+                SqlCommand cmd = new SqlCommand(@"INSERT INTO Measuring
+                            (Pool_id, Fish_detail_id, number, Fish_AVGweight,date,before_number,before_Fish_AVGweight) OUTPUT INSERTED.Measuring_id VALUES 
+                        (@Pool_id,@Fish_detail_id,@number,@Fish_AVGweight,@date,@before_number,@before_Fish_AVGweight)");
+                cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
+                cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value = Fish_detail_id;
+                cmd.Parameters.Add("@number", SqlDbType.Int).Value = number;
+                cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
+                cmd.Parameters.Add("@date", SqlDbType.DateTime2, 7).Value = date;
+                cmd.Parameters.Add("@before_number", SqlDbType.NVarChar, 10).Value = select.Rows[new_position - 1][3].ToString();
+                cmd.Parameters.Add("@before_Fish_AVGweight", SqlDbType.NVarChar, 10).Value = select.Rows[new_position - 1][4].ToString();
+                int Measuring_id = Fish.SqlHelper.Return_IDENTITY(cmd);
+                result = (Measuring_id != 0) ? "success" : "fail";
                 //新增損益紀錄
                 string insert_Inventory = Inventory(Pool_id, Fish_detail_id, number, Int32.Parse(select.Rows[new_position - 1][3].ToString()), date, Measuring_id);
                 //修改下筆資料
                 DataTable Next_Inventory = select_Inventory(Pool_id, Fish_detail_id, select.Rows[new_position][5].ToString());
                 int id = Int32.Parse(Next_Inventory.Rows[0][0].ToString());
                 Updata_Inventory(Next_Inventory.Rows[0][0].ToString(), Int32.Parse(select.Rows[new_position][3].ToString())-number);
+                Updata_Measuring(select.Rows[new_position][0].ToString(), number.ToString(), Fish_AVGweight);
                 return result;
             }
         }
@@ -310,6 +316,17 @@ public class Method_Fish
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
 
 
+    }
+    #endregion
+    #region 更新測量紀錄(單筆)(建)
+    public void Updata_Measuring(string id, string number,string Fish_AVGweight)
+    {
+        SqlCommand cmd = new SqlCommand(@"UPDATE Measuring SET before_number = @before_number,before_Fish_AVGweight = @before_Fish_AVGweight
+                WHERE (Measuring_id = @Measuring_id)");
+        cmd.Parameters.Add("@Measuring_id", SqlDbType.Int).Value = id;
+        cmd.Parameters.Add("@before_number", SqlDbType.NVarChar, 10).Value = number;
+        cmd.Parameters.Add("@before_Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
     }
     #endregion
     #region 新增損益紀錄(建)
@@ -360,6 +377,96 @@ public class Method_Fish
         return result;
     }
     #endregion
+    public string Measuring_delete(string Pool_id, string Fish_detail_id, string id)
+    {
+        DataTable select = measuring_view(Pool_id, Fish_detail_id);
+        var new_position = 0;
+        for (int i = 0; i < select.Rows.Count; i++)
+        {
+            if (select.Rows[i][0].ToString() == id)
+            {
+                new_position = i;
+                break;
+            }
+            else
+            {
+            }
+        }
+        int check_num;
+        //判斷是否為刪除最後一筆資料，是直接刪除，否修正下筆紀錄及刪除。
+        if (new_position == (select.Rows.Count - 1))
+        {
+            DataTable sel_Inventory = select_Inventory(Pool_id, Int32.Parse(Fish_detail_id), select.Rows[new_position][5].ToString());
+            //刪除該筆測量記錄
+            SqlCommand cmd = new SqlCommand(@"DELETE Measuring  WHERE (Measuring_id = @Measuring_id)");
+            cmd.Parameters.Add("@Measuring_id", SqlDbType.Int).Value = id;
+            check_num = Fish.SqlHelper.cmdCheck(cmd);
+            //更新魚群細節資訊    
+            string b = Measuring_UP_FishDetail(Int32.Parse(Fish_detail_id), select.Rows[new_position][7].ToString(), Int32.Parse(select.Rows[new_position][6].ToString()));
+            //更新池內數量
+           string a = Measuring_UP_Pool(Pool_id, Int32.Parse(select.Rows[new_position][6].ToString()));
+            //查詢該筆資料是否有包含損益資料，有刪除無略過
+            if (sel_Inventory.Rows.Count > 0)
+            {
+                Console.Write(sel_Inventory);
+                SqlCommand cmd_Inventory = new SqlCommand(@"DELETE Inventory  WHERE (Inventory_id = @Inventory_id)");
+                cmd_Inventory.Parameters.Add("@Inventory_id", SqlDbType.Int).Value = sel_Inventory.Rows[0][0];
+                check_num = Fish.SqlHelper.cmdCheck(cmd_Inventory);
+                return "success";
+            }
+            else {
+                return "success";
+            }
+            
+        }
+        else {
+            DataTable sel_Inventory = select_Inventory(Pool_id, Int32.Parse(Fish_detail_id), select.Rows[new_position][5].ToString());
+            //刪除該筆測量記錄
+            SqlCommand cmd = new SqlCommand(@"DELETE Measuring  WHERE (Measuring_id = @Measuring_id)");
+            cmd.Parameters.Add("@Measuring_id", SqlDbType.Int).Value = id;
+            check_num = Fish.SqlHelper.cmdCheck(cmd);
+            //修正下筆測量記錄
+            Updata_Measuring(select.Rows[new_position+1][0].ToString(), select.Rows[new_position][6].ToString(), select.Rows[new_position][7].ToString());
+            //查詢下筆測量是否包含損益
+            DataTable sel_Inventory_next = select_Inventory(Pool_id, Int32.Parse(Fish_detail_id), select.Rows[new_position+1][5].ToString());
+            //計算上筆跟下筆的差異((非此筆資料
+            int update_Inventory_num = (Int32.Parse(select.Rows[new_position - 1][3].ToString()))-(Int32.Parse(select.Rows[new_position + 1][3].ToString()));
+            if (sel_Inventory_next.Rows.Count > 0)
+            {
+                SqlCommand cmd_UP_Inventory = new SqlCommand(@"UPDATE Inventory SET Loss_or_Profit_Num = @number,Measuring_id = @Measuring_id
+                WHERE (Inventory_id = @Inventory_id)");
+                cmd_UP_Inventory.Parameters.Add("@Inventory_id", SqlDbType.Int).Value = sel_Inventory_next.Rows[0][0];
+                cmd_UP_Inventory.Parameters.Add("@number", SqlDbType.Int, 20).Value = update_Inventory_num;
+                cmd_UP_Inventory.Parameters.Add("@Measuring_id", SqlDbType.Int, 20).Value = select.Rows[new_position + 1][0].ToString();
+                check_num = Fish.SqlHelper.cmdCheck(cmd_UP_Inventory);        
+            }
+            else
+            {
+                SqlCommand cmd_insert_Inventory = new SqlCommand(@"INSERT INTO Pool (Pool_id,Fish_detail_id,Loss_or_Profit_Num,date,Measuring_id) VALUES (@Pool_id,@Fish_detail_id,@Loss_or_Profit_Num,@date,@Measuring_id)");
+                cmd_insert_Inventory.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = select.Rows[new_position + 1][1].ToString();
+                cmd_insert_Inventory.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 20).Value = select.Rows[new_position + 1][2].ToString();
+                cmd_insert_Inventory.Parameters.Add("@Loss_or_Profit_Num", SqlDbType.Int, 20).Value = update_Inventory_num;
+                cmd_insert_Inventory.Parameters.Add("@date", SqlDbType.DateTime2, 7).Value = select.Rows[new_position + 1][5].ToString();
+                cmd_insert_Inventory.Parameters.Add("@Measuring_id", SqlDbType.Int, 20).Value = select.Rows[new_position + 1][0].ToString();
+                check_num = Fish.SqlHelper.cmdCheck(cmd_insert_Inventory);
+
+            }
+            //查詢該筆資料是否有包含損益資料，有刪除無略過
+            if (sel_Inventory.Rows.Count > 0)
+            {
+                SqlCommand cmd_Inventory = new SqlCommand(@"DELETE Inventory  WHERE (Inventory_id = @Inventory_id)");
+                cmd_Inventory.Parameters.Add("@Inventory_id", SqlDbType.Int).Value = sel_Inventory.Rows[0][0];
+                check_num = Fish.SqlHelper.cmdCheck(cmd_Inventory);
+                return "success";
+            }
+            else
+            {
+                return "success";
+            }
+
+        }
+
+    }
     #region 測量資料查詢
     public DataTable measuring_view(string Pool_id, string Fish_detail_id)
     {
@@ -370,6 +477,7 @@ public class Method_Fish
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
         return dt;
     }
+    #endregion
     #region 測量資料查詢(單筆)
     public DataTable measuring_view_one(string Measuring_id)    {
 
@@ -379,7 +487,7 @@ public class Method_Fish
         return dt;
     }
     #endregion
-    #endregion
+ 
     #endregion
     #region 飼料操作
     #region 飼料新增後顯示(renwu)

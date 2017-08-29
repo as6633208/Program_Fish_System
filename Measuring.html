@@ -262,7 +262,9 @@
                                                         <th>測量日期</th>
                                                         <th>測量編號</th>
                                                         <th>測量後數量</th>
-                                                        <th>測量後平均重量</th>                                                        
+                                                        <th>測量後平均重量</th>          
+                                                        <th>測量前數量</th>    
+                                                        <th>測量前平均重量</th>                                                  
                                                     </tr>
                                                 </thead>
                                                 <tbody id="supplier_view"></tbody>
@@ -307,6 +309,17 @@
                 <div class="modal-body">
                     <div class="panel-body">
                         <form class="form-horizontal" id="supplier_insert" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">測量日期：</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <div class="input-group date" id="datepicker-disabled-past2" data-date-format="yyyy-mm-dd">
+                                            <input type="text" class="form-control" placeholder="請選擇日期" id="modify_Measuring_time" />
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>          
                           <div class="form-group">
                                 <label for="modify_Measuring_id" class="col-sm-3 control-label">測量編號：</label>
                                 <div class="col-sm-7">
@@ -659,7 +672,8 @@
                         '<td>' + measuring_json[index].Measuring_id + '</td>        ' +
                         '<td>' + measuring_json[index].number + '</td>        ' +
                         '<td>' + measuring_json[index].Fish_AVGweight + '</td>         ' +
-                
+                        '<td>' + measuring_json[index].before_number + '</td>         ' +
+                        '<td>' + measuring_json[index].before_Fish_AVGweight + '</td>         ' +
                         '</tr>'
                 }
                 $("#supplier_view").html(cssString);
@@ -670,27 +684,50 @@
         });        
         $('table > tbody > tr').click(function () {
             var Measuring_id = $.trim($(this).find("td:eq(1)").text());
-            $.ajax({
-                url: 'database/measuring/measuring_view_one.ashx',
-                type: 'post',
-                dataType: 'json',
-                async: false,//啟用同步請求
-                data: {
-                    Measuring_id: Measuring_id
-                },
-                success: function (measuring_view_one_json) {
-                    $("#modify_Measuring_id").val = measuring_view_one_json[0]["Measuring_id"];
-                    $("#modify_Measuring_number").val = measuring_view_one_json[0]["number"];
-                    $("#modify_Measuring_Fish_AVGweight").val= measuring_view_one_json[0]["Fish_AVGweight"];
-                    $("#modify_Measuring_before_number").val = measuring_view_one_json[0]["before_number"];
-                    $("#modify_Measuring_before_Fish_AVGweight").value = measuring_view_one_json[0]["before_Fish_AVGweight"];
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入' + e);
-                }
-            });
-        });/*
-            $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
+            $("#modify_Measuring_time").val($.trim($(this).find("td:eq(0)").text()))
+            $("#modify_Measuring_id").val($.trim($(this).find("td:eq(1)").text()))
+            $("#modify_Measuring_number").val($.trim($(this).find("td:eq(2)").text()))
+            $("#modify_Measuring_Fish_AVGweight").val($.trim($(this).find("td:eq(3)").text()))
+            $("#modify_Measuring_before_number").val($.trim($(this).find("td:eq(4)").text()))
+            $("#modify_Measuring_before_Fish_AVGweight").val($.trim($(this).find("td:eq(5)").text()))
+            var modify_Measuring_time = $.trim($(this).find("td:eq(0)").text())
+            var modify_Measuring_id = $.trim($(this).find("td:eq(1)").text())
+            var modify_Measuring_number = $.trim($(this).find("td:eq(2)").text())
+            var modify_Measuring_Fish_AVGweight = $.trim($(this).find("td:eq(3)").text())
+            var modify_Measuring_before_number = $.trim($(this).find("td:eq(4)").text())
+            var modify_Measuring_before_Fish_AVGweight = $.trim($(this).find("td:eq(5)").text())
+            //刪除功能
+            $("#modify_del").click(function (e) {
+                e.preventDefault();                 
+                $.ajax({
+                    url: 'database/measuring/measuring_delete.ashx',
+                     type: 'post',
+                     data: {
+                         Pool_id: Page_Pool_id,
+                         Fish_detail_id: Fish_detail_id,
+                         id: modify_Measuring_id
+                     },
+                     async: false,//啟用同步請求
+                     success: function (event) {
+                         if (event === "success") {
+                             swal({
+                                 type: 'success',
+                                 title: '刪除成功!',
+                                 allowOutsideClick: false //不可點背景關閉
+                             }).then(function () {
+                                 location.reload();
+                             })
+                         } else {
+                             notyf.alert('刪除失敗');
+                         }
+                     },
+                     error: function (e) {
+                         notyf.alert('伺服器錯誤,無法載入');
+                     }
+                 });
+             });
+        });
+        /*  $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
             $("#modify_Out_number").val($.trim($(this).find("td:eq(1)").text()))
             $("#modify_Out_Fish_AVGweight").val($.trim($(this).find("td:eq(2)").text()))
             $("#modify_date").val($.trim($(this).find("td:eq(3)").text()))
