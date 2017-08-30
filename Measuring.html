@@ -725,8 +725,49 @@
                          notyf.alert('伺服器錯誤,無法載入');
                      }
                  });
-             });
+            });
+            $("#modify_UP").click(function (e) {
+                var table_number = document.getElementById('modify_Measuring_number').value;
+                var table_Fish_AVGweight = document.getElementById('modify_Measuring_Fish_AVGweight').value;;
+                var table_date = document.getElementById('modify_Measuring_time').value;;
+
+                e.preventDefault();
+                $.ajax({
+                    url: 'database/measuring/measuring_update.ashx',
+                    type: 'post',
+                    data: {
+
+                        Pool_id: Page_Pool_id,
+                        Fish_detail_id: Fish_detail_id,
+                        number: table_number,
+                        Measuring_Fish_AVGweight: table_Fish_AVGweight,
+                        date: table_date,
+                        Fish_detail_before_number: Fush_Pool_Pool_number,
+                        Fish_detail_before_Fish_AVGweight: Fish_detail_Fish_AVGweight,
+                        id: modify_Measuring_id
+                    },
+                    async: false,//啟用同步請求
+                    success: function (event) {
+                        if (event === "success") {
+                            swal({
+                                type: 'success',
+                                title: '修改成功!',
+                                allowOutsideClick: false //不可點背景關閉
+                            }).then(function () {
+                                location.reload();
+                            })
+                        } else {
+                            notyf.alert('修改失敗');
+                        }
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤,無法載入');
+                    }
+                });
+            });
+
         });
+
         /*  $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
             $("#modify_Out_number").val($.trim($(this).find("td:eq(1)").text()))
             $("#modify_Out_Fish_AVGweight").val($.trim($(this).find("td:eq(2)").text()))

@@ -218,7 +218,9 @@ public class Method_Fish
         {
             int last_one = select.Rows.Count - 1;
             //日期最晚的測量記錄
-            DateTime last_time = Convert.ToDateTime((select.Rows[last_one][5].ToString()).Substring(0, 10));
+            string[] last_time_spilt;
+            last_time_spilt = select.Rows[last_one][5].ToString().Split(' ');
+            DateTime last_time = Convert.ToDateTime(last_time_spilt[0]);      
             //新增的測量記錄日期
             DateTime now_date = Convert.ToDateTime(date);
             //判斷時間前後，若新增之日期為最後一筆，則無需考慮前後資料問題
@@ -377,6 +379,7 @@ public class Method_Fish
         return result;
     }
     #endregion
+    #region 測量刪除(建)
     public string Measuring_delete(string Pool_id, string Fish_detail_id, string id)
     {
         DataTable select = measuring_view(Pool_id, Fish_detail_id);
@@ -467,6 +470,15 @@ public class Method_Fish
         }
 
     }
+    #endregion
+    #region 測量更新(建)
+    public string Measuring_update(string Pool_id, int Fish_detail_id, int number, string Fish_AVGweight, string date, string before_number, string before_Fish_AVGweight, string id) {
+
+        string delest_cheak = Measuring_delete(Pool_id, Fish_detail_id.ToString(),id);
+        string insert_cheak = Measuring_insert(Pool_id, Fish_detail_id, number, Fish_AVGweight, date, before_number, before_Fish_AVGweight);
+        return "success";
+    }
+    #endregion
     #region 測量資料查詢
     public DataTable measuring_view(string Pool_id, string Fish_detail_id)
     {
