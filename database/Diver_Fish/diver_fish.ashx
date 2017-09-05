@@ -103,11 +103,15 @@ public class diver_fish : IHttpHandler {
         Method_Fish method_pool = new Method_Fish();
         //更新原魚池
         string source_pool = method_pool.Pool_update(Page_Pool_id,
-            false,
-            0,
-            "0");
+            true,
+             int.Parse(Fish_Pool_number) -  int.Parse(Fish_amount),
+            Fish_detail_id);
         //計算損益   a=池編號 b=魚池細節編號 c=分養池加總的數量 d=被分養池原本數量 e日期
-        method_pool.Inventory(Page_Pool_id, int.Parse(Fish_detail_id),int.Parse(Fish_amount), int.Parse(Fish_Pool_number), DateTime.Now.ToString());
+      /*  method_pool.Inventory(Page_Pool_id,
+            int.Parse(Fish_detail_id),
+            int.Parse(Fish_amount), 
+            int.Parse(Fish_Pool_number), 
+            DateTime.Now.ToString());*/
     }
     public bool IsReusable {
         get {
