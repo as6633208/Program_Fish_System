@@ -340,9 +340,9 @@
         var Fish_detail_Origin_Fish_detail_id = -1; //魚群來源
         var Fish_Spawning_date = -1; //產卵日 1
         var Fish_Insert_fry_date = -1; //入苗日 2
-        var Fish_Insert_year = -1; //民國年 3 
+        var Fish_Insert_year = -1; //民國年 3
         var Fish_Fry_weight = -1;//魚苗魚重 4
-        var Fish_Fish_company_id = -1; //魚群供應商編號 
+        var Fish_Fish_company_id = -1; //魚群供應商編號
         var Fish_company_company_abbreviation = -1;//魚群供應商簡稱 5
         var Fish_Fish_kind_id = -1;//魚種編號
         var Fush_Pool_Pool_number = -1;//魚池數量
@@ -359,13 +359,12 @@
             //如果取出的參數存在則取出參數的值否則回穿null
             if (r != null) return unescape(r[2]); return null;
         }
-        var Page_Pool_id = $.UrlParam('Pool_id') ? $.UrlParam('Pool_id') : -1; //現在頁數
+        var Page_Pool_id = $.UrlParam('Pool_id') ? $.UrlParam('Pool_id') : -1; //現在魚池
         if (Page_Pool_id == -1) {
             notyf.alert('伺服器錯誤,無法載入池號');
         } else {
             //顯示魚池編號
             $("#pool").html(Page_Pool_id);
-
             /*批號開始*/
             //魚池ajax
             $.ajax({
@@ -466,7 +465,7 @@
             //批號顯示
             $('#batch').html(Spawning_date + '-' + fry_date + '-' + Fish_Insert_year + '-' + Fish_Fry_weight + '-'
                 + Fish_company_company_abbreviation + '-' + Fish_detail_Fish_size + '-' + Move_date);
-            
+
             /*批號結束*/
 
             /*來源批號開始*/
@@ -561,15 +560,15 @@
             $("#submit_button").click(function () {
                 $("#diver_pool").submit();
             });
-            //分養ajax
+            //轉池ajax
             $("#diver_pool").submit(function (e) {
                 var flag = true;
                 e.preventDefault();
-           //     console.log($("#diver_pool").serialize());
+                //     console.log($("#diver_pool").serialize());
 
                 $('#diver_pool *').filter(':input').each(function () {
-                  //  console.log($(this).val());
-                    if (!$(this).val()) {flag = false;$(this).focus();}
+                    //  console.log($(this).val());
+                    if (!$(this).val()) { flag = false; $(this).focus(); }
                 });
                 var count = 0; //總魚數
                 $.each($(".fish_number"), function () {
@@ -578,34 +577,44 @@
                     }
                 });
                 if (flag) {
-                    $.ajax({
-                        url: 'database/Diver_Fish/',
-                        type: 'post',
-                        dataType: 'text',
-                        data: {
-                            Fish_Diver_Arrray: $("#diver_pool").serialize(), Fish_detail_Fish_id: Fish_detail_Fish_id,
-                            Fish_detail_id: Fish_detail_id,
-                            Page_Pool_id: Page_Pool_id,
-                            count: count,
-                            Fush_Pool_Pool_number: Fush_Pool_Pool_number
-                        },
-                        async: false,//啟用同步請求
-                        success: function (Fish_kind_Json) {
-                            notyf.confirm('分養成功');
-                            swal({
-                                type: 'question',
-                                title: '' + Page_Pool_id + '池損益為 ' + (Number(Fush_Pool_Pool_number) - Number(count)).toString() + '隻魚',
-                                allowOutsideClick: false //不可點背景關閉
-                            }).then(function () {
-                                location.reload();//之後改跳到總攬
-                            })
-                        },
-                        error: function (e) {
-                            console.log(e);
-                            notyf.alert('伺服器錯誤,分養錯誤' + e);
-                        }
-                    });
-
+                    if ((Number(Fush_Pool_Pool_number) - Number(count)) < 0) {
+                        notyf.alert('轉池錯誤');
+                        swal({
+                            type: 'warning',
+                            title: '請重新測量後再轉池',
+                            allowOutsideClick: false //不可點背景關閉
+                        }).then(function () {
+                            location.href = './Measuring.html?Pool_id=' + Page_Pool_id + '';
+                        });
+                    } else {
+                        $.ajax({
+                            url: 'database/Diver_Fish/diver_fish.ashx',
+                            type: 'post',
+                            dataType: 'text',
+                            data: {
+                                Fish_Diver_Arrray: $("#diver_pool").serialize(), Fish_detail_Fish_id: Fish_detail_Fish_id,
+                                Fish_detail_id: Fish_detail_id,
+                                Page_Pool_id: Page_Pool_id,
+                                count: count,
+                                Fush_Pool_Pool_number: Fush_Pool_Pool_number
+                            },
+                            async: false,//啟用同步請求
+                            success: function (Fish_kind_Json) {
+                                notyf.confirm('轉池成功');
+                                swal({
+                                    type: 'question',
+                                    title: '' + Page_Pool_id + '魚池剩下 ' + (Number(Fush_Pool_Pool_number) - Number(count)).toString() + '隻魚',
+                                    allowOutsideClick: false //不可點背景關閉
+                                }).then(function () {
+                                    location.reload();//之後改跳到總攬
+                                })
+                            },
+                            error: function (e) {
+                                console.log(e);
+                                notyf.alert('伺服器錯誤,轉池錯誤' + e);
+                            }
+                        });
+                    }
                 } else {
                     notyf.alert('請將資料填齊');
                 }
@@ -627,77 +636,90 @@
             $('#plus_content').click(function () {
                 var plus = $('#plus_content');
                 $('#diver_pool').last().append(
-                        '<div class="col-md-6">                                                                                                                                        ' +
-                        '        <div class="panel panel-default card-view">                                                                                                           ' +
-                        '            <div class="panel-heading">                                                                                                                       ' +
-                        '                <div class="pull-left">                                                                                                                       ' +
-                        '                    <h6 class="panel-title txt-dark">分養內容</h6>                                                                                            ' +
-                        '                </div>                                                                                                                                        ' +
-                        '                <div class="clearfix"></div>                                                                                                                  ' +
-                        '            </div>                                                                                                                                            ' +
-                        '            <div class="panel-wrapper collapse in">                                                                                                           ' +
-                        '                <div class="panel-body">                                                                                                                      ' +
-                        '                    <div class="row">                                                                                                                         ' +
-                        '                        <div class="col-sm-12 col-xs-12" style="padding-right : 9px">                                                                         ' +
-                        '                            <div class="form-wrap">                                                                                                           ' +
-                        '                                <div class="form-horizontal">                                                                                                 ' +
-                        '                                    <div class="form-group">                                                                                                  ' +
-                        '                                        <label for="supplier_name" class="col-sm-3 control-label">目標池：</label>                                            ' +
-                        '                                        <div class="col-sm-9">                                                                                                ' +
-                        '                                            <div class="input-group"> <label class="source_pool"></label>&nbsp;<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>                       ' +
-                        '                                                &nbsp;<select  name="target_pool" class="pool-id" data-style="btn-primary btn-outline">                       ' +
-                        '                                                    <option value="" selected>請選擇魚池</option>                                                             ' +                       
-                        '                                                </select>                                                                                                     ' +
-                        '                                            </div>                                                                                                            ' +
-                        '                                        </div>                                                                                                                ' +
-                        '                                    </div>                                                                                                                    ' +
-                        '                                    <div class="form-group">                                                                                                  ' +
-                        '                                        <label for="supplier_name" class="col-sm-3 control-label">魚數量：</label>                                            ' +
-                        '                                        <div class="input-group col-sm-9">                                                                                    ' +
-                        '                                            <div class="col-sm-10 col-xs-12">                                                                                 ' +
-                        '                                                <input type="text" name="fish_number" class="form-control fish_number" placeholder="魚隻數量" required >                          ' +
-                        '                                            </div>                                                                                                            ' +
-                        '                                            <label for="supplier_name" class="col-sm-2 control-label">隻</label>                                              ' +
-                        '                                        </div>                                                                                                                ' +
-                        '                                    </div>                                                                                                                    ' +
-                        '                                    <div class="form-group">                                                                                                  ' +
-                        '                                        <label for="supplier_classification" style="padding-right: 1px;" class="col-sm-3 control-label">平均魚重：</label>    ' +
-                        '                                        <div class="input-group col-sm-9">                                                                                    ' +
-                        '                                            <div class="col-sm-10 col-xs-12">                                                                                 ' +
-                        '                                                <input type="text" name="fish_weight" class="form-control fish_weight" placeholder="平均魚重" required >                          ' +
-                        '                                            </div>                                                                                                            ' +
-                        '                                            <label for="supplier_name" class="col-sm-2 control-label">KG</label>                                              ' +
-                        '                                        </div>                                                                                                                ' +
-                        '                                    </div>                                                                                                                    ' +                        
-                        '                                    <div class="form-group">                                                                                                  ' +
-                        '                                        <label for="supplier_classification" style="padding-right: 1px;" class="col-sm-3 control-label">移動日：</label>      ' +
-                        '                                        <div class="col-sm-9">                                                                                                ' +
-                        '                                            <div class="input-group col-sm-12">                                                                               ' +
-                        '                                                <div class="input-group date datepicker-disabled-past"  data-date-format="yyyy-mm-dd">                   ' +
-                        '                                                    <input type="text"  name="move_date" class="form-control picker_time" placeholder="請選擇日期"/  required>                            ' +
-                        '                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>                                     ' +
-                        '                                                </div>                                                                                                        ' +
-                        '                                            </div>                                                                                                            ' +
-                        '                                        </div>                                                                                                                ' +
-                        '                                    </div>                                                                                                                    ' +
-                        '                                    <div class="form-group ">                                                                                                  ' +
-                        '                                        <div class="panel-wrapper collapse in ">                                                                               ' +
-                        '                                            <div class="panel-body ">                                                                                          ' +
-                        '                                                <ul class="pager delete-pool">                                                                                            ' +
-                        '                                                    <li> <a href="#"><i class="fa fa-trash"></i>刪除</a> </li>                                           ' +
-                        '                                                </ul>                                                                                                         ' +
-                        '                                            </div>                                                                                                            ' +
-                        '                                        </div>                                                                                                                ' +
-                        '                                    </div>                                                                                                                    ' +
-                        '                                </div>                                                                                                                        ' +
-                        '                            </div>                                                                                                                            ' +
-                        '                        </div>                                                                                                                                ' +
-                        '                    </div>                                                                                                                                    ' +
-                        '                </div>                                                                                                                                        ' +
-                        '            </div>                                                                                                                                            ' +
-                        '        </div>                                                                                                                                                ' +
-                        '    </div>                                                                                                                                                    '
-            )
+                    '<div class="col-md-6">                                                                                                                                        ' +
+                    '        <div class="panel panel-default card-view">                                                                                                           ' +
+                    '            <div class="panel-heading">                                                                                                                       ' +
+                    '                <div class="pull-left">                                                                                                                       ' +
+                    '                    <h6 class="panel-title txt-dark">轉池內容</h6>                                                                                            ' +
+                    '                </div>                                                                                                                                        ' +
+                    '                <div class="clearfix"></div>                                                                                                                  ' +
+                    '            </div>                                                                                                                                            ' +
+                    '            <div class="panel-wrapper collapse in">                                                                                                           ' +
+                    '                <div class="panel-body">                                                                                                                      ' +
+                    '                    <div class="row">                                                                                                                         ' +
+                    '                        <div class="col-sm-12 col-xs-12" style="padding-right : 9px">                                                                         ' +
+                    '                            <div class="form-wrap">                                                                                                           ' +
+                    '                                <div class="form-horizontal">                                                                                                 ' +
+                    '                                    <div class="form-group">                                                                                                  ' +
+                    '                                        <label for="supplier_name" class="col-sm-3 control-label">目標池：</label>                                            ' +
+                    '                                        <div class="col-sm-9">                                                                                                ' +
+                    '                                            <div class="input-group"> <label class="source_pool"></label>&nbsp;<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>                       ' +
+                    '                                                &nbsp;<select  name="target_pool" class="pool-id" data-style="btn-primary btn-outline">                       ' +
+                    '                                                    <option value="" selected>請選擇魚池</option>                                                             ' +
+                    '                                                </select>                                                                                                     ' +
+                    '                                            </div>                                                                                                            ' +
+                    '                                        </div>                                                                                                                ' +
+                    '                                    </div>                                                                                                                    ' +
+                    '                                    <div class="form-group">                                                                                                  ' +
+                    '                                        <label for="supplier_name" class="col-sm-3 control-label">魚數量：</label>                                            ' +
+                    '                                        <div class="input-group col-sm-9">                                                                                    ' +
+                    '                                            <div class="col-sm-10 col-xs-12">                                                                                 ' +
+                    '                                                <input type="text" name="fish_number" class="form-control fish_number" placeholder="魚隻數量" required >                          ' +
+                    '                                            </div>                                                                                                            ' +
+                    '                                            <label for="supplier_name" class="col-sm-2 control-label">隻</label>                                              ' +
+                    '                                        </div>                                                                                                                ' +
+                    '                                    </div>                                                                                                                    ' +
+                    '                                    <div class="form-group">                                                                                                  ' +
+                    '                                        <label for="supplier_classification" style="padding-right: 1px;" class="col-sm-3 control-label">平均魚重：</label>    ' +
+                    '                                        <div class="input-group col-sm-9">                                                                                    ' +
+                    '                                            <div class="col-sm-10 col-xs-12">                                                                                 ' +
+                    '                                                <input type="text" name="fish_weight" class="form-control fish_weight" placeholder="平均魚重" required >                          ' +
+                    '                                            </div>                                                                                                            ' +
+                    '                                            <label for="supplier_name" class="col-sm-2 control-label">KG</label>                                              ' +
+                    '                                        </div>                                                                                                                ' +
+                    '                                    </div>                                                                                                                    ' +
+
+                    '                                    <div class="form-group"  style="display:none">                                                                                                  ' +
+                    '                                        <label for="supplier_name" class="col-sm-3 control-label">魚體態：</label>                                            ' +
+                    '                                        <div class="col-sm-9">                                                                                                ' +
+                    '                                            <div class="input-group">                                                                                         ' +
+                    '                                                <select  name="fish_size" data-style="btn-primary btn-outline" required >                                       ' +
+                    '                                                    <option value="null" selected>請選擇體態</option>                                                             ' +
+                    '                                                    <option data-tokens="S">S</option>                                                                      ' +
+                    '                                                </select>                                                                                                     ' +
+                    '                                            </div>                                                                                                            ' +
+                    '                                        </div>                                                                                                                ' +
+                    '                                    </div>                                                                                                                    ' +
+
+                    '                                    <div class="form-group">                                                                                                  ' +
+                    '                                        <label for="supplier_classification" style="padding-right: 1px;" class="col-sm-3 control-label">移動日：</label>      ' +
+                    '                                        <div class="col-sm-9">                                                                                                ' +
+                    '                                            <div class="input-group col-sm-12">                                                                               ' +
+                    '                                                <div class="input-group date datepicker-disabled-past"  data-date-format="yyyy-mm-dd">                   ' +
+                    '                                                    <input type="text"  name="move_date" class="form-control picker_time" placeholder="請選擇日期"/  required>                            ' +
+                    '                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>                                     ' +
+                    '                                                </div>                                                                                                        ' +
+                    '                                            </div>                                                                                                            ' +
+                    '                                        </div>                                                                                                                ' +
+                    '                                    </div>                                                                                                                    ' +
+                    '                                    <div class="form-group ">                                                                                                  ' +
+                    '                                        <div class="panel-wrapper collapse in ">                                                                               ' +
+                    '                                            <div class="panel-body ">                                                                                          ' +
+                    '                                                <ul class="pager delete-pool">                                                                                            ' +
+                    '                                                    <li> <a href="#"><i class="fa fa-trash"></i>刪除</a> </li>                                           ' +
+                    '                                                </ul>                                                                                                         ' +
+                    '                                            </div>                                                                                                            ' +
+                    '                                        </div>                                                                                                                ' +
+                    '                                    </div>                                                                                                                    ' +
+                    '                                </div>                                                                                                                        ' +
+                    '                            </div>                                                                                                                            ' +
+                    '                        </div>                                                                                                                                ' +
+                    '                    </div>                                                                                                                                    ' +
+                    '                </div>                                                                                                                                        ' +
+                    '            </div>                                                                                                                                            ' +
+                    '        </div>                                                                                                                                                ' +
+                    '    </div>                                                                                                                                                    '
+                )
                 $('#diver_pool').children(":last").hide();
                 $('#diver_pool').children(":last").fadeIn();
 
@@ -709,13 +731,13 @@
                 });
                 //選擇魚池加入Pool_id
                 $.each($('.pool-id'), function () {
-                    //判斷有沒有空              
+                    //判斷有沒有空
                     if (!$(this).val()) {
                         $(this).html('<option value="" selected>請選擇魚池</option>');
                         for (var Pool in Fish_Pool_id) {
                             if (Fish_Pool_id[Pool]["Pool_id"]) {
                                 $(this).append(
-                                     '<option data-tokens=' + Fish_Pool_id[Pool]["Pool_id"] + '>' + Fish_Pool_id[Pool]["Pool_id"] + '</option>'
+                                    '<option data-tokens=' + Fish_Pool_id[Pool]["Pool_id"] + '>' + Fish_Pool_id[Pool]["Pool_id"] + '</option>'
                                 );
                             }
                         }
@@ -723,14 +745,14 @@
                 });
                 $(".pool-id option[data-tokens='" + Page_Pool_id + "']").remove(); //刪除目前魚池
                 //加入魚池到select左方
-                $(".source_pool").html(Page_Pool_id);                
+                $(".source_pool").html(Page_Pool_id);
             }); //++
             $(document).on('click', '.delete-pool', function (e) { //事件綁定
                 $(this).closest('.col-md-6').remove();
                 $('html,body').animate({ scrollTop: $('.wrapper').offset().top }, 1);
             }); //--
         }
-    </script>                                                                                                                                                                    
+    </script>                                                                                                                                                                   
                                                                                                                                                                                  
 </body>                                                                                                                                                                          
 </html>                                                                                                                                                                          
