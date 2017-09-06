@@ -766,6 +766,19 @@ public class Method_Fish
         return result;
     }
     #endregion
+    #region 廠商飼料名稱修改(Renwu)
+    public string feed_name_modify(string a ,string b)
+    {
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"UPDATE Fodder SET Fodder_name = @Fodder_name WHERE     
+                    (Fodder_id = @Fodder_id)");
+        cmd.Parameters.Add("@Fodder_id", SqlDbType.Int).Value = a;
+        cmd.Parameters.Add("@Fodder_name", SqlDbType.NVarChar, 10).Value = b;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+        return result;
+    }
+    #endregion
     #endregion
     #region 入漁操作
     #region 新增入魚資料(Renwu)

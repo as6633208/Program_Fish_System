@@ -22,6 +22,8 @@
     <link href="css/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
     <!-- ================== CSS bootstrap-select ================== -->
     <link href="css/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <!-- ================== CSS 功能樣式 ================== -->
+    <link href="css/tableTools/jquery.dataTables.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -50,12 +52,28 @@
         <!--Left Sidebar Menu-->
         <div class="fixed-sidebar-left">
             <ul class="nav navbar-nav side-nav nicescroll-bar">
-            
                 <li>
-                    <a href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
+                    <a class="active" href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
                 </li>
                 <li>
-                    <a class="active" href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><i class="icon-map mr-10"></i>後臺管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#report_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="report_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="Keeping_day_Report.html">日報表(飼養紀錄)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(魚隻變動)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(飼料耗用)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(飼料庫存)</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><i class="icon-map mr-10"></i>後臺管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
                     <ul id="ui_dr" class="collapse collapse-level-1">
                         <li>
                             <a href="Into_fish.html">入魚作業</a>
@@ -87,23 +105,6 @@
                                     <a href="medicine_purchase.html">進貨紀錄(添加劑)</a>
                                 </li>
                             </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#report_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
-                    <ul id="report_dr" class="collapse collapse-level-1">
-                        <li>
-                            <a href="">日報表(飼養紀錄)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(魚隻變動)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(飼料耗用)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(飼料庫存)</a>
                         </li>
                     </ul>
                 </li>
@@ -219,6 +220,31 @@
                     </div>
                 </div>
                 <!-- /Row -->
+                <!-- Row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default card-view">
+                            <div class="panel-wrapper collapse in">
+                                <div class="panel-body">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <table id="datable_1" class="table table-hover display  pb-30">
+                                                <thead>
+                                                    <tr>
+                                                        <th>魚種編號</th>
+                                                        <th>魚種名稱</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="FishName_view"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Row -->
                 <!-- Footer -->
                 <footer class="footer container-fluid pl-30 pr-30">
                     <div class="row">
@@ -237,7 +263,7 @@
         </div>
     </div>
     <!-- 彈跳視窗開始  -->
-    <div class="modal fade" id="jump-supplier" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="jump-insert-fishname" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -269,6 +295,37 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="jump-fish-name" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">修改魚種名稱</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <form class="form-horizontal" method="post">
+                            <div class="form-group">
+                                <label for="Modify_Fish_name" class="col-sm-5 control-label">魚種名稱：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="icon-grid"></i></div>
+                                        <input type="text" class="form-control" id="Modify_Fish_name" placeholder="魚種名稱" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" id="Modify_val" value="確定修改" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- /#wrapper -->
     <!-- JavaScript -->
     <!-- jQuery -->
@@ -292,10 +349,14 @@
     <!-- ================== JS datetimepicker ================== -->
     <script src="javascript/datetimepicker/form-plugins.demo.min.js"></script>
     <script src="javascript/datetimepicker/bootstrap-datepicker.js"></script>
+    <!-- Data table JavaScript -->
+    <script src="javascript/jquery.dataTables.min.js"></script>
+    <script src="javascript/dataTables-data.js"></script>
     <!-- ================== JS Check ================== -->
     <script src="javascript/check_authority.js"></script>
     <script>
         var notyf = new Notyf();//notyf.js宣告使用
+        var fisf_name;
         $(document).ready(function () {
             FormPlugins.init();
             var Today = new Date();
@@ -308,6 +369,7 @@
             dataType: 'json',
             async: false,//啟用同步請求
             success: function (FishKind_Json) {
+                fisf_name = FishKind_Json
                 for (var index in FishKind_Json) {
                     var s = document.getElementById('fish_classification');//取得id給予值
                     var new_option = new Option(FishKind_Json[index].kind_name, FishKind_Json[index].Fish_kind_id);
@@ -338,7 +400,7 @@
         });
         /**bootstrap modal 載入資料**/
         $('#insertFish').click(function () {
-            $("#jump-supplier").modal();
+            $("#jump-insert-fishname").modal();
             /**新增魚種**/
             $("#Insert_val").click(function (e) {
                 e.preventDefault();
@@ -389,47 +451,45 @@
         $(document).ready(function () {
             /**into_fish_insert新增**/
             $("#into_fish_insert").submit(function (e) {
-                e.preventDefault();
-                //fish_classification   魚群種類編號
-                //supplier_classification   魚群供應商編號
-                //into_time1    產卵日
-                //into_time2    入苗日
-                //fry_weight    魚苗魚重
-                //start_number  起始數量          
-                $.ajax({
-                    type: 'post',
-                    url: 'database/Into_fish/Into_fish_insert.ashx',
-                    async: false,
-                    data: {
-                        fish_classification: $("#fish_classification").val(),
-                        supplier_classification: $("#supplier_classification").val(),
-                        into_time1: $("#into_time1").val(),
-                        into_time2: $("#into_time2").val(),
-                        fry_weight: $("#fry_weight").val(),
-                        start_number: $("#start_number").val()
-                    },
-                    success: function (e) {
-                        /**新增Fish 表單**/
-                        if (e != null) {
-                            alert(e)//Fish_id          
-                            return_id = e
-                            swal({
-                                type: 'success',
-                                title: '新增成功，下一步分配魚隻!',
-                                confirmButtonText: '下一步',
-                                allowOutsideClick: false //不可點背景關閉
-                            }).then(function () {
-                                var testnum = $("#start_number").val();
-                                insert_name(testnum)     
-                            })
-                        } else {
-                            notyf.alert('新增失敗');
+                e.preventDefault();  
+                if ($("#into_time1").val() != '' && $("#into_time2").val() != '') {
+                    $.ajax({
+                        type: 'post',
+                        url: 'database/Into_fish/Into_fish_insert.ashx',
+                        async: false,
+                        data: {
+                            fish_classification: $("#fish_classification").val(),
+                            supplier_classification: $("#supplier_classification").val(),
+                            into_time1: $("#into_time1").val(),
+                            into_time2: $("#into_time2").val(),
+                            fry_weight: $("#fry_weight").val(),
+                            start_number: $("#start_number").val()
+                        },
+                        success: function (e) {
+                            /**新增Fish 表單**/
+                            if (e != null) {
+                                return_id = e//Fish_id  
+                                swal({
+                                    type: 'success',
+                                    title: '新增成功，下一步分配魚隻!',
+                                    confirmButtonText: '下一步',
+                                    allowOutsideClick: false //不可點背景關閉
+                                }).then(function () {
+                                    var testnum = $("#start_number").val();
+                                    insert_name(testnum)
+                                })
+                            } else {
+                                notyf.alert('新增失敗');
+                            }
+                        },
+                        error: function (e) {
+                            notyf.alert('請填寫完整資料');
                         }
-                    },
-                    error: function (e) {
-                        notyf.alert('伺服器錯誤,無法載入' + e);
-                    }
-                });
+                    });
+                } else {
+                    notyf.alert('選擇時間！');
+                }
+              
 
             });
         });
@@ -480,28 +540,41 @@
                 swal.queue(steps).then(function (result) {// +1 +1
                     swal.resetDefaults()
                     //alert(result[1])
-                    /**魚群細節**/
-                    $.ajax({
-                        type: 'post',
-                        url: 'database/Into_fish/Into_fish_detail.ashx',
-                        async: false,
-                        data: {
-                            Fish_id:return_id,//原先ID
-                            number: result[1],//魚隻數量
-                            Pool_id: result[0],//池號
-                            into_time2: $("#into_time2").val(),
-                            Fish_AVGweight: ($("#fry_weight").val() )/1000
-                        },
-                        success: function (e) {
+                    /**數量異常超額**/
+                    if (result[1] > testnum) {
+                        swal({
+                            type: 'error',
+                            title: '數量錯誤，請輸入剩餘數量內數值',
+                            confirmButtonText: '確認',
+                            allowOutsideClick: false //不可點背景關閉
+                        }).then(function () {
                             update_poolview()
-                            /**分配剩餘魚隻**/
-                            testnum = testnum - result[1] // 1 0
                             insert_name(testnum)
-                        },
-                        error: function (e) {
-                        }
-                    });
-                
+                        })
+                    } else {
+                        /**魚群細節**/
+                        $.ajax({
+                            type: 'post',
+                            url: 'database/Into_fish/Into_fish_detail.ashx',
+                            async: false,
+                            data: {
+                                Fish_id: return_id,//原先ID
+                                number: result[1],//魚隻數量
+                                Pool_id: result[0],//池號
+                                into_time2: $("#into_time2").val(),
+                                Fish_AVGweight: ($("#fry_weight").val()) / 1000
+                            },
+                            success: function (e) {
+                                update_poolview()
+                                /**分配剩餘魚隻**/
+                                testnum = testnum - result[1] // 1 0
+                                insert_name(testnum)
+                            },
+                            error: function (e) {
+                            }
+                        });  
+                    }
+              
 
                 }, function () {
                     swal.resetDefaults()
@@ -516,6 +589,59 @@
                 })
             }
         }
+    </script>
+    <script>
+        /**表格載入資料，顯示魚種表格**/
+        var cssString = "";
+        for (var index in fisf_name) {
+            if (fisf_name[index].Fish_kind_id != 0) {
+                cssString += '<tr data-toggle="modal" data-target="#jump-fish-name" >' +
+                    '<td>' + fisf_name[index].Fish_kind_id + '</td>        ' +
+                    '<td>' + fisf_name[index].kind_name + '</td>   ' +
+                    '</tr>                       '
+            }
+        }
+        $("#FishName_view").html(cssString);
+
+        /**bootstrap modal 載入資料**/
+        $('table > tbody > tr').click(function () {
+            $("#Modify_Fish_name").val($.trim($(this).find("td:eq(1)").text()))
+            var id = $.trim($(this).find("td:eq(0)").text())
+            /**修改魚種名稱**/
+            $("#Modify_val").click(function (e) {
+                e.preventDefault();
+                if ($("#Modify_Fish_name").val() != '') {
+                    $.ajax({
+                        url: 'database/fish_kind/fish_kind_modify.ashx',
+                        type: 'post',
+                        data: {
+                            fish_kind_name: $("#Modify_Fish_name").val(),
+                            modify_id: id
+                        },
+                        async: false,//啟用同步請求
+                        success: function (event) {
+                            if (event === "success") {
+                                swal({
+                                    type: 'success',
+                                    title: '修改成功!',
+                                    allowOutsideClick: false //不可點背景關閉
+                                }).then(function () {
+                                    location.reload();
+                                })
+                            } else {
+                                notyf.alert('修改失敗');
+                            }
+                        },
+                        error: function (e) {
+                            notyf.alert('伺服器錯誤,無法載入');
+                        }
+                    });
+                } else {
+                    notyf.alert('請輸入魚種名稱！');
+                }
+
+            });
+        });
     </script>
 </body>
 </html>

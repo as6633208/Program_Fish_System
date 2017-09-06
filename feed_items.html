@@ -53,22 +53,38 @@
         <!--Left Sidebar Menu-->
         <div class="fixed-sidebar-left">
             <ul class="nav navbar-nav side-nav nicescroll-bar">
-            
                 <li>
-                    <a href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
+                    <a class="active" href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
                 </li>
                 <li>
-                    <a class="active" href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><i class="icon-map mr-10"></i>後臺管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#report_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="report_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="Keeping_day_Report.html">日報表(飼養紀錄)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(魚隻變動)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(飼料耗用)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(飼料庫存)</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><i class="icon-map mr-10"></i>後臺管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
                     <ul id="ui_dr" class="collapse collapse-level-1">
                         <li>
                             <a href="Into_fish.html">入魚作業</a>
-                        </li>       
+                        </li>
                         <li>
                             <a href="supplier.html">供應商管理</a>
-                        </li>                 
+                        </li>
                         <li>
                             <a href="pool.html">新增魚池</a>
-                        </li>       
+                        </li>
                         <li>
                             <a href="javascript:void(0);" data-toggle="collapse" data-target="#newfeed_dr">飼料<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
                             <ul id="newfeed_dr" class="collapse">
@@ -90,23 +106,6 @@
                                     <a href="medicine_purchase.html">進貨紀錄(添加劑)</a>
                                 </li>
                             </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#report_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
-                    <ul id="report_dr" class="collapse collapse-level-1">
-                        <li>
-                            <a href="">日報表(飼養紀錄)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(魚隻變動)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(飼料耗用)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(飼料庫存)</a>
                         </li>
                     </ul>
                 </li>
@@ -222,6 +221,43 @@
             <!-- /Main Content -->
         </div>
     </div>
+    <!-- 彈跳視窗開始  -->
+    <div class="modal fade" id="jump-feed-items" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">修改供應商資料</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <form class="form-horizontal" method="post">
+                            <div class="form-group">
+                                <label for="modify_supplier_classification" class="col-sm-5 control-label">供應商名稱：</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="Modify_supplier_name" placeholder="飼料名稱" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Modify_feed_name" class="col-sm-5 control-label">飼料名稱：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="Modify_feed_name" placeholder="飼料名稱" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" id="Modify_val" value="確定修改" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- /#wrapper -->
     <!-- JavaScript -->
     <!-- jQuery -->
@@ -258,7 +294,7 @@
             success: function (Supplier_Json) {
                 var cssString = "";
                 for (var index in Supplier_Json) {
-                    cssString += '<tr>' +
+                    cssString += '<tr  data-toggle="modal" data-target="#jump-feed-items" >' +
                                     '<td>' + Supplier_Json[index].Fodder_id + '</td>        ' +
                                     '<td>' + Supplier_Json[index].company_name + '</td>   ' +
                                     '<td>' + Supplier_Json[index].Fodder_name + '</td>          ' +
@@ -274,7 +310,6 @@
             /**供應商新增**/
             $("#supplier_insert").submit(function (e) {
                 e.preventDefault();
-                //alert($("#supplier_classification").val() + "," + $("#supplier_sname").val() + "," + $("#supplier_name").val())//supplier_classification    supplier_sname  supplier_name
                 if ($("#supplier_classification").val() != '') {
                     swal({
                         title: '確認新增此供應商？',
@@ -338,6 +373,47 @@
             error: function (e) {
                 notyf.alert('伺服器錯誤,無法載入' + e);
             }
+        });
+
+        /**bootstrap modal 載入資料**/
+        $('table > tbody > tr').click(function () {         
+            $("#Modify_supplier_name").val($.trim($(this).find("td:eq(1)").text()))
+            $("#Modify_feed_name").val($.trim($(this).find("td:eq(2)").text()))
+            var id = $.trim($(this).find("td:eq(0)").text())
+            /**修改供應商名稱&飼料**/
+            $("#Modify_val").click(function (e) {
+                e.preventDefault();
+                if ($("#Modify_Supplier_name").val() != '' && $("#Modify_feed_name").val() != '' ) {
+                    $.ajax({
+                        url: 'database/fodder/feed_name_modify.ashx',
+                        type: 'post',
+                        data: {
+                            fish_kind_name: $("#Modify_feed_name").val(),
+                            modify_id: id
+                        },
+                        async: false,//啟用同步請求
+                        success: function (event) {
+                            if (event === "success") {
+                                swal({
+                                    type: 'success',
+                                    title: '修改成功!',
+                                    allowOutsideClick: false //不可點背景關閉
+                                }).then(function () {
+                                    location.reload();
+                                })
+                            } else {
+                                notyf.alert('修改失敗');
+                            }
+                        },
+                        error: function (e) {
+                            notyf.alert('伺服器錯誤,無法載入');
+                        }
+                    });
+                } else {
+                    notyf.alert('請完整輸入！');
+                }
+
+            });
         });
     </script>
 </body>

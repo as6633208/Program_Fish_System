@@ -9,45 +9,45 @@
               <Width>1.33583cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.39417cm</Width>
+              <Width>1.33584cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.69064cm</Width>
+              <Width>2.66131cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.97083cm</Width>
+              <Width>1.59917cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.22103cm</Width>
+              <Width>3.08332cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.89432cm</Width>
+              <Width>2.17994cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.5cm</Width>
+              <Width>2.05021cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.5cm</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>2.5cm</Width>
+              <Width>1.5875cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.05563cm</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.10854cm</Width>
+              <Width>2.20896cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.07667cm</Width>
+              <Width>2.10312cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.60042cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.75875cm</Height>
+              <Height>1.15562cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -767,7 +767,8 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>生餌</Value>
+                              <Value>生餌
+</Value>
                               <Style>
                                 <FontFamily>標楷體</FontFamily>
                                 <FontSize>14pt</FontSize>
@@ -1004,7 +1005,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>尾數</rd:DefaultName>
@@ -1057,7 +1060,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>平均魚重</rd:DefaultName>
@@ -1110,7 +1115,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>總重</rd:DefaultName>
@@ -1163,7 +1170,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>實投包</rd:DefaultName>
@@ -1216,7 +1225,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>秏損</rd:DefaultName>
@@ -1322,7 +1333,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>投餌率</rd:DefaultName>
@@ -1428,7 +1441,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>添加物劑量</rd:DefaultName>
@@ -1481,7 +1496,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>生餌</rd:DefaultName>
@@ -1550,8 +1567,9 @@
         </TablixRowHierarchy>
         <DataSetName>DataSet1</DataSetName>
         <Top>0.3175cm</Top>
-        <Height>1.35875cm</Height>
-        <Width>34.74766cm</Width>
+        <Left>0.3175cm</Left>
+        <Height>1.75563cm</Height>
+        <Width>26.74563cm</Width>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1579,10 +1597,10 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>2in</Height>
+    <Height>3.89583in</Height>
     <Style />
   </Body>
-  <Width>13.68018in</Width>
+  <Width>10.85318in</Width>
   <Page>
     <PageHeader>
       <Height>3.70417cm</Height>
@@ -1609,7 +1627,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
           <Top>0.3175cm</Top>
-          <Left>9.365cm</Left>
+          <Left>8.095cm</Left>
           <Height>1.28792cm</Height>
           <Width>12.89812cm</Width>
           <Style>
@@ -1648,7 +1666,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox4</rd:DefaultName>
           <Top>2.90724cm</Top>
-          <Left>12.80266cm</Left>
+          <Left>11.53266cm</Left>
           <Height>0.70583cm</Height>
           <Width>6.24484cm</Width>
           <ZIndex>1</ZIndex>
@@ -1682,7 +1700,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox8</rd:DefaultName>
           <Top>1.78181cm</Top>
-          <Left>13.54349cm</Left>
+          <Left>12.27349cm</Left>
           <Height>0.80793cm</Height>
           <Width>5.46333cm</Width>
           <ZIndex>2</ZIndex>
@@ -1703,12 +1721,12 @@
         </Border>
       </Style>
     </PageHeader>
-    <PageHeight>29.7cm</PageHeight>
-    <PageWidth>21cm</PageWidth>
-    <LeftMargin>2cm</LeftMargin>
-    <RightMargin>2cm</RightMargin>
-    <TopMargin>2cm</TopMargin>
-    <BottomMargin>2cm</BottomMargin>
+    <PageHeight>21cm</PageHeight>
+    <PageWidth>29.7cm</PageWidth>
+    <LeftMargin>0.5cm</LeftMargin>
+    <RightMargin>0.5cm</RightMargin>
+    <TopMargin>0.5cm</TopMargin>
+    <BottomMargin>0.5cm</BottomMargin>
     <ColumnSpacing>0.13cm</ColumnSpacing>
     <Style />
   </Page>

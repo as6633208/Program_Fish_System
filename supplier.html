@@ -53,12 +53,28 @@
         <!--Left Sidebar Menu-->
         <div class="fixed-sidebar-left">
             <ul class="nav navbar-nav side-nav nicescroll-bar">
-              
                 <li>
-                    <a href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
+                    <a class="active" href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
                 </li>
                 <li>
-                    <a class="active" href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><i class="icon-map mr-10"></i>後臺管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#report_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="report_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="Keeping_day_Report.html">日報表(飼養紀錄)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(魚隻變動)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(飼料耗用)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(飼料庫存)</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><i class="icon-map mr-10"></i>後臺管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
                     <ul id="ui_dr" class="collapse collapse-level-1">
                         <li>
                             <a href="Into_fish.html">入魚作業</a>
@@ -90,23 +106,6 @@
                                     <a href="medicine_purchase.html">進貨紀錄(添加劑)</a>
                                 </li>
                             </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#report_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
-                    <ul id="report_dr" class="collapse collapse-level-1">
-                        <li>
-                            <a href="">日報表(飼養紀錄)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(魚隻變動)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(飼料耗用)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(飼料庫存)</a>
                         </li>
                     </ul>
                 </li>
@@ -196,12 +195,6 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="panel panel-default card-view">
-                            <div class="panel-heading">
-                                <div class="pull-left">
-                                    <h6 class="panel-title txt-dark">data Table</h6>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
                             <div class="panel-wrapper collapse in">
                                 <div class="panel-body">
                                     <div class="table-wrap">
@@ -291,8 +284,6 @@
     <script src="javascript/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="javascript/bootstrap.min.js"></script>
-    <!-- Data table JavaScript -->
-
     <!-- Slimscroll JavaScript -->
     <script src="javascript/jquery.slimscroll.js"></script>
     <!-- Fancy Dropdown JS -->

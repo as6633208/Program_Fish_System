@@ -48,10 +48,24 @@
         <div class="fixed-sidebar-left">
             <ul class="nav navbar-nav side-nav nicescroll-bar">
                 <li>
-                    <a href="blank.html" data-toggle="collapse" data-target="#pages_dr"><i class="icon-home mr-10"></i>首頁</a>
+                    <a class="active" href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
                 </li>
                 <li>
-                    <a class="active" href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#report_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="report_dr" class="collapse collapse-level-1">
+                        <li>
+                            <a href="Keeping_day_Report.html">日報表(飼養紀錄)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(魚隻變動)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(飼料耗用)</a>
+                        </li>
+                        <li>
+                            <a href="">月報表(飼料庫存)</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><i class="icon-map mr-10"></i>後臺管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
@@ -90,19 +104,10 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#report_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
-                    <ul id="report_dr" class="collapse collapse-level-1">
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#authority_dr"><i class="icon-eye mr-10"></i>權限管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
+                    <ul id="authority_dr" class="collapse collapse-level-1">
                         <li>
-                            <a href="">日報表(飼養紀錄)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(魚隻變動)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(飼料耗用)</a>
-                        </li>
-                        <li>
-                            <a href="">月報表(飼料庫存)</a>
+                            <a href="Authority.html">用戶管理</a>
                         </li>
                     </ul>
                 </li>
