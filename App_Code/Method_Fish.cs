@@ -582,7 +582,7 @@ public class Method_Fish
     #region 飼料Fodder catch id(Renwu)
     public DataTable FeedPurchase_catch_id(string supplier, string feed)
     {
-        SqlCommand cmd = new SqlCommand(@"SELECT Fodder_id FROM Fodder WHERE (Fish_company_id = @supplier) AND (Fodder_name = @feed)");
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Fodder WHERE (Fish_company_id = @supplier) AND (Fodder_name = @feed)");
         cmd.Parameters.Add("@supplier", SqlDbType.Int).Value = supplier;
         cmd.Parameters.Add("@feed", SqlDbType.NVarChar, 10).Value = feed;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
@@ -638,7 +638,7 @@ public class Method_Fish
     #region 添加物 MedicinePurchase_catch_id(翔)
     public DataTable MedicinePurchase_catch_id(string supplier, string feed)
     {
-        SqlCommand cmd = new SqlCommand(@"SELECT Medicine_id FROM Medicine WHERE (Fish_company_id = @supplier) AND (Medicine_name = @medicine)");
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Medicine WHERE (Fish_company_id = @supplier) AND (Medicine_name = @medicine)");
         cmd.Parameters.Add("@supplier", SqlDbType.Int).Value = supplier;
         cmd.Parameters.Add("@medicine", SqlDbType.NVarChar, 10).Value = feed;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
