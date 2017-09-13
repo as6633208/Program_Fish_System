@@ -13,13 +13,21 @@ public class Fish_detail_view : IHttpHandler {
         if (context.Request.ServerVariables["HTTP_REFERER"] == null)
         {
             context.Response.Write("Error");
-        } else
+        }
+        else
         {
             string Fish_detail_id = context.Request.Form["Fish_detail_id"].ToString();
             Method_Fish method = new Method_Fish();
-            DataTable re_ = method.Fish_detail_view(Fish_detail_id);
-            string str_json = JsonConvert.SerializeObject(re_, Formatting.Indented);
-            context.Response.Write(str_json);//回傳資料
+            try
+            {
+                DataTable re_ = method.Fish_detail_view(Fish_detail_id);
+                string str_json = JsonConvert.SerializeObject(re_, Formatting.Indented);
+                context.Response.Write(str_json);//回傳資料
+            }
+            catch (Exception e)
+            {
+                context.Response.Write("null");//回傳資料
+            }
         }
     }
 
