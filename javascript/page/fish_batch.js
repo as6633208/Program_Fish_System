@@ -147,10 +147,14 @@ if (Page_Pool_id == -1) {
         data: { Fish_detail_id: Fish_detail_Origin_Fish_detail_id },
         async: false,//啟用同步請求
         success: function (Fish_detail_Json) {
-            Fish_detail_Fish_id = Fish_detail_Json[0]["Fish_id"];
-            Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
-            Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
-            Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
+            if (JSON.stringify((Fish_detail_Json)).indexOf("null") <= 0) {
+                source_empty = true;
+            } else {
+                Fish_detail_Fish_id = Fish_detail_Json[0]["Fish_id"];
+                Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
+                Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
+                Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
+            }
         },
         error: function (e) {
             source_empty = true;
@@ -205,15 +209,16 @@ if (Page_Pool_id == -1) {
         var Move_date = new Date(Fish_detail_Move_date);
         Move_date_MM = ((Move_date.getMonth() + 1 < 10 ? '0' : '')) + (Move_date.getMonth() + 1);
         Move_date_DD = (Move_date.getDate() < 10 ? '0' : '') + Move_date.getDate();
+        //移入日期顯示
+        $('#insert_date').html(Move_date.getFullYear() + '-' + Move_date_MM + '-' + Move_date_DD);
+        Move_date = Move_date_MM + '' + Move_date_DD;
         //批號顯示
         $('#source_batch').html(Spawning_date + '-' + fry_date + '-' + Fish_Insert_year + '-' + Fish_Fry_weight + '-'
             + Fish_company_company_abbreviation + '-' + Fish_detail_Fish_size + '-' + Move_date);
+    } else {
+        //批號顯示
+        $('#source_batch').html("來源批號不存在");
     }
-    //移入日期顯示
-    $('#insert_date').html(Move_date.getFullYear() + '-' + Move_date_MM + '-' + Move_date_DD);
-    Move_date = Move_date_MM + '' + Move_date_DD;
-    //批號顯示
-    $('#source_batch').html("來源魚群不存在");
     //魚群種類ajax
     $.ajax({
         url: 'database/fish_kind/fish_kind_search.ashx',
