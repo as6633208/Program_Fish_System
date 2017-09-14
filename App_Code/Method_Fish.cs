@@ -106,7 +106,7 @@ public class Method_Fish
     }
     #endregion 
     #region 供應商修改名稱
-    public string Supplier_Modify(string a, string b ,string c)
+    public string Supplier_Modify(string a, string b, string c)
     {
         string result = "";
         SqlCommand cmd = new SqlCommand(@"UPDATE Fish_company SET
@@ -158,7 +158,7 @@ public class Method_Fish
     {
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Fish_kind (kind_name) VALUES (@kind_name)");
-        cmd.Parameters.Add("@kind_name", SqlDbType.NVarChar,50).Value = a;
+        cmd.Parameters.Add("@kind_name", SqlDbType.NVarChar, 50).Value = a;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
@@ -176,7 +176,7 @@ public class Method_Fish
     #endregion
     #region 測量及損益操作
     #region 測量新增(建)
-    public string Measuring_insert(string Pool_id, int Fish_detail_id, int number, string Fish_AVGweight, string date, string before_number,string before_Fish_AVGweight)
+    public string Measuring_insert(string Pool_id, int Fish_detail_id, int number, string Fish_AVGweight, string date, string before_number, string before_Fish_AVGweight)
     {
         int old_fish_number;
         string result = "";
@@ -184,7 +184,7 @@ public class Method_Fish
         DataTable select = measuring_view(Pool_id, Fish_detail_id.ToString());
         Console.Write(select);
         //判斷是否為全新紀錄
-        if (select.Rows.Count<1)
+        if (select.Rows.Count < 1)
         {
 
             SqlCommand cmd = new SqlCommand(@"INSERT INTO Measuring
@@ -220,7 +220,7 @@ public class Method_Fish
             //日期最晚的測量記錄
             string[] last_time_spilt;
             last_time_spilt = select.Rows[last_one][5].ToString().Split(' ');
-            DateTime last_time = Convert.ToDateTime(last_time_spilt[0]);      
+            DateTime last_time = Convert.ToDateTime(last_time_spilt[0]);
             //新增的測量記錄日期
             DateTime now_date = Convert.ToDateTime(date);
             //判斷時間前後，若新增之日期為最後一筆，則無需考慮前後資料問題
@@ -256,7 +256,7 @@ public class Method_Fish
             }
             else
             {
-                 var new_position = 0;
+                var new_position = 0;
                 for (int i = 0; i < select.Rows.Count; i++)
                 {
 
@@ -290,7 +290,7 @@ public class Method_Fish
                 //修改下筆資料
                 DataTable Next_Inventory = select_Inventory(Pool_id, Fish_detail_id, select.Rows[new_position][5].ToString());
                 int id = Int32.Parse(Next_Inventory.Rows[0][0].ToString());
-                Updata_Inventory(Next_Inventory.Rows[0][0].ToString(), Int32.Parse(select.Rows[new_position][3].ToString())-number);
+                Updata_Inventory(Next_Inventory.Rows[0][0].ToString(), Int32.Parse(select.Rows[new_position][3].ToString()) - number);
                 Updata_Measuring(select.Rows[new_position][0].ToString(), number.ToString(), Fish_AVGweight);
                 return result;
             }
@@ -298,11 +298,12 @@ public class Method_Fish
     }
     #endregion
     #region 尋找損益紀錄(單筆)(建)
-    public DataTable select_Inventory(string Pool_id,int Fish_detail_id,string date) {
+    public DataTable select_Inventory(string Pool_id, int Fish_detail_id, string date)
+    {
         SqlCommand cmd = new SqlCommand(@"SELECT * FROM Inventory WHERE (Pool_id = @Pool_id) AND ( Fish_detail_id=@Fish_detail_id) AND(date=@date) ");
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 50).Value = Fish_detail_id;
-        cmd.Parameters.Add("@date", SqlDbType.DateTime2,7).Value = date;
+        cmd.Parameters.Add("@date", SqlDbType.DateTime2, 7).Value = date;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
         return dt;
 
@@ -310,7 +311,8 @@ public class Method_Fish
 
     #endregion
     #region 更新損益紀錄(單筆)(建)
-    public void Updata_Inventory(string id,int number) {
+    public void Updata_Inventory(string id, int number)
+    {
         SqlCommand cmd = new SqlCommand(@"UPDATE Inventory SET Loss_or_Profit_Num = @number
                 WHERE (Inventory_id = @Inventory_id)");
         cmd.Parameters.Add("@Inventory_id", SqlDbType.Int).Value = id;
@@ -321,7 +323,7 @@ public class Method_Fish
     }
     #endregion
     #region 更新測量紀錄(單筆)(建)
-    public void Updata_Measuring(string id, string number,string Fish_AVGweight)
+    public void Updata_Measuring(string id, string number, string Fish_AVGweight)
     {
         SqlCommand cmd = new SqlCommand(@"UPDATE Measuring SET before_number = @before_number,before_Fish_AVGweight = @before_Fish_AVGweight
                 WHERE (Measuring_id = @Measuring_id)");
@@ -332,7 +334,7 @@ public class Method_Fish
     }
     #endregion
     #region 新增損益紀錄(建)
-    public string Inventory(string a, int b, int c, int d, string e,int f)
+    public string Inventory(string a, int b, int c, int d, string e, int f)
     {
         //a=池編號 b=魚池細節編號 c=分養池加總的數量 d=被分養池原本數量 e日期
         int number = c - d;
@@ -407,7 +409,7 @@ public class Method_Fish
             //更新魚群細節資訊    
             string b = Measuring_UP_FishDetail(Int32.Parse(Fish_detail_id), select.Rows[new_position][7].ToString(), Int32.Parse(select.Rows[new_position][6].ToString()));
             //更新池內數量
-           string a = Measuring_UP_Pool(Pool_id, Int32.Parse(select.Rows[new_position][6].ToString()));
+            string a = Measuring_UP_Pool(Pool_id, Int32.Parse(select.Rows[new_position][6].ToString()));
             //查詢該筆資料是否有包含損益資料，有刪除無略過
             if (sel_Inventory.Rows.Count > 0)
             {
@@ -417,23 +419,25 @@ public class Method_Fish
                 check_num = Fish.SqlHelper.cmdCheck(cmd_Inventory);
                 return "success";
             }
-            else {
+            else
+            {
                 return "success";
             }
-            
+
         }
-        else {
+        else
+        {
             DataTable sel_Inventory = select_Inventory(Pool_id, Int32.Parse(Fish_detail_id), select.Rows[new_position][5].ToString());
             //刪除該筆測量記錄
             SqlCommand cmd = new SqlCommand(@"DELETE Measuring  WHERE (Measuring_id = @Measuring_id)");
             cmd.Parameters.Add("@Measuring_id", SqlDbType.Int).Value = id;
             check_num = Fish.SqlHelper.cmdCheck(cmd);
             //修正下筆測量記錄
-            Updata_Measuring(select.Rows[new_position+1][0].ToString(), select.Rows[new_position][6].ToString(), select.Rows[new_position][7].ToString());
+            Updata_Measuring(select.Rows[new_position + 1][0].ToString(), select.Rows[new_position][6].ToString(), select.Rows[new_position][7].ToString());
             //查詢下筆測量是否包含損益
-            DataTable sel_Inventory_next = select_Inventory(Pool_id, Int32.Parse(Fish_detail_id), select.Rows[new_position+1][5].ToString());
+            DataTable sel_Inventory_next = select_Inventory(Pool_id, Int32.Parse(Fish_detail_id), select.Rows[new_position + 1][5].ToString());
             //計算上筆跟下筆的差異((非此筆資料
-            int update_Inventory_num = (Int32.Parse(select.Rows[new_position - 1][3].ToString()))-(Int32.Parse(select.Rows[new_position + 1][3].ToString()));
+            int update_Inventory_num = (Int32.Parse(select.Rows[new_position - 1][3].ToString())) - (Int32.Parse(select.Rows[new_position + 1][3].ToString()));
             if (sel_Inventory_next.Rows.Count > 0)
             {
                 SqlCommand cmd_UP_Inventory = new SqlCommand(@"UPDATE Inventory SET Loss_or_Profit_Num = @number,Measuring_id = @Measuring_id
@@ -441,7 +445,7 @@ public class Method_Fish
                 cmd_UP_Inventory.Parameters.Add("@Inventory_id", SqlDbType.Int).Value = sel_Inventory_next.Rows[0][0];
                 cmd_UP_Inventory.Parameters.Add("@number", SqlDbType.Int, 20).Value = update_Inventory_num;
                 cmd_UP_Inventory.Parameters.Add("@Measuring_id", SqlDbType.Int, 20).Value = select.Rows[new_position + 1][0].ToString();
-                check_num = Fish.SqlHelper.cmdCheck(cmd_UP_Inventory);        
+                check_num = Fish.SqlHelper.cmdCheck(cmd_UP_Inventory);
             }
             else
             {
@@ -472,9 +476,10 @@ public class Method_Fish
     }
     #endregion
     #region 測量更新(建)
-    public string Measuring_update(string Pool_id, int Fish_detail_id, int number, string Fish_AVGweight, string date, string before_number, string before_Fish_AVGweight, string id) {
+    public string Measuring_update(string Pool_id, int Fish_detail_id, int number, string Fish_AVGweight, string date, string before_number, string before_Fish_AVGweight, string id)
+    {
 
-        string delest_cheak = Measuring_delete(Pool_id, Fish_detail_id.ToString(),id);
+        string delest_cheak = Measuring_delete(Pool_id, Fish_detail_id.ToString(), id);
         string insert_cheak = Measuring_insert(Pool_id, Fish_detail_id, number, Fish_AVGweight, date, before_number, before_Fish_AVGweight);
         return "success";
     }
@@ -491,7 +496,8 @@ public class Method_Fish
     }
     #endregion
     #region 測量資料查詢(單筆)
-    public DataTable measuring_view_one(string Measuring_id)    {
+    public DataTable measuring_view_one(string Measuring_id)
+    {
 
         SqlCommand cmd = new SqlCommand(@"SELECT * FROM Measuring WHERE (Measuring_id = @Measuring_id)  ");
         cmd.Parameters.Add("@Measuring_id", SqlDbType.Int, 50).Value = Measuring_id;
@@ -499,7 +505,7 @@ public class Method_Fish
         return dt;
     }
     #endregion
- 
+
     #endregion
     #region 飼料操作
     #region 飼料新增後顯示(renwu)
@@ -539,13 +545,47 @@ public class Method_Fish
         return result;
     }
     #endregion
+    #region 飼料進貨查詢 (翔)
+    public DataTable Fodder_detail_view()
+    {
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Fodder INNER JOIN Feed_Purchase ON (Fodder.Fodder_id = Feed_Purchase.Fodder_id)
+                                        LEFT JOIN Fish_company ON (Fodder.Fish_company_id = Fodder.Fish_company_id) WHERE company_item = '飼料商'");
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;
+    }
+    #endregion
+    #region 飼料總量修改 (翔)
+    public string Fodder_number_modify(string a, string b)
+    {
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"UPDATE Fodder SET Fodder_number = @Fodder_number WHERE (Fodder_id = @Fodder_id)");
+        cmd.Parameters.Add("@Fodder_id", SqlDbType.Int).Value = a;
+        cmd.Parameters.Add("@Fodder_number", SqlDbType.NVarChar, 10).Value = b;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+        return result;
+    }
+    #endregion
+    #region 飼料歷史紀錄修改 (翔)
+    public string FeedPurchase_modify(string a, string b)
+    {
+        string result = "";
+        SqlCommand cmd = new SqlCommand(@"UPDATE Feed_Purchase SET number = @number WHERE     
+                    (Feed_Purchase_id = @Feed_Purchase_id)");
+        cmd.Parameters.Add("@Feed_Purchase_id", SqlDbType.Int).Value = a;
+        cmd.Parameters.Add("@number", SqlDbType.Int).Value = b;
+        int check_num = Fish.SqlHelper.cmdCheck(cmd);
+        result = (check_num != 0) ? "success" : "fail";
+        return result;
+    }
+    #endregion
     #region 飼料進貨新增 FeedPurchase 歷史表(翔)
     public string FeedPurchase_Insert(string a, string b, string c)
     {
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Feed_Purchase
                             (Fodder_id, number, date) VALUES
-                        (@Fodder_id, @feedPurchase_number, @feedPurchase_date)");     
+                        (@Fodder_id, @feedPurchase_number, @feedPurchase_date)");
         cmd.Parameters.Add("@Fodder_id", SqlDbType.Int).Value = a;
         cmd.Parameters.Add("@feedPurchase_number", SqlDbType.Int).Value = b;
         cmd.Parameters.Add("@feedPurchase_date", SqlDbType.DateTime2, 7).Value = c;
@@ -575,6 +615,15 @@ public class Method_Fish
         SqlCommand cmd = new SqlCommand(@"SELECT Fish_company.company_name, Fodder.Fodder_name, Fodder.Fodder_number
                     FROM Fodder INNER JOIN Fish_company ON Fodder.Fish_company_id = Fish_company.Fish_company_id 
                 ORDER BY   Fish_company.company_name");
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        return dt;
+    }
+    #endregion
+    #region 飼料更新數量(翔)
+    public DataTable SelectSum(string a)
+    {
+        SqlCommand cmd = new SqlCommand(@"SELECT SUM (number) Feed_Purchase FROM Feed_Purchase WHERE Fodder_id = @Fodder_id");
+        cmd.Parameters.Add("@Fodder_id", SqlDbType.Int).Value = a;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
         return dt;
     }
@@ -729,7 +778,7 @@ public class Method_Fish
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value = Fish_detail_id;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
-        
+
 
     }
     #endregion
@@ -767,7 +816,7 @@ public class Method_Fish
     }
     #endregion
     #region 廠商飼料名稱修改(Renwu)
-    public string feed_name_modify(string a ,string b)
+    public string feed_name_modify(string a, string b)
     {
         string result = "";
         SqlCommand cmd = new SqlCommand(@"UPDATE Fodder SET Fodder_name = @Fodder_name WHERE     
@@ -892,7 +941,7 @@ public class Method_Fish
         //Update Products Set ProductName = ProductName + ',6' Where ProductID = 1
         string result = "";
         SqlCommand cmd = new SqlCommand(@"Delete Feed  WHERE (Feed_id = @feed_id)");
-        cmd.Parameters.Add("@feed_id", SqlDbType.Int).Value = feed_id;       
+        cmd.Parameters.Add("@feed_id", SqlDbType.Int).Value = feed_id;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
@@ -901,7 +950,7 @@ public class Method_Fish
     #region 餵食資料查詢
     public DataTable feed_view(string Pool_id, string Fish_detail_id)
     {
-  
+
         SqlCommand cmd = new SqlCommand(@"SELECT Feed.Feed_id, Feed.Fodder_id, Fish_company.company_name AS F_Comp_name, Fodder.Fodder_name, 
                                                  Feed.Pool_id, Feed.Fish_detail_id, Feed.Fodder_number, Feed.date, Feed.Bait, Feed.Medicine_id, 
                                                  Fish_company_1.company_name AS M_Comp_name, Medicine.Medicine_name, Feed.medicine_number, 
@@ -916,14 +965,14 @@ public class Method_Fish
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 50).Value = Fish_detail_id;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
-        return dt;  
+        return dt;
     }
     #endregion
     #region 餵食資料查詢(單一)
     public DataTable feed_view_one(string feed_id)
     {
         SqlCommand cmd = new SqlCommand(@"SELECT * FROM Feed  WHERE (Feed_id = @feed_id) ");
-        cmd.Parameters.Add("@feed_id", SqlDbType.Int, 10).Value = feed_id;      
+        cmd.Parameters.Add("@feed_id", SqlDbType.Int, 10).Value = feed_id;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
         return dt;
     }
@@ -1032,16 +1081,17 @@ public class Method_Fish
     #endregion
     #region 出魚操作
     #region 出魚記錄新增
-    public string Outfish_Insert(string Pool_id, string number, string Fish_AVGweight, string Waistline, string bust, string Tail, string Fish_detail_id, string Outside_date) {
+    public string Outfish_Insert(string Pool_id, string number, string Fish_AVGweight, string Waistline, string bust, string Tail, string Fish_detail_id, string Outside_date)
+    {
         string result = "";
         SqlCommand cmd = new SqlCommand(@"INSERT INTO Out
                             (Pool_id,number,Fish_AVGweight,Waistline,bust,Tail,Fish_detail_id,Outside_date) VALUES
                         (@Pool_id,@number,@Fish_AVGweight,@Waistline,@bust,@Tail,@Fish_detail_id,@Outside_date)");
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 50).Value = Pool_id;
-        cmd.Parameters.Add("@number", SqlDbType.Int,10).Value = number;
+        cmd.Parameters.Add("@number", SqlDbType.Int, 10).Value = number;
         cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 50).Value = Fish_AVGweight;
-        cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int,10).Value =Fish_detail_id;
-        cmd.Parameters.Add("@Outside_date", SqlDbType.DateTime2,10).Value = Outside_date;
+        cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int, 10).Value = Fish_detail_id;
+        cmd.Parameters.Add("@Outside_date", SqlDbType.DateTime2, 10).Value = Outside_date;
         cmd.Parameters.Add("@Waistline", SqlDbType.NVarChar, 10).Value = Waistline;
         cmd.Parameters.Add("@bust", SqlDbType.NVarChar, 10).Value = bust;
         cmd.Parameters.Add("@Tail", SqlDbType.NVarChar, 10).Value = Tail;
@@ -1063,7 +1113,7 @@ public class Method_Fish
     }
     #endregion
     #region 出魚紀錄刪除
-    public string Out_delete(string Out_id, string Fish_detail_id, string total,string Pool_id)
+    public string Out_delete(string Out_id, string Fish_detail_id, string total, string Pool_id)
     {
         //Update Products Set ProductName = ProductName + ',6' Where ProductID = 1
         string result = "";
@@ -1079,25 +1129,27 @@ public class Method_Fish
             {
                 return result;
             }
-            else {
-                 return "fail";
-            }           
+            else
+            {
+                return "fail";
+            }
         }
-        else {
+        else
+        {
             return "fail";
         }
-       
+
     }
     #endregion
     #region 出魚紀錄修改
-    public string Out_Update(string Out_id, string Fish_detail_id, string total, string Pool_id,string out_number,string Out_Fish_AVGweight,string Waistline,string bust,string Tail)
+    public string Out_Update(string Out_id, string Fish_detail_id, string total, string Pool_id, string out_number, string Out_Fish_AVGweight, string Waistline, string bust, string Tail)
     {
         //Update Products Set ProductName = ProductName + ',6' Where ProductID = 1
         string result = "";
         SqlCommand cmd = new SqlCommand(@"UPDATE Out SET number=@number,Waistline=@Waistline,bust=@bust,Tail=@Tail, Fish_AVGweight=@Fish_AVGweight WHERE (Outside_id = @Out_id)");
-          cmd.Parameters.Add("@Out_id", SqlDbType.Int).Value = Out_id;
-         cmd.Parameters.Add("@number", SqlDbType.Int).Value = out_number;
-         cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.Int).Value = Out_Fish_AVGweight;
+        cmd.Parameters.Add("@Out_id", SqlDbType.Int).Value = Out_id;
+        cmd.Parameters.Add("@number", SqlDbType.Int).Value = out_number;
+        cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.Int).Value = Out_Fish_AVGweight;
         cmd.Parameters.Add("@Waistline", SqlDbType.NVarChar, 10).Value = Waistline;
         cmd.Parameters.Add("@bust", SqlDbType.NVarChar, 10).Value = bust;
         cmd.Parameters.Add("@Tail", SqlDbType.NVarChar, 10).Value = Tail;

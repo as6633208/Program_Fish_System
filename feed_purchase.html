@@ -205,6 +205,7 @@
                         <div class="panel panel-default card-view">
                             <div class="panel-wrapper collapse in">
                                 <div class="panel-body">
+                                    <h3 class="text-center" style="">【目前飼料種類與數量】</h3>
                                     <div class="table-wrap">
                                         <div class="table-responsive">
                                             <table id="datable_1" class="table table-hover display  pb-30">
@@ -216,6 +217,37 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="supplier_view"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Row -->
+                <!-- Row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default card-view">
+                            <div class="panel-wrapper collapse in">
+                                <div class="panel-body">
+                                    <h3 class="text-center" style="">【歷史進貨飼料紀錄】</h3>
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <table id="datable_2" class="table table-hover display  pb-30">
+                                                <thead>
+                                                    <tr>
+                                                        <th>編號</th>
+                                                        <th>供應商名稱</th>
+                                                        <th>飼料名稱</th>
+                                                        <th>進貨日期</th>
+                                                        <th>進貨數量</th>
+                                                        <th style="display:none">test</th>
+                                                        <th style="display:none">test2</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="fodder_view"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -239,6 +271,59 @@
                 <!-- /Footer -->
             </div>
             <!-- /Main Content -->
+        </div>
+    </div>
+    <!-- 彈跳視窗開始  -->
+    <div class="modal fade" id="jump-feed_purchase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">修改飼料進貨資料</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <form class="form-horizontal" method="post">
+                            <div class="form-group">
+                                <label for="company_name" class="col-sm-5 control-label">供應商名稱：</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="Modify_company_name" placeholder="供應商名稱" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Fodder_name" class="col-sm-5 control-label">飼料名稱：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="Modify_Fodder_name" placeholder="飼料名稱" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Fodder_number" class="col-sm-5 control-label">進貨日期：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="Modify_Fodder_date" placeholder="進貨日期" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Fodder_number" class="col-sm-5 control-label">進貨數量：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="Modify_Fodder_number" placeholder="進貨數量" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" id="Modify_val" value="確定修改" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
         </div>
     </div>
     <!-- /#wrapper -->
@@ -271,16 +356,17 @@
     <script src="javascript/check_authority.js"></script>
     <script>
         var notyf = new Notyf();//notyf.js宣告使用
-        var feed_name = ''//catch_name
-        var feedpurchase_id = ''
-        var update_company_time = ''//更新廠商時間
+        var feed_name = '';//catch_name
+        var feedpurchase_id = '';
+        var update_company_time = '';//更新廠商時間
+        var fodder_sum = "";//總量
 
         $(document).ready(function () {
             FormPlugins.init();
             var Today = new Date();
             $("#purchase_time").val(Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate())
         });
-        /**表格載入資料**/
+        /**【目前飼料數量】表格載入資料**/
         $.ajax({
             url: 'database/feedPurchase/feedPurchase_view.ashx',
             type: 'post',
@@ -289,13 +375,38 @@
             success: function (Supplier_Json) {
                 var cssString = "";
                 for (var index in Supplier_Json) {
-                    cssString += '<tr data-toggle="modal" data-target="#jump-feed_items">' +
+                    cssString += '<tr>' +
                                     '<td>' + Supplier_Json[index].company_name + '</td>        ' +
                                     '<td>' + Supplier_Json[index].Fodder_name + '</td>   ' +
                                     '<td>' + Supplier_Json[index].Fodder_number + '</td>          ' +
                                     '</tr>                       '
                 }
                 $("#supplier_view").html(cssString);
+            },
+            error: function (e) {
+                notyf.alert('伺服器錯誤,無法載入' + e);
+            }
+        });
+        /**【歷史進貨紀錄】表格載入資料**/
+        $.ajax({
+            url: 'database/feedPurchase/Fodder_detail_view.ashx',
+            type: 'post',
+            dataType: 'json',
+            async: false,//啟用同步請求
+            success: function (Supplier_Json) {
+                var cssString = "";
+                for (var index in Supplier_Json) {
+                    cssString += '<tr data-toggle="modal" data-target="#jump-feed_purchase">' +
+                                    '<td>' + Supplier_Json[index].Feed_Purchase_id + '</td>        ' +
+                                    '<td>' + Supplier_Json[index].company_name + '</td>   ' +
+                                    '<td>' + Supplier_Json[index].Fodder_name + '</td>          ' +
+                                    '<td>' + Supplier_Json[index].date + '</td>          ' +
+                                    '<td>' + Supplier_Json[index].number + '</td>          ' +
+                                    '<td style ="display:none">' + Supplier_Json[index].Fish_company_id + '</td>          ' +
+                                    '<td style ="display:none">' + Supplier_Json[index].Fodder_id + '</td>          ' +
+                                    '</tr>                       '
+                }
+                $("#fodder_view").html(cssString);
             },
             error: function (e) {
                 notyf.alert('伺服器錯誤,無法載入' + e);
@@ -308,8 +419,8 @@
                 e.preventDefault();
                 if ($("#supplier_classification").val() != '' && $("#feed_classification").val() != '') {
                     swal({
-                        title: '確認新增飼料數量？',
-                        text: "新增後將無法修改",
+                        title: '確定要在「' + document.getElementById("supplier_classification").options[parseInt($("#supplier_classification").val()) + 1].text + '：' + document.getElementById("feed_classification").options[$("#feed_classification").val()].text + '」中進貨' + $("#fodder_count").val() + '包飼料?',
+                        text: "",
                         type: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -331,7 +442,7 @@
                                 async: false,//啟用同步請求
                                 success: function (Supplier_Json) {
                                     feedpurchase_id = Supplier_Json[0].Fodder_id//catch id
-                                    //alert(feedpurchase_id)
+                                    // alert(feedpurchase_id)
                                     /**飼料進貨新增**/
                                     $.ajax({
                                         type: 'post',
@@ -401,6 +512,8 @@
             });
 
         });
+
+
         /**載入下拉式供應商資料**/
         $.ajax({
             url: 'database/supplier/select_supplier.ashx',
@@ -457,6 +570,89 @@
             console.log($('#feed_classification option:selected').text())
             feed_name = $('#feed_classification option:selected').text()
         }
+
+
+        /**bootstrap modal 彈出視窗載入資料：供應商名稱、飼料名稱、進貨日期、進貨數量**/
+        $('table > tbody > tr').click(function () {
+            $("#Modify_company_name").val($.trim($(this).find("td:eq(1)").text()))
+            $("#Modify_Fodder_name").val($.trim($(this).find("td:eq(2)").text()))
+            $("#Modify_Fodder_date").val($.trim($(this).find("td:eq(3)").text()))
+            $("#Modify_Fodder_number").val($.trim($(this).find("td:eq(4)").text()))
+            var id = $.trim($(this).find("td:eq(0)").text())//使用編號進行修改
+            var Fish_company_id = $.trim($(this).find("td:eq(5)").text())//隱藏的TD包含fishcompanyID 用於修改總數
+            var Fodder_id = $.trim($(this).find("td:eq(6)").text())//隱藏的TD包含Fodder_id 用來查詢SUM加總數量
+            /**「修改飼料數量」&「更新飼料數量」(2種資料庫方法)**/
+
+            //  alert(feedpurchase_id);
+            $("#Modify_val").click(function (e) {
+                e.preventDefault();
+                if ($("#Modify_Fodder_number").val() != '') {
+                    $.ajax({
+                        url: 'database/feedPurchase/FeedPurchase_modify2.ashx',
+                        type: 'post',
+                        data: {
+                            modify_id: id,
+                            modify_number: $("#Modify_Fodder_number").val()
+                        },
+                        async: false,//啟用同步請求
+                        success: function (event) {
+                            /**更新原先數量**/
+                            /**利用sql查詢運算計算加總數量**/
+                            $.ajax({
+                                type: 'post',
+                                url: 'database/feedPurchase/SelectSum.ashx',
+                                async: false,
+                                dataType: 'json',
+                                data: {
+                                    FodderID: Fodder_id
+                                },
+                                success: function (test_E) {
+                                    /**利用加總之數值Feed_Purchase更改資料庫內總數量**/
+                                    fodder_sum = test_E[0].Feed_Purchase;
+                                    $.ajax({
+                                       type: 'post',
+                                        url: 'database/feedPurchase/Fodder_number_modify.ashx',
+                                        async: false,
+                                        data: {
+                                            FodderID: Fodder_id,
+                                            Fodder_number: fodder_sum
+                                        },
+                                        success: function (e) {
+                                            if (event === "success") {
+                                                swal({
+                                                    type: 'success',
+                                                    title: '修改成功!',
+                                                    allowOutsideClick: false //不可點背景關閉
+                                                }).then(function () {
+                                                    location.reload();
+                                                })
+                                            } else {
+                                                notyf.alert('修改失敗，原因不明XD');
+                                            }
+                                        },
+                                        error: function (e) {
+                                            alert(fodder_sum);
+                                            notyf.alert('無法修改總量');
+                                        },
+                                    });
+                                },
+                                error: function (e) {
+                                    //alert(feedpurchase_id);
+                                    notyf.alert('無法利用fooder_id進行數量加總查詢');
+                                },
+                            });
+                        },
+                        error: function (e) {
+                            notyf.alert('不正確的修改ID或數量');
+                        }
+                    });
+                } else {
+                    notyf.alert('請完整輸入！');
+                }
+
+            });
+        });
+
 
     </script>
 </body>
