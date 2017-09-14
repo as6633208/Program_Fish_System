@@ -419,7 +419,7 @@
                 e.preventDefault();
                 if ($("#supplier_classification").val() != '' && $("#feed_classification").val() != '') {
                     swal({
-                        title: '確定要在「' + document.getElementById("supplier_classification").options[parseInt($("#supplier_classification").val()) + 1].text + '：' + document.getElementById("feed_classification").options[$("#feed_classification").val()].text + '」中進貨' + $("#fodder_count").val() + '包飼料?',
+                        title: '確定要新增「' + $("#fodder_count").val() + '包飼料?',
                         text: "",
                         type: 'warning',
                         showCancelButton: true,
@@ -607,7 +607,7 @@
                                     FodderID: Fodder_id
                                 },
                                 success: function (test_E) {
-                                    /**利用加總之數值Feed_Purchase更改資料庫內總數量**/
+                                    /**利用加總之數值Feed_Purchase更改表單數量**/
                                     fodder_sum = test_E[0].Feed_Purchase;
                                     $.ajax({
                                        type: 'post',
