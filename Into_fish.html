@@ -53,7 +53,7 @@
         <div class="fixed-sidebar-left">
             <ul class="nav navbar-nav side-nav nicescroll-bar">
                 <li>
-                    <a class="active" href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池總覽 </a>
+                    <a class="active" href="blank.html" data-toggle="collapse" data-target="#dashboard_dr"><i class="icon-screen-desktop mr-10"></i>魚池管理 </a>
                 </li>
                 <li>
                     <a href="javascript:void(0);" data-toggle="collapse" data-target="#report_dr"><i class="icon-calender mr-10"></i>報表管理<span class="pull-right"><i class="fa fa-fw fa-angle-down"></i></span></a>
@@ -354,6 +354,8 @@
     <script src="javascript/dataTables-data.js"></script>
     <!-- ================== JS Check ================== -->
     <script src="javascript/check_authority.js"></script>
+    <!-- ================== JS IE sweetalert ================== -->
+    <script src="javascript/sweetalert2/core-js.js"></script>
     <script>
         var notyf = new Notyf();//notyf.js宣告使用
         var fisf_name;
@@ -541,7 +543,7 @@
                     swal.resetDefaults()
                     //alert(result[1])
                     /**數量異常超額**/
-                    if (result[1] > testnum) {
+                    if (result[1] > testnum || result[1] == 0 || result[1] < 0 || result[1] == '') {
                         swal({
                             type: 'error',
                             title: '數量錯誤，請輸入剩餘數量內數值',
@@ -551,6 +553,8 @@
                             update_poolview()
                             insert_name(testnum)
                         })
+                      
+                       
                     } else {
                         /**魚群細節**/
                         $.ajax({
@@ -572,7 +576,7 @@
                             },
                             error: function (e) {
                             }
-                        });  
+                        });
                     }
               
 
