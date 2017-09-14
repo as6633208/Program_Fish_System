@@ -549,7 +549,7 @@ public class Method_Fish
     public DataTable Fodder_detail_view()
     {
         SqlCommand cmd = new SqlCommand(@"SELECT * FROM Fodder INNER JOIN Feed_Purchase ON (Fodder.Fodder_id = Feed_Purchase.Fodder_id)
-                                        LEFT JOIN Fish_company ON (Fodder.Fish_company_id = Fodder.Fish_company_id) WHERE company_item = '飼料商'");
+                                        LEFT JOIN Fish_company ON (Fodder.Fish_company_id = Fish_company.Fish_company_id) WHERE company_item = '飼料商'");
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
         return dt;
     }
