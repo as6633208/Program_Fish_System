@@ -107,7 +107,7 @@ public class move_fish : IHttpHandler {
             0,
             "0");
         //計算損益   a=池編號 b=魚池細節編號 c=分養池加總的數量 d=被分養池原本數量 e日期
-        method_pool.Inventory(Page_Pool_id, int.Parse(Fish_detail_id),int.Parse(Fish_amount), int.Parse(Fish_Pool_number), DateTime.Now.ToString());
+       // method_pool.Inventory(Page_Pool_id, int.Parse(Fish_detail_id),int.Parse(Fish_amount), int.Parse(Fish_Pool_number), DateTime.Now.ToString());
     }
     public bool IsReusable {
         get {
