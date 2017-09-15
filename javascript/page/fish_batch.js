@@ -217,7 +217,7 @@ if (Page_Pool_id == -1) {
             + Fish_company_company_abbreviation + '-' + Fish_detail_Fish_size + '-' + Move_date);
     } else {
         //批號顯示
-        $('#source_batch').html("來源批號不存在");
+        $('#source_batch').html("無");
     }
     //魚群種類ajax
     $.ajax({
