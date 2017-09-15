@@ -191,7 +191,7 @@
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <div class="input-group-addon"><i class="icon-check"></i></div>
-                                                                <input type="number" class="form-control" id="fry_weight" placeholder="魚苗重量" step="0.00001">
+                                                                <input type="number" class="form-control" min="0" id="fry_weight" placeholder="魚苗重量" step="0.00001">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -200,7 +200,7 @@
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <div class="input-group-addon"><i class="icon-check"></i></div>
-                                                                <input type="number" class="form-control" id="start_number" placeholder="起始數量">
+                                                                <input type="number" min="0" class="form-control" id="start_number" placeholder="起始數量">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -369,7 +369,7 @@
         $(document).ready(function () {
             FormPlugins.init();
             var Today = new Date();
-            $("#into_time2").val(Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate())
+           // $("#into_time2").val(Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate()) 不選今日
         });
         /**載入下拉式魚種資料**/
         $.ajax({
