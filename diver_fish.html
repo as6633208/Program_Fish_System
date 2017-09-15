@@ -356,6 +356,20 @@
                         count += Number($(this).val());
                     }
                 });
+                $.each($(".fish_number"), function () {
+                    if ($(this).val) {
+                        // 負數判斷
+                        if (Number($(this).val()) < 0) {
+                            flag = false;
+                            swal({
+                                type: 'warning',
+                                title: '請輸入大於零的數字',
+                                allowOutsideClick: false //不可點背景關閉
+                            }).then(function () {
+                            });
+                        }
+                    }
+                });
                 if (flag) {
                     if ((Number(Fush_Pool_Pool_number) - Number(count)) < 0) {
                         notyf.alert('分養錯誤');
