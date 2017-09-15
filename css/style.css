@@ -2361,9 +2361,9 @@ a.toggle-left-nav-btn i {
 .breadcrumb a:hover {
   opacity: 1;
 }
-.breadcrumb span {
-  color: #000;
-}
+    .breadcrumb span {
+        color: #FFFFFF;
+    }
 
 .breadcrumb > li + li::before {
   color: #fff;

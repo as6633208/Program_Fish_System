@@ -127,8 +127,8 @@
                 <div class="row heading-bg  bg-blue">
                     <!--Breadcrumb-->
                     <ol class="breadcrumb">
-                        <li><a href="blank.html">首頁</a></li>
-                        <li><a href="#"><span>後臺管理</span></a></li>
+                        <li><span>首頁</span></li>
+                        <li><span>後臺管理</span></li>
                         <li class="active"><span>進貨紀錄(添加物)</span></li>
                     </ol>
                     <!--Breadcrumb-->
@@ -277,8 +277,13 @@
         var feedpurchase_id = ''
         var update_company_time = ''//更新廠商時間
 
+
         $(document).ready(function () {
             FormPlugins.init();
+            /**設定權限**/
+            if (Cookies.get('authority') == 3) {
+                location.href = '404.html';
+            }
             var Today = new Date();
             $("#purchase_time").val(Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate())
         });

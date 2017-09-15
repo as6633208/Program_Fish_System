@@ -130,8 +130,8 @@
                 <div class="row heading-bg  bg-blue">
                     <!--Breadcrumb-->
                     <ol class="breadcrumb">
-                        <li><a href="blank.html">首頁</a></li>
-                        <li><a href="#"><span>後臺管理</span></a></li>
+                        <li><span>首頁</span></li>
+                        <li><span>後臺管理</span></li>
                         <li class="active"><span>新增魚池</span></li>
                     </ol>
                     <!--Breadcrumb-->
@@ -237,6 +237,13 @@
     <script src="javascript/check_authority.js"></script>
     <script>
         var notyf = new Notyf();//notyf.js宣告使用
+
+        /**設定權限**/
+        $(document).ready(function () {
+            if (Cookies.get('authority') == 3) {
+                location.href = '404.html';
+            }
+        });
         /**表格載入資料**/
         $.ajax({
             url: 'database/pool/pool_view.ashx',

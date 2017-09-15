@@ -123,8 +123,8 @@
                 <div class="row heading-bg  bg-blue">
                     <!--Breadcrumb-->
                     <ol class="breadcrumb">
-                        <li><a href="blank.html">報表管理</a></li>
-                        <li><a href="blank.html"><span>日報表(飼養紀錄)</span></a></li>
+                        <li><span>報表管理</span></li>
+                        <li><span>日報表(飼養紀錄)</span></a></li>
                     </ol>
                     <!--Breadcrumb-->
                 </div>
@@ -223,6 +223,12 @@
     <!-- ================== JS IE sweetalert ================== -->
     <script src="javascript/sweetalert2/core-js.js"></script>
     <script>
+        /**設定權限**/
+        $(document).ready(function () {
+            if (Cookies.get('authority') == 3) {
+                location.href = '404.html';
+            }
+        });
         //Confirm_date
         $("#document").ready(function(){
             $("#Confirm_date").click(function (e) {
