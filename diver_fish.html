@@ -407,7 +407,7 @@
                 }
             });
 
-        //增加刪除區
+
         $(document).ready(function () {
                 FormPlugins.init();
                 var Today = new Date();
@@ -526,7 +526,8 @@
                 $(".pool-id option[data-tokens='" + Page_Pool_id + "']").remove(); //刪除目前魚池
                 //加入魚池到select左方
                 $(".source_pool").html(Page_Pool_id);
-            }); //++
+        }); //++
+        //增加刪除區
         $(document).on('click', '.delete-pool', function (e) { //事件綁定
                 $(this).closest('.col-md-6').remove();
                 $('html,body').animate({ scrollTop: $('.wrapper').offset().top }, 1);
