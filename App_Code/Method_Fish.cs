@@ -573,7 +573,7 @@ public class Method_Fish
         SqlCommand cmd = new SqlCommand(@"UPDATE Feed_Purchase SET number = @number WHERE     
                     (Feed_Purchase_id = @Feed_Purchase_id)");
         cmd.Parameters.Add("@Feed_Purchase_id", SqlDbType.Int).Value = a;
-        cmd.Parameters.Add("@number", SqlDbType.Int).Value = b;
+        cmd.Parameters.Add("@number", SqlDbType.Float).Value = b;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
@@ -587,7 +587,7 @@ public class Method_Fish
                             (Fodder_id, number, date) VALUES
                         (@Fodder_id, @feedPurchase_number, @feedPurchase_date)");
         cmd.Parameters.Add("@Fodder_id", SqlDbType.Int).Value = a;
-        cmd.Parameters.Add("@feedPurchase_number", SqlDbType.Int).Value = b;
+        cmd.Parameters.Add("@feedPurchase_number", SqlDbType.Float).Value = b;
         cmd.Parameters.Add("@feedPurchase_date", SqlDbType.DateTime2, 7).Value = c;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
@@ -601,7 +601,7 @@ public class Method_Fish
         SqlCommand cmd = new SqlCommand(@"UPDATE Feed_Purchase SET
         number = @Feed_Purchase_number, date = @feedPurchase_date
             WHERE (Fodder_id = @Original_Fodder_id)");
-        cmd.Parameters.Add("@Feed_Purchase_number", SqlDbType.Int).Value = a;
+        cmd.Parameters.Add("@Feed_Purchase_number", SqlDbType.Float).Value = a;
         cmd.Parameters.Add("@Original_Fodder_id", SqlDbType.Int).Value = b;
         cmd.Parameters.Add("@feedPurchase_date", SqlDbType.DateTime2, 7).Value = DateTime.Now.ToShortDateString();
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
