@@ -250,7 +250,7 @@
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <select class="selectpicker" data-style="btn-primary btn-outline" id="medicine_company" onchange="changed_medicine_company(this)">
-                                                                    <option value="Null" selected>請選擇添加物供應商</option>
+                                                                    <option value="0" selected>請選擇添加物供應商</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -260,7 +260,7 @@
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <select class="selectpicker" data-style="btn-primary btn-outline" id="medicine_name" onchange="changed_medicine_name(this)">
-                                                                    <option value="Null" selected>請選擇添加物</option>
+                                                                    <option value="0" selected>請選擇添加物</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -381,7 +381,7 @@
                                             <div class="col-sm-9">
                                                 <div class="input-group">
                                                     <select class="selectpicker" data-style="btn-primary btn-outline" id="jump_medicine_company" onchange="changed_medicine_company(this)">
-                                                        <option value="Null" selected>請選擇添加物供商</option>
+                                                        <option value="0" selected>請選擇添加物供商</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -391,7 +391,7 @@
                                             <div class="col-sm-9">
                                                 <div class="input-group">
                                                     <select class="selectpicker" data-style="btn-primary btn-outline" id="jump_medicine_name" onchange="changed_medicine_name(this)">
-                                                        <option value="Null" selected>請選擇添加物</option>
+                                                        <option value="0" selected>請選擇添加物</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -609,7 +609,7 @@
                         var jump_id = document.getElementById('jump_medicine_name');
                         //彈跳視窗
                         $('#jump_medicine_name').empty();//清空
-                        $('#jump_medicine_name').append('<option value="" selected>請選擇添加物供應商分類</option>');
+                        $('#jump_medicine_name').append('<option value="0" selected>請選擇添加物供應商分類</option>');
                         for (var index in medicine_company_Json) {
                             //彈跳視窗
                             var jump_new_option = new Option(medicine_company_Json[index].Medicine_name, medicine_company_Json[index].Fodder_id);
@@ -619,7 +619,7 @@
                     } else {
                         //彈跳視窗
                         $('#jump_medicine_name').empty();//清空
-                        $('#jump_medicine_name').append('<option value="" selected>請選擇分類</option>');
+                        $('#jump_medicine_name').append('<option value="0" selected>請選擇分類</option>');
                         $('#jump_medicine_name').selectpicker('refresh');//refresh
                     }
                 },
@@ -982,6 +982,10 @@
         $(document).ready(function () {
             /*date picker time bug fix by sen*/
             FormPlugins.init();
+            var medicine;
+            medicine_name = '無';
+
+            var feed_id;
             var Today = new Date();
             $(".picker_time").val(Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate())
             /**投餵紀錄新增**/
@@ -1082,6 +1086,7 @@
                                     }
                                 });
                             }
+                            //alert($('#medicine_name').val());
                             if (medicine == '0') {
                             }
                             else {
@@ -1259,10 +1264,10 @@
                         var jump_id = document.getElementById('jump_medicine_name');
                         //頁面
                         $('#medicine_name').empty();//清空
-                        $('#medicine_name').append('<option value="" selected>請選擇添加物供應商分類</option>');
+                        $('#medicine_name').append('<option value="0" selected>請選擇添加物供應商分類</option>');
                         //彈跳視窗
                         $('#jump_medicine_name').empty();//清空
-                        $('#jump_medicine_name').append('<option value="" selected>請選擇添加物供應商分類</option>');
+                        $('#jump_medicine_name').append('<option value="0" selected>請選擇添加物供應商分類</option>');
                         for (var index in medicine_company_Json) {
                             //頁面
                             var new_option = new Option(medicine_company_Json[index].Medicine_name, medicine_company_Json[index].Fodder_id);
