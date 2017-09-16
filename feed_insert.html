@@ -640,6 +640,62 @@
             $("#modify_UP").click(function (e) {
 
                 e.preventDefault();
+                var before_foddder_number = 0;
+                var befoee_medicine_number = 0;
+                var check_fodder_company = document.getElementById('jump_fodder_company').value;
+                var check_medicine_company = document.getElementById('jump_medicine_company').value;
+
+                var use_fodder_number = document.getElementById('modify_Fodder_number').value;
+                var use_medicine_number = document.getElementById('modify_medicine_number').value;
+
+                console.log(Table_Feed_id)
+                jump_feed_name = $('#jump_fodder_name option:selected').text();
+                jump_medicine_name = $('#jump_medicine_name option:selected').text();
+                if (check_fodder_company == 'Null') {
+                }
+                else {
+                    //抓取飼料ID
+                    $.ajax({
+                        url: 'database/feedPurchase/feedPurchase_select_Id.ashx',
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            supplier: check_fodder_company,
+                            feed: jump_feed_name
+                        },
+                        async: false,//啟用同步請求,
+                        success: function (select) {
+                            jump_fodder_id = select[0].Fodder_id
+                            before_foddder_number = select[0].Fodder_number;
+                            //console.log(select[0].Fodder_number)
+                        },
+                        error: function (e) {
+                            notyf.alert('伺服器錯誤,無法載入' + e);
+                        }
+                    });
+                }
+                if (check_medicine_company == 'Null') {
+                }
+                else {
+                    //抓取添加物ID
+                    $.ajax({
+                        url: 'database/medicinePurchase/medicinePurchase_select_Id.ashx',
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            supplier: check_medicine_company,
+                            medicine: jump_medicine_name
+                        },
+                        async: false,//啟用同步請求
+                        success: function (select) {
+                            jump_medicine_id = select[0].Medicine_id,
+                                befoee_medicine_number = select[0].number
+                        },
+                        error: function (e) {
+                            notyf.alert('伺服器錯誤,無法載入' + e);
+                        }
+                    });
+                }
                 swal({
                     title: '確認修改此筆投餵紀錄？',
                     type: 'warning',
@@ -651,17 +707,12 @@
                     cancelButtonText: '取消'
                 }).then(function (isConfirm) {
                     if (isConfirm) {
-                        console.log(Table_Feed_id)
-                        feed_name = $('#fodder_name option:selected').text();
-                        jump_feed_name = $('#jump_fodder_name option:selected').text();
-                        medicine_name = $('#medicine_name option:selected').text();
-                        jump_medicine_name = $('#jump_medicine_name option:selected').text();
                         //抓取飼料及添加物ID
                         $.ajax({
                             url: 'database/feed/feed_select_one.ashx',
                             type: 'post',
                             dataType: 'json',
-                            data: {feed_id: Table_Feed_id},
+                            data: { feed_id: Table_Feed_id },
                             async: false,
                             success: function (selecr_one_json) {
                                 Table_Fodder_id = selecr_one_json[0]["Fodder_id"];
@@ -717,7 +768,7 @@
                                 notyf.alert('伺服器錯誤，無法載入')
                             }
                         });
-
+                        
                         //餵食紀錄刪除
                         $.ajax({
                             url: 'database/feed/feed_delete.ashx',
@@ -727,142 +778,117 @@
                             },
                             async: false,//啟用同步請求
                             success:
-                              console.log("delete success")
+                            console.log("delete success")
                             ,
                             error: function (e) {
                                 notyf.alert('伺服器錯誤,無法載入');
                             }
                         });
-                        //抓取新飼料ID
-                        if (jump_check_fodder_company == 'Null') {
-                        }
-                        else {
-                            $.ajax({
-                                url: 'database/feedPurchase/feedPurchase_select_Id.ashx',
-                                type: 'post',
-                                dataType: 'json',
-                                data: {
-                                    supplier: $("#jump_fodder_company").val(),
-                                    feed: jump_feed_name
-                                },
-                                async: false,//啟用同步請求,
-                                success: function (select) {
-                                    jump_fodder_id = select[0].Fodder_id
-                                },
-                                error: function (e) {
-                                    notyf.alert('伺服器錯誤,無法載入' + e);
-                                }
-                            });
-                        }
-                        //抓取新添加物ID
-                        if (jump_check_medicine_company == 'Null') {
-                        }
-                        else {
-                            $.ajax({
-                                url: 'database/medicinePurchase/medicinePurchase_select_Id.ashx',
-                                type: 'post',
-                                dataType: 'json',
-                                data: {
-                                    supplier: $("#jump_medicine_company").val(),
-                                    medicine: jump_medicine_name
-                                },
-                                async: false,//啟用同步請求
-                                success: function (select) {
-                                    jump_medicine_id = select[0].Medicine_id
-                                },
-                                error: function (e) {
-                                    notyf.alert('伺服器錯誤,無法載入' + e);
-                                }
-                            });
-                        }
 
-                        //修改-新增餵食資訊
-                        //新飼料減少
-                        if (jump_fodder_id == '0') {
-                        }
-                        else {
+
+                        //判斷庫存數量是否充足
+                        console.log(use_fodder_number + "  use_fodder_number");
+                        console.log(use_medicine_number + "  use_medicine_number");
+                        console.log(befoee_medicine_number - use_medicine_number   + "check");
+                        if (before_foddder_number - use_fodder_number >= 0 && befoee_medicine_number - use_medicine_number >= 0) {
+                            //修改-新增餵食資訊
+                            //新飼料減少
+                            if (jump_fodder_id == '0') {
+                            }
+                            else {
+                                $.ajax({
+                                    url: 'database/feed/feed_fodder_cut.ashx',
+                                    type: 'post',
+                                    data: {
+                                        Fodder_id: jump_fodder_id,
+                                        Fodder_number: $("#modify_Fodder_number").val()
+                                    },
+                                    async: false,
+                                    success: function (e) {
+                                        if (e == 'success') {
+                                        }
+
+                                        else {
+                                            notyf.alert('伺服器錯誤，無法載入')
+                                        }
+                                    },
+                                    error: function (e) {
+                                        notyf.alert('伺服器錯誤，無法載入')
+                                    }
+                                });
+                            }
+                            //新添加物減少
+                            if (jump_medicine_id == '0') {
+                            }
+                            else {
+                                //添加物減少
+                                $.ajax({
+                                    url: 'database/feed/feed_medicine_cut.ashx',
+                                    type: 'post',
+                                    data: {
+                                        Medicine_id: jump_medicine_id,
+                                        medicine_number: $("#modify_medicine_number").val()
+                                    },
+                                    async: false,
+                                    success: function (e) {
+                                        if (e == 'success') {
+                                        }
+
+                                        else {
+                                            notyf.alert('伺服器錯誤，無法載入')
+                                        }
+                                    },
+                                    error: function (e) {
+                                        notyf.alert('伺服器錯誤，無法載入')
+                                    }
+                                })
+                            }
+
+                            //新增一筆餵食資訊
                             $.ajax({
-                                url: 'database/feed/feed_fodder_cut.ashx',
+                                url: 'database/feed/feed_insert.ashx',
                                 type: 'post',
                                 data: {
                                     Fodder_id: jump_fodder_id,
-                                    Fodder_number: $("#modify_Fodder_number").val()
-                                },
-                                async: false,
-                                success: function (e) {
-                                    if (e == 'success') {
-                                    }
-
-                                    else {
-                                        notyf.alert('伺服器錯誤，無法載入')
-                                    }
-                                },
-                                error: function (e) {
-                                    notyf.alert('伺服器錯誤，無法載入')
-                                }
-                            });
-                        }
-                        //新添加物減少
-                        if (jump_medicine_id == '0') {
-                        }
-                        else {
-                            //添加物減少
-                            $.ajax({
-                                url: 'database/feed/feed_medicine_cut.ashx',
-                                type: 'post',
-                                data: {
+                                    Fodder_number: $("#modify_Fodder_number").val(),
                                     Medicine_id: jump_medicine_id,
-                                    medicine_number: $("#modify_medicine_number").val()
+                                    data: $("#modify_date").val(),
+                                    medicine_number: $("#modify_medicine_number").val(),
+                                    Bait: $("#modify_Bait").val(),
+                                    Pool_id: Page_Pool_id,
+                                    Fish_detail_id: Fish_detail_id
                                 },
-                                async: false,
+                                async: false,//啟用同步請求
                                 success: function (e) {
                                     if (e == 'success') {
-                                    }
-
-                                    else {
-                                        notyf.alert('伺服器錯誤，無法載入')
+                                        swal({
+                                            type: 'success',
+                                            title: '更改投餵資料成功!',
+                                            allowOutsideClick: false //不可點背景關閉
+                                        }).then(function () {
+                                            location.reload();
+                                        })
+                                    } else {
+                                        notyf.alert('更改失敗');
                                     }
                                 },
                                 error: function (e) {
-                                    notyf.alert('伺服器錯誤，無法載入')
+                                    notyf.alert('伺服器錯誤,無法載入' + e);
                                 }
                             })
                         }
+                        else if (before_foddder_number - use_fodder_number < 0) {
+                            //飼料庫存不足
+                            notyf.alert('飼料庫存不足');
+                        }
+                        else if (befoee_medicine_number - use_medicine_number < 0) {
+                            //添加物庫存不足
+                            notyf.alert('添加物庫存不足');
+                        }
 
-                        //新增一筆餵食資訊
-                        $.ajax({
-                            url: 'database/feed/feed_insert.ashx',
-                            type: 'post',
-                            data: {
-                                Fodder_id: jump_fodder_id,
-                                Fodder_number: $("#modify_Fodder_number").val(),
-                                Medicine_id: jump_medicine_id,
-                                data: $("#modify_date").val(),
-                                medicine_number: $("#modify_medicine_number").val(),
-                                Bait: $("#modify_Bait").val(),
-                                Pool_id: Page_Pool_id,
-                                Fish_detail_id: Fish_detail_id
-                            },
-                            async: false,//啟用同步請求
-                            success: function (e) {
-                                if (e == 'success') {
-                                    swal({
-                                        type: 'success',
-                                        title: '更改投餵資料成功!',
-                                        allowOutsideClick: false //不可點背景關閉
-                                    }).then(function () {
-                                        location.reload();
-                                    })
-                                } else {
-                                    notyf.alert('更改失敗');
-                                }
-                            },
-                            error: function (e) {
-                                notyf.alert('伺服器錯誤,無法載入' + e);
-                            }
-                        })
                     }
                 })
+
             });
             /**刪除**/
             $("#modify_del").click(function (e) {
