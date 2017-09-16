@@ -522,13 +522,104 @@
         });
         /**bootstrap modal 載入資料**/
         $('table > tbody > tr').click(function () {
+            //jump飼料供應商id 自動選擇 
+            var textToFind = $.trim($(this).find("td:eq(2)").text());
+            var jump_s = document.getElementById('jump_fodder_company');
+            for (var i = 0; i < jump_s.options.length; i++) {
+                if (jump_s.options[i].text === textToFind) {
+                    $('#jump_fodder_company').selectpicker('val', jump_s.options[i].value);
+                }
+            }
+            //飼料名稱 連動查詢
+            $.ajax({
+                url: 'database/feedPurchase/feed_select.ashx',
+                type: 'post',
+                dataType: 'json',
+                data: { Fish_company_id: $('#jump_fodder_company').val() },
+                async: false,
+                success: function (fodder_name_Json) {
+                    if (fodder_name_Json != "") {
+                        var jump_id = document.getElementById('jump_fodder_name');
+                        $('#jump_fodder_name').empty();
+                        $('#jump_fodder_name').append('<option value="" selsected >請選擇分類</option>');
+
+                        for (var index in fodder_name_Json) {                       
+                            var jump_new_option = new Option(fodder_name_Json[index].Fodder_name, fodder_name_Json[index].Fodder_id);
+                            jump_id.options.add(jump_new_option)
+                            $('#jump_fodder_name').selectpicker('refresh');//refresh
+                        }
+                    } else {
+                        $('#jump_fodder_name').empty();//清空
+                        $('#jump_fodder_name').append('<option value="" selsected >請選擇分類</option>');
+                        $('#jump_fodder_name').selectpicker('refresh');//refresh
+                    }
+                },
+                error: function (e) {
+                    notyf.alert('伺服器錯誤,無法載入' + e)
+                }
+            });
+            //飼料名稱id 自動選擇 
+            var textToFind = $.trim($(this).find("td:eq(3)").text());
+            var jump_s = document.getElementById('jump_fodder_name');
+            for (var i = 0; i < jump_s.options.length; i++) {
+                if (jump_s.options[i].text === textToFind) {
+                    $('#jump_fodder_name').selectpicker('val', jump_s.options[i].value);
+                }
+            }
+
+            //jump 供應商 從id 選擇資料
+            var textToFind = $.trim($(this).find("td:eq(5)").text());
+            var jump_s = document.getElementById('jump_medicine_company');
+            for (var i = 0; i < jump_s.options.length; i++) {
+                if (jump_s.options[i].text === textToFind) {
+                    $('#jump_medicine_company').selectpicker('val', jump_s.options[i].value);
+                }
+            }
+            //供應商名稱 連動查詢
+            $.ajax({
+                url: 'database/medicinePurchase/medicine_select.ashx',
+                type: 'post',
+                dataType: 'json',
+                data: { Fish_company_id: $('#jump_medicine_company').val() },
+                async: false,//啟用同步請求
+                success: function (medicine_company_Json) {
+                    if (medicine_company_Json != "") {
+                        var jump_id = document.getElementById('jump_medicine_name');
+                        //彈跳視窗
+                        $('#jump_medicine_name').empty();//清空
+                        $('#jump_medicine_name').append('<option value="" selected>請選擇添加物供應商分類</option>');
+                        for (var index in medicine_company_Json) {
+                            //彈跳視窗
+                            var jump_new_option = new Option(medicine_company_Json[index].Medicine_name, medicine_company_Json[index].Fodder_id);
+                            jump_id.options.add(jump_new_option);
+                            $('#jump_medicine_name').selectpicker('refresh');//refresh
+                        }
+                    } else {
+                        //彈跳視窗
+                        $('#jump_medicine_name').empty();//清空
+                        $('#jump_medicine_name').append('<option value="" selected>請選擇分類</option>');
+                        $('#jump_medicine_name').selectpicker('refresh');//refresh
+                    }
+                },
+                error: function (e) {
+                    notyf.alert('伺服器錯誤,無法載入' + e);
+                }
+            });
+            //供應商名稱id 自動選擇
+            var textToFind = $.trim($(this).find("td:eq(6)").text());
+            var jump_s = document.getElementById('jump_medicine_name');
+            for (var i = 0; i < jump_s.options.length; i++) {
+                if (jump_s.options[i].text === textToFind) {
+                    $('#jump_medicine_name').selectpicker('val', jump_s.options[i].value);
+                }
+            }
             // 0-日期 1-餵食編號 2-供應商 3-飼料名稱 4-餵食數量 5-供應商 6-添加物名稱 7-使用數量 8-生餌
          //   $("#modify_Fodder_id").val($.trim($(this).find("td:eq(1)").text()))
-            $("#jump_fodder_company").val($.trim($(this).find("td:eq(2)").text()))
-            $("#jump_fodder_name").val($.trim($(this).find("td:eq(3)").text()))
+         //  $("#jump_fodder_company").val($.trim($(this).find("td:eq(2)").text()))
+         //   $("#jump_fodder_name").val($.trim($(this).find("td:eq(3)").text()))
             $("#modify_Fodder_number").val($.trim($(this).find("td:eq(4)").text()))
-            $("#jump_medicine_company").val($.trim($(this).find("td:eq(5)").text()))
-            $("#jump_medicine_name").val($.trim($(this).find("td:eq(6)").text()))
+         //   $("#jump_medicine_company").val($.trim($(this).find("td:eq(5)").text()))
+         //   $("#jump_medicine_name").val($.trim($(this).find("td:eq(6)").text()))
             $("#modify_medicine_number").val($.trim($(this).find("td:eq(7)").text()))
             $("#modify_Bait").val($.trim($(this).find("td:eq(8)").text()))
             $("#modify_date").val($.trim($(this).find("td:eq(0)").text()))
@@ -840,7 +931,7 @@
         });
 
         $(document).ready(function () {
-            /*bug fix by sen*/
+            /*date picker time bug fix by sen*/
             FormPlugins.init();
             var Today = new Date();
             $(".picker_time").val(Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate())
@@ -1021,8 +1112,10 @@
                 for (var index in select) {
                     var s = document.getElementById('fodder_company');//取得id給予值
                     var jump_s = document.getElementById('jump_fodder_company');
+
                     var new_option = new Option(select[index].company_name, select[index].Fish_company_id);
                     var jump_new_option = new Option(select[index].company_name, select[index].Fish_company_id);
+
                     s.options.add(new_option);
                     jump_s.options.add(jump_new_option);
                 }
@@ -1042,8 +1135,10 @@
                     //取得id給予值
                     var s = document.getElementById('medicine_company');
                     var s_jump = document.getElementById('jump_medicine_company');
+
                     var new_option = new Option(select[index].company_name, select[index].Fish_company_id);
                     var jump_new_option = new Option(select[index].company_name, select[index].Fish_company_id);
+
                     s.options.add(new_option);
                     s_jump.options.add(jump_new_option);
                 }
@@ -1066,8 +1161,10 @@
                         var jump_id = document.getElementById('jump_fodder_name');
                         $('#fodder_name').empty();
                         $('#fodder_name').append('<option value="" selsected >請選擇分類</option>');
+
                         $('#jump_fodder_name').empty();
                         $('#jump_fodder_name').append('<option value="" selsected >請選擇分類</option>');
+
                         for (var index in fodder_name_Json) {
                             var new_option = new Option(fodder_name_Json[index].Fodder_name, fodder_name_Json[index].Fodder_id);
                             var jump_new_option = new Option(fodder_name_Json[index].Fodder_name, fodder_name_Json[index].Fodder_id);
@@ -1080,6 +1177,7 @@
                         $('#fodder_name').empty();//清空
                         $('#fodder_name').append('<option value="" selsected >請選擇分類</option>');
                         $('#fodder_name').selectpicker('refresh');//refresh
+
                         $('#jump_fodder_name').empty();//清空
                         $('#jump_fodder_name').append('<option value="" selsected >請選擇分類</option>');
                         $('#jump_fodder_name').selectpicker('refresh');//refresh
