@@ -15,6 +15,7 @@ var Fish_Fish_company_id = -1; //魚群供應商編號
 var Fish_company_company_abbreviation = -1;//魚群供應商簡稱 5
 var Fish_Fish_kind_id = -1;//魚種編號
 var Fush_Pool_Pool_number = -1;//魚池數量
+var Fish_detail_Fish_AVGweight = '';//測量用
 //抓網址變數
 $.UrlParam = function (name) {
     //宣告正規表達式
@@ -75,6 +76,7 @@ if (Page_Pool_id == -1) {
             Fish_detail_Fish_id = Fish_detail_Json[0]["Fish_id"];
             Fish_detail_Move_date = Fish_detail_Json[0]["Move_date"];
             Fish_detail_Fish_size = Fish_detail_Json[0]["Fish_size"];
+            Fish_detail_Fish_AVGweight = Fish_detail_Json[0]["Fish_AVGweight"];
             Fish_detail_Origin_Fish_detail_id = Fish_detail_Json[0]["Origin_Fish_detail_id"];
         },
         error: function (e) {
