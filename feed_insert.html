@@ -372,7 +372,7 @@
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Fodder_number">
+                                                    <input type="number"  min="0"  class="form-control" id="modify_Fodder_number">
                                                 </div>
                                             </div>
                                         </div>
@@ -401,7 +401,7 @@
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_medicine_number">
+                                                    <input type="number"  min="0" class="form-control" id="modify_medicine_number">
                                                 </div>
                                             </div>
                                         </div>
@@ -410,7 +410,7 @@
                                             <div class="col-sm-7">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                    <input type="text" class="form-control" id="modify_Bait">
+                                                    <input  type="number"  min="0"  class="form-control" id="modify_Bait">
                                                 </div>
                                             </div>
                                         </div>
@@ -522,6 +522,29 @@
         });
         /**bootstrap modal 載入資料**/
         $('table > tbody > tr').click(function () {
+            // 0-日期 1-餵食編號 2-供應商 3-飼料名稱 4-餵食數量 5-供應商 6-添加物名稱 7-使用數量 8-生餌
+            //   $("#modify_Fodder_id").val($.trim($(this).find("td:eq(1)").text()))
+            //  $("#jump_fodder_company").val($.trim($(this).find("td:eq(2)").text()))
+            //   $("#jump_fodder_name").val($.trim($(this).find("td:eq(3)").text()))
+            $("#modify_Fodder_number").val($.trim($(this).find("td:eq(4)").text()))
+            //   $("#jump_medicine_company").val($.trim($(this).find("td:eq(5)").text()))
+            //   $("#jump_medicine_name").val($.trim($(this).find("td:eq(6)").text()))
+            $("#modify_medicine_number").val($.trim($(this).find("td:eq(7)").text()))
+            $("#modify_Bait").val($.trim($(this).find("td:eq(8)").text()))
+            $("#modify_date").val($.trim($(this).find("td:eq(0)").text()))
+
+            var Table_Feed_id = $.trim($(this).find("td:eq(1)").text())
+            var Table_Fodder_id;
+            var Table_medicine_id;
+            var Table_Fodder_comp = $.trim($(this).find("td:eq(2)").text())
+            var Table_Fodder_name = $.trim($(this).find("td:eq(3)").text())
+            var Table_Fodder_number = $.trim($(this).find("td:eq(4)").text())
+            var Table_Medicine_comp = $.trim($(this).find("td:eq(5)").text())
+            var Table_medicine_name = $.trim($(this).find("td:eq(6)").text())
+            var Table_medicine_number = $.trim($(this).find("td:eq(7)").text())
+            var jump_check_fodder_company = document.getElementById('jump_fodder_company').value;
+            var jump_check_medicine_company = document.getElementById('jump_medicine_company').value;
+
             //jump飼料供應商id 自動選擇 
             var textToFind = $.trim($(this).find("td:eq(2)").text());
             var jump_s = document.getElementById('jump_fodder_company');
@@ -613,28 +636,6 @@
                 }
             }
 
-            // 0-日期 1-餵食編號 2-供應商 3-飼料名稱 4-餵食數量 5-供應商 6-添加物名稱 7-使用數量 8-生餌
-         //   $("#modify_Fodder_id").val($.trim($(this).find("td:eq(1)").text()))
-         //  $("#jump_fodder_company").val($.trim($(this).find("td:eq(2)").text()))
-         //   $("#jump_fodder_name").val($.trim($(this).find("td:eq(3)").text()))
-            $("#modify_Fodder_number").val($.trim($(this).find("td:eq(4)").text()))
-         //   $("#jump_medicine_company").val($.trim($(this).find("td:eq(5)").text()))
-         //   $("#jump_medicine_name").val($.trim($(this).find("td:eq(6)").text()))
-            $("#modify_medicine_number").val($.trim($(this).find("td:eq(7)").text()))
-            $("#modify_Bait").val($.trim($(this).find("td:eq(8)").text()))
-            $("#modify_date").val($.trim($(this).find("td:eq(0)").text()))
-
-            var Table_Feed_id = $.trim($(this).find("td:eq(1)").text())
-            var Table_Fodder_id ;
-            var Table_medicine_id ;
-            var Table_Fodder_comp = $.trim($(this).find("td:eq(2)").text())
-            var Table_Fodder_name = $.trim($(this).find("td:eq(3)").text())
-            var Table_Fodder_number = $.trim($(this).find("td:eq(4)").text())
-            var Table_Medicine_comp = $.trim($(this).find("td:eq(5)").text())
-            var Table_medicine_name = $.trim($(this).find("td:eq(6)").text())
-            var Table_medicine_number = $.trim($(this).find("td:eq(7)").text())
-            var jump_check_fodder_company = document.getElementById('jump_fodder_company').value;
-            var jump_check_medicine_company = document.getElementById('jump_medicine_company').value;
             /**修改**/
             $("#modify_UP").click(function (e) {
 
@@ -694,7 +695,6 @@
                                 notyf.alert('伺服器錯誤，無法載入')
                             }
                         });
-
                         //添加物用量復原
                         $.ajax({
                             url: 'database/feed/feed_medicine_cut.ashx',
@@ -718,7 +718,6 @@
                             }
                         });
 
-
                         //餵食紀錄刪除
                         $.ajax({
                             url: 'database/feed/feed_delete.ashx',
@@ -734,7 +733,6 @@
                                 notyf.alert('伺服器錯誤,無法載入');
                             }
                         });
-
                         //抓取新飼料ID
                         if (jump_check_fodder_company == 'Null') {
                         }
@@ -777,6 +775,7 @@
                                 }
                             });
                         }
+
                         //修改-新增餵食資訊
                         //新飼料減少
                         if (jump_fodder_id == '0') {
@@ -829,6 +828,7 @@
                                 }
                             })
                         }
+
                         //新增一筆餵食資訊
                         $.ajax({
                             url: 'database/feed/feed_insert.ashx',
@@ -867,6 +867,22 @@
             /**刪除**/
             $("#modify_del").click(function (e) {
                 e.preventDefault();
+                //抓取飼料及添加物ID
+                $.ajax({
+                    url: 'database/feed/feed_select_one.ashx',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { feed_id: Table_Feed_id },
+                    async: false,
+                    success: function (selecr_one_json) {
+                        Table_Fodder_id = selecr_one_json[0]["Fodder_id"];
+                        Table_medicine_id = selecr_one_json[0]["Medicine_id"];
+                        console.log(Table_Fodder_id + "" + Table_medicine_id)
+                    },
+                    error: function (e) {
+                        notyf.alert('伺服器錯誤，無法載入')
+                    }
+                });
                 //飼料用量復原
                 $.ajax({
                     url: 'database/feed/feed_fodder_cut.ashx',
@@ -894,7 +910,7 @@
                     url: 'database/feed/feed_medicine_cut.ashx',
                     type: 'post',
                     data: {
-                        Medicine_id: Table_Medicine_id,
+                        Medicine_id: Table_medicine_id,
                         medicine_number: '-' + Table_medicine_number
                     },
                     async: false,
@@ -969,7 +985,8 @@
                         if (check_fodder_company == 'Null') {
                         }
                         else {
-                            $.ajax({//抓取飼料ID
+                            //抓取飼料ID
+                            $.ajax({
                                 url: 'database/feedPurchase/feedPurchase_select_Id.ashx',
                                 type: 'post',
                                 dataType: 'json',
@@ -991,7 +1008,8 @@
                         if (check_medicine_company == 'Null') {
                         }
                         else {
-                            $.ajax({//抓取添加物ID
+                            //抓取添加物ID
+                            $.ajax({
                                 url: 'database/medicinePurchase/medicinePurchase_select_Id.ashx',
                                 type: 'post',
                                 dataType: 'json',
