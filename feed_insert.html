@@ -707,90 +707,88 @@
                     cancelButtonText: '取消'
                 }).then(function (isConfirm) {
                     if (isConfirm) {
-                        //抓取飼料及添加物ID
-                        $.ajax({
-                            url: 'database/feed/feed_select_one.ashx',
-                            type: 'post',
-                            dataType: 'json',
-                            data: { feed_id: Table_Feed_id },
-                            async: false,
-                            success: function (selecr_one_json) {
-                                Table_Fodder_id = selecr_one_json[0]["Fodder_id"];
-                                Table_medicine_id = selecr_one_json[0]["Medicine_id"];
-                                console.log(Table_Fodder_id + "" + Table_medicine_id)
-                            },
-                            error: function (e) {
-                                notyf.alert('伺服器錯誤，無法載入')
-                            }
-                        });
-
-                        //飼料用量復原
-                        $.ajax({
-                            url: 'database/feed/feed_fodder_cut.ashx',
-                            type: 'post',
-                            data: {
-                                Fodder_id: Table_Fodder_id,
-                                Fodder_number: '-' + Table_Fodder_number
-                            },
-                            async: false,
-                            success: function (e) {
-                                if (e == 'success') {
-                                    console.log('success')
-                                }
-
-                                else {
-                                    notyf.alert('伺服器錯誤，無法載入')
-                                }
-                            },
-                            error: function (e) {
-                                notyf.alert('伺服器錯誤，無法載入')
-                            }
-                        });
-                        //添加物用量復原
-                        $.ajax({
-                            url: 'database/feed/feed_medicine_cut.ashx',
-                            type: 'post',
-                            data: {
-                                Medicine_id: Table_medicine_id,
-                                medicine_number: '-' + Table_medicine_number
-                            },
-                            async: false,
-                            success: function (e) {
-                                if (e == 'success') {
-                                    console.log('success')
-                                }
-
-                                else {
-                                    notyf.alert('伺服器錯誤，無法載入')
-                                }
-                            },
-                            error: function (e) {
-                                notyf.alert('伺服器錯誤，無法載入')
-                            }
-                        });
-                        
-                        //餵食紀錄刪除
-                        $.ajax({
-                            url: 'database/feed/feed_delete.ashx',
-                            type: 'post',
-                            data: {
-                                Feed_id: Table_Feed_id
-                            },
-                            async: false,//啟用同步請求
-                            success:
-                            console.log("delete success")
-                            ,
-                            error: function (e) {
-                                notyf.alert('伺服器錯誤,無法載入');
-                            }
-                        });
-
-
                         //判斷庫存數量是否充足
                         console.log(use_fodder_number + "  use_fodder_number");
                         console.log(use_medicine_number + "  use_medicine_number");
                         console.log(befoee_medicine_number - use_medicine_number   + "check");
                         if (before_foddder_number - use_fodder_number >= 0 && befoee_medicine_number - use_medicine_number >= 0) {
+                            //抓取飼料及添加物ID
+                            $.ajax({
+                                url: 'database/feed/feed_select_one.ashx',
+                                type: 'post',
+                                dataType: 'json',
+                                data: { feed_id: Table_Feed_id },
+                                async: false,
+                                success: function (selecr_one_json) {
+                                    Table_Fodder_id = selecr_one_json[0]["Fodder_id"];
+                                    Table_medicine_id = selecr_one_json[0]["Medicine_id"];
+                                    console.log(Table_Fodder_id + "" + Table_medicine_id)
+                                },
+                                error: function (e) {
+                                    notyf.alert('伺服器錯誤，無法載入')
+                                }
+                            });
+
+                            //飼料用量復原
+                            $.ajax({
+                                url: 'database/feed/feed_fodder_cut.ashx',
+                                type: 'post',
+                                data: {
+                                    Fodder_id: Table_Fodder_id,
+                                    Fodder_number: '-' + Table_Fodder_number
+                                },
+                                async: false,
+                                success: function (e) {
+                                    if (e == 'success') {
+                                        console.log('success')
+                                    }
+
+                                    else {
+                                        notyf.alert('伺服器錯誤，無法載入')
+                                    }
+                                },
+                                error: function (e) {
+                                    notyf.alert('伺服器錯誤，無法載入')
+                                }
+                            });
+                            //添加物用量復原
+                            $.ajax({
+                                url: 'database/feed/feed_medicine_cut.ashx',
+                                type: 'post',
+                                data: {
+                                    Medicine_id: Table_medicine_id,
+                                    medicine_number: '-' + Table_medicine_number
+                                },
+                                async: false,
+                                success: function (e) {
+                                    if (e == 'success') {
+                                        console.log('success')
+                                    }
+
+                                    else {
+                                        notyf.alert('伺服器錯誤，無法載入')
+                                    }
+                                },
+                                error: function (e) {
+                                    notyf.alert('伺服器錯誤，無法載入')
+                                }
+                            });
+
+                            //餵食紀錄刪除
+                            $.ajax({
+                                url: 'database/feed/feed_delete.ashx',
+                                type: 'post',
+                                data: {
+                                    Feed_id: Table_Feed_id
+                                },
+                                async: false,//啟用同步請求
+                                success:
+                                console.log("delete success")
+                                ,
+                                error: function (e) {
+                                    notyf.alert('伺服器錯誤,無法載入');
+                                }
+                            });
                             //修改-新增餵食資訊
                             //新飼料減少
                             if (jump_fodder_id == '0') {

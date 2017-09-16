@@ -539,7 +539,7 @@ public class Method_Fish
         SqlCommand cmd = new SqlCommand(@"UPDATE Fodder SET Fodder_number = Fodder_number+@Fodder_number
             WHERE (Fodder_id = @Fodder_id)");
         cmd.Parameters.Add("@Fodder_id", SqlDbType.Int).Value = a;
-        cmd.Parameters.Add("@Fodder_number", SqlDbType.Int).Value = b;
+        cmd.Parameters.Add("@Fodder_number", SqlDbType.Float).Value = b;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
@@ -915,7 +915,7 @@ public class Method_Fish
         SqlCommand cmd = new SqlCommand(@"UPDATE Fodder SET Fodder_number = Fodder_number-@Fodder_number
             WHERE (Fodder_id = @Fodder_id)");
         cmd.Parameters.Add("@Fodder_id", SqlDbType.Int).Value = Fodder_id;
-        cmd.Parameters.Add("@Fodder_number", SqlDbType.Int).Value = Fodder_number;
+        cmd.Parameters.Add("@Fodder_number", SqlDbType.Float).Value = Fodder_number;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
