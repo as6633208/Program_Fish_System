@@ -566,7 +566,6 @@
                     $('#jump_fodder_name').selectpicker('val', jump_s.options[i].value);
                 }
             }
-
             //jump 供應商 從id 選擇資料
             var textToFind = $.trim($(this).find("td:eq(5)").text());
             var jump_s = document.getElementById('jump_medicine_company');
@@ -613,6 +612,7 @@
                     $('#jump_medicine_name').selectpicker('val', jump_s.options[i].value);
                 }
             }
+
             // 0-日期 1-餵食編號 2-供應商 3-飼料名稱 4-餵食數量 5-供應商 6-添加物名稱 7-使用數量 8-生餌
          //   $("#modify_Fodder_id").val($.trim($(this).find("td:eq(1)").text()))
          //  $("#jump_fodder_company").val($.trim($(this).find("td:eq(2)").text()))
@@ -651,6 +651,10 @@
                 }).then(function (isConfirm) {
                     if (isConfirm) {
                         console.log(Table_Feed_id)
+                        feed_name = $('#fodder_name option:selected').text();
+                        jump_feed_name = $('#jump_fodder_name option:selected').text();
+                        medicine_name = $('#medicine_name option:selected').text();
+                        jump_medicine_name = $('#jump_medicine_name option:selected').text();
                         //抓取飼料及添加物ID
                         $.ajax({
                             url: 'database/feed/feed_select_one.ashx',
@@ -667,6 +671,7 @@
                                 notyf.alert('伺服器錯誤，無法載入')
                             }
                         });
+
                         //飼料用量復原
                         $.ajax({
                             url: 'database/feed/feed_fodder_cut.ashx',
@@ -689,6 +694,7 @@
                                 notyf.alert('伺服器錯誤，無法載入')
                             }
                         });
+
                         //添加物用量復原
                         $.ajax({
                             url: 'database/feed/feed_medicine_cut.ashx',
@@ -711,6 +717,8 @@
                                 notyf.alert('伺服器錯誤，無法載入')
                             }
                         });
+
+
                         //餵食紀錄刪除
                         $.ajax({
                             url: 'database/feed/feed_delete.ashx',
@@ -726,6 +734,7 @@
                                 notyf.alert('伺服器錯誤,無法載入');
                             }
                         });
+
                         //抓取新飼料ID
                         if (jump_check_fodder_company == 'Null') {
                         }

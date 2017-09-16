@@ -14,6 +14,8 @@ public class feed_insert : IHttpHandler {
         string Bait = context.Request.Form["Bait"].ToString();
         string Medicine_id =context.Request.Form["Medicine_id"].ToString();
         string medicine_number = context.Request.Form["medicine_number"].ToString();
+
+
         Method_Fish method = new Method_Fish();
         string re_ = method.feed_insert(Fodder_id,Pool_id,Fish_detail_id,Fodder_number,date,Bait,Medicine_id,medicine_number);
         context.Response.Write(re_);

@@ -926,7 +926,7 @@ public class Method_Fish
     {
         //Update Products Set ProductName = ProductName + ',6' Where ProductID = 1
         string result = "";
-        SqlCommand cmd = new SqlCommand(@"UPDATE Medicine SET number = number-@number
+        SqlCommand cmd = new SqlCommand(@"UPDATE Medicine SET number = (number-@number)
             WHERE (Medicine_id = @Medicine_id)");
         cmd.Parameters.Add("@Medicine_id", SqlDbType.Int).Value = Medicine_id;
         cmd.Parameters.Add("@number", SqlDbType.Int).Value = number;
