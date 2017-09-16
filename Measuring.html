@@ -489,7 +489,6 @@
                 var table_number = document.getElementById('modify_Measuring_number').value;
                 var table_Fish_AVGweight = document.getElementById('modify_Measuring_Fish_AVGweight').value;;
                 var table_date = document.getElementById('modify_Measuring_time').value;;
-
                 e.preventDefault();
                 $.ajax({
                     url: 'database/measuring/measuring_update.ashx',
@@ -526,87 +525,6 @@
             });
 
         });
-
-        /*  $("#modify_Outside_id").val($.trim($(this).find("td:eq(0)").text()))
-            $("#modify_Out_number").val($.trim($(this).find("td:eq(1)").text()))
-            $("#modify_Out_Fish_AVGweight").val($.trim($(this).find("td:eq(2)").text()))
-            $("#modify_date").val($.trim($(this).find("td:eq(3)").text()))
-            Table_Outside_id = $.trim($(this).find("td:eq(0)").text())
-            Table_Out_number = $.trim($(this).find("td:eq(1)").text())
-            Table_Out_Fish_AVGweight = $.trim($(this).find("td:eq(2)").text())
-            Table_date = $.trim($(this).find("td:eq(3)").text())
-            var fish_total = parseInt(Table_Out_number) + parseInt(Fush_Pool_Pool_number);
-            $("#modify_del").click(function (e) {
-                e.preventDefault();
-                //出魚紀錄刪除及修改(包含魚群細節加回)
-                /**刪除**/
-               /* $.ajax({
-                    url: 'database/outfish/outfish_delete.ashx',
-                    type: 'post',
-                    data: {
-                        Out_id: Table_Outside_id,
-                        Fish_detail_id: Fish_detail_id,
-                        total: fish_total,
-                        Pool_id: Page_Pool_id
-                    },
-                    async: false,//啟用同步請求
-                    success: function (event) {
-                        if (event === "success") {
-                            swal({
-                                type: 'success',
-                                title: '刪除成功!',
-                                allowOutsideClick: false //不可點背景關閉
-                            }).then(function () {
-                                location.reload();
-                            })
-                        } else {
-                            notyf.alert('刪除失敗');
-                        }
-                    },
-                    error: function (e) {
-                        notyf.alert('伺服器錯誤,無法載入');
-                    }
-                });
-            });
-            /**修改**/
-           /* $("#modify_UP").click(function (e) {
-                var new_OUT_nubmer = document.getElementById('modify_Out_number').value;
-                var new_Out_Fish_AVGweight = document.getElementById('modify_Out_Fish_AVGweight').value;
-                var fish_total = parseInt(Table_Out_number) - parseInt(new_OUT_nubmer) + parseInt(Fush_Pool_Pool_number);
-                console.log(fish_total)
-                //出魚紀錄修改(包含更新魚群細節及池內資訊)                   
-                $.ajax({
-                    url: 'database/outfish/outfish_Update.ashx',
-                    type: 'post',
-                    data: {
-                        Out_id: Table_Outside_id,
-                        Fish_detail_id: Fish_detail_id,
-                        Out_nubmer: new_OUT_nubmer,
-                        Out_Fish_AVGweight: new_Out_Fish_AVGweight,
-                        total: fish_total,
-                        Pool_id: Page_Pool_id
-                    },
-                    async: false,//啟用同步請求
-                    success: function (event) {
-                        if (event === "success") {
-                            swal({
-                                type: 'success',
-                                title: '修改成功!',
-                                allowOutsideClick: false //不可點背景關閉
-                            }).then(function () {
-                                location.reload();
-                            })
-                        } else {
-                            notyf.alert('修改失敗');
-                        }
-                    },
-                    error: function (e) {
-                        notyf.alert('伺服器錯誤,無法載入');
-                    }
-                });
-            });
-
-        });*/
         $(document).ready(function () {
             FormPlugins.init();
         });
@@ -627,6 +545,7 @@
                 }).then(function (isConfirm) {
                     if (isConfirm) {
                         /**測量紀錄新增**/
+                     //   Fish_detail_Fish_AVGweight = 0;
                         $.ajax({
                             url: 'database/measuring/measuring_insert.ashx',
                             type: 'post',
