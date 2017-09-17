@@ -324,7 +324,7 @@
                                 <div class="col-sm-7">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="icon-user"></i></div>
-                                        <input type="text" class="form-control" id="modify_Measuring_id">
+                                        <input type="text" class="form-control" id="modify_Measuring_id" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -333,7 +333,7 @@
                                 <div class="col-sm-7">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="icon-user"></i></div>
-                                        <input  type="number" step="0.01" min="0"  class="form-control" id="modify_Measuring_number">
+                                        <input  type="number" step="0.01" min="0"  class="form-control" id="modify_Measuring_number" >
                                     </div>
                                 </div>
                             </div>
@@ -351,7 +351,7 @@
                                 <div class="col-sm-7">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="icon-user"></i></div>
-                                        <input  type="number" step="0.01" min="0"  class="form-control" id="modify_Measuring_before_number">
+                                        <input  type="number" step="0.01" min="0"  class="form-control" id="modify_Measuring_before_number" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -360,7 +360,7 @@
                                 <div class="col-sm-7">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="icon-user"></i></div>
-                                        <input type="text" class="form-control" id="modify_Measuring_before_Fish_AVGweight" >
+                                        <input type="text" class="form-control" id="modify_Measuring_before_Fish_AVGweight" disabled >
                                     </div>
                                 </div>
                             </div>
@@ -442,19 +442,21 @@
             }
         });        
         $('table > tbody > tr').click(function () {
-            var Measuring_id = $.trim($(this).find("td:eq(1)").text());
-            $("#modify_Measuring_time").val($.trim($(this).find("td:eq(0)").text()))
-            $("#modify_Measuring_id").val($.trim($(this).find("td:eq(1)").text()))
-            $("#modify_Measuring_number").val($.trim($(this).find("td:eq(2)").text()))
-            $("#modify_Measuring_Fish_AVGweight").val($.trim($(this).find("td:eq(3)").text()))
-            $("#modify_Measuring_before_number").val($.trim($(this).find("td:eq(4)").text()))
-            $("#modify_Measuring_before_Fish_AVGweight").val($.trim($(this).find("td:eq(5)").text()))
-            var modify_Measuring_time = $.trim($(this).find("td:eq(0)").text())
-            var modify_Measuring_id = $.trim($(this).find("td:eq(1)").text())
-            var modify_Measuring_number = $.trim($(this).find("td:eq(2)").text())
-            var modify_Measuring_Fish_AVGweight = $.trim($(this).find("td:eq(3)").text())
-            var modify_Measuring_before_number = $.trim($(this).find("td:eq(4)").text())
-            var modify_Measuring_before_Fish_AVGweight = $.trim($(this).find("td:eq(5)").text())
+            //最後一筆
+            var _tr = $("#supplier_view").children("tr:last");
+            var Measuring_id = $.trim(_tr.find("td:eq(1)").text());
+            $("#modify_Measuring_time").val($.trim(_tr.find("td:eq(0)").text()))
+            $("#modify_Measuring_id").val($.trim(_tr.find("td:eq(1)").text()))
+            $("#modify_Measuring_number").val($.trim(_tr.find("td:eq(2)").text()))
+            $("#modify_Measuring_Fish_AVGweight").val($.trim(_tr.find("td:eq(3)").text()))
+            $("#modify_Measuring_before_number").val($.trim(_tr.find("td:eq(4)").text()))
+            $("#modify_Measuring_before_Fish_AVGweight").val($.trim(_tr.find("td:eq(5)").text()))
+            var modify_Measuring_time = $.trim(_tr.find("td:eq(0)").text())
+            var modify_Measuring_id = $.trim(_tr.find("td:eq(1)").text())
+            var modify_Measuring_number = $.trim(_tr.find("td:eq(2)").text())
+            var modify_Measuring_Fish_AVGweight = $.trim(_tr.find("td:eq(3)").text())
+            var modify_Measuring_before_number = $.trim(_tr.find("td:eq(4)").text())
+            var modify_Measuring_before_Fish_AVGweight = $.trim(_tr.find("td:eq(5)").text())
             //刪除功能
             $("#modify_del").click(function (e) {
                 e.preventDefault();                 

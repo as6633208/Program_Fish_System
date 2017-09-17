@@ -43,7 +43,7 @@
                     <a href="#" class="dropdown-toggle pr-0" data-toggle="dropdown">歡迎登入系統  <img src="image/user.png" alt="user_auth" class="user-auth-img img-circle" /><span class="user-online-status"></span></a>
                     <ul class="dropdown-menu user-auth-dropdown" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
                         <li>
-                            <a href="" id="Sign_out"><i class="fa fa-fw fa-power-off" ></i> 登出</a>
+                            <a href="" id="Sign_out"><i class="fa fa-fw fa-power-off"></i> 登出</a>
                         </li>
                     </ul>
                 </li>
@@ -180,7 +180,7 @@
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                                <input type="number"  min="0"  class="form-control" id="fodder_count" placeholder="數量" required>
+                                                                <input type="number" step="0.01" min="0" class="form-control" id="fodder_count" placeholder="數量" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -243,9 +243,11 @@
                                                         <th>添加物名稱</th>
                                                         <th>進貨日期</th>
                                                         <th>進貨數量</th>
+                                                        <th style="display:none">test</th>
+                                                        <th style="display:none">test2</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="supplier_view"></tbody>
+                                                <tbody id="medicine_view"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -271,6 +273,60 @@
             <!-- /Main Content -->
         </div>
     </div>
+    <!-- 彈跳視窗開始  -->
+    <div class="modal fade" id="jump-feed_purchase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">修改添加物進貨資料</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <form class="form-horizontal" method="post">
+                            <div class="form-group">
+                                <label for="company_name" class="col-sm-5 control-label">供應商名稱：</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="Modify_company_name" placeholder="供應商名稱" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Fodder_name" class="col-sm-5 control-label">添加物名稱：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="Modify_Fodder_name" placeholder="添加物名稱" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Fodder_number" class="col-sm-5 control-label">進貨日期：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="Modify_Fodder_date" placeholder="進貨日期" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Fodder_number" class="col-sm-5 control-label">進貨數量：</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <input type="number" step="0.01" class="form-control" id="Modify_Medicine_number" placeholder="進貨數量" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" id="Modify_val" value="確定修改" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#wrapper -->
     <!-- /#wrapper -->
     <!-- JavaScript -->
     <!-- jQuery -->
@@ -318,7 +374,7 @@
             $("#purchase_time").val(Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate())
         });
 
-        /**表格載入資料**/
+        /**表格載入【目前添加物種類與總量】資料**/
         $.ajax({
             url: 'database/medicinePurchase/medicinePurchase_view.ashx',
             type: 'post',
@@ -327,13 +383,38 @@
             success: function (Supplier_Json) {
                 var cssString = "";
                 for (var index in Supplier_Json) {
-                    cssString += '<tr data-toggle="modal" data-target="#jump-feed_items">' +
+                    cssString +=   '<tr data-toggle="modal" data-target="#jump-feed_items">' +
                                     '<td>' + Supplier_Json[index].company_name + '</td>        ' +
                                     '<td>' + Supplier_Json[index].Medicine_name + '</td>   ' +
                                     '<td>' + Supplier_Json[index].number + '</td>          ' +
                                     '</tr>     '
                 }
                 $("#supplier_view").html(cssString);
+            },
+            error: function (e) {
+                notyf.alert('伺服器錯誤,無法載入' + e);
+            }
+        });
+        /**表格載入【歷史進貨添加物紀錄】資料**/
+        $.ajax({
+            url: 'database/medicinePurchase/Medicine_detail_view.ashx',
+            type: 'post',
+            dataType: 'json',
+            async: false,//啟用同步請求
+            success: function (Supplier_Json) {
+                var cssString = "";
+                for (var index in Supplier_Json) {
+                    cssString += '<tr data-toggle="modal" data-target="#jump-feed_purchase">' +
+                                    '<td>' + Supplier_Json[index].Medicine_Purchase_id + '</td>        ' +
+                                    '<td>' + Supplier_Json[index].company_name + '</td>   ' +
+                                    '<td>' + Supplier_Json[index].Medicine_name + '</td>          ' +
+                                    '<td>' + Supplier_Json[index].date + '</td>          ' +
+                                    '<td>' + Supplier_Json[index].number1 + '</td>          ' +
+                                    '<td style ="display:none">' + Supplier_Json[index].Fish_company_id + '</td>          ' +
+                                    '<td style ="display:none">' + Supplier_Json[index].Medicine_id + '</td>          ' +
+                                    '</tr>     '
+                }
+                $("#medicine_view").html(cssString);
             },
             error: function (e) {
                 notyf.alert('伺服器錯誤,無法載入' + e);
@@ -368,7 +449,7 @@
                                 async: false,//啟用同步請求
                                 success: function (Supplier_Json) {
                                     feedpurchase_id = Supplier_Json[0].Medicine_id//catch id
-                                   // alert(feedpurchase_id)
+                                    // alert(feedpurchase_id)
                                     /**飼料進貨新增**/
                                     $.ajax({
                                         type: 'post',
@@ -498,6 +579,87 @@
             feed_name = $('#feed_classification option:selected').text()
         }
 
+        /**bootstrap modal 彈出視窗載入資料：供應商名稱、飼料名稱、進貨日期、進貨數量**/
+        $('table > tbody > tr').click(function () {
+            $("#Modify_company_name").val($.trim($(this).find("td:eq(1)").text()))
+            $("#Modify_Fodder_name").val($.trim($(this).find("td:eq(2)").text()))
+            $("#Modify_Fodder_date").val($.trim($(this).find("td:eq(3)").text()))
+            $("#Modify_Medicine_number").val($.trim($(this).find("td:eq(4)").text()))
+            var id = $.trim($(this).find("td:eq(0)").text())//使用編號進行修改
+            var Fish_company_id = $.trim($(this).find("td:eq(5)").text())//隱藏的TD包含fishcompanyID 用於修改總數
+            var Fodder_id = $.trim($(this).find("td:eq(6)").text())//隱藏的TD包含Fodder_id 用來查詢SUM加總數量
+            /**「修改飼料數量」&「更新飼料數量」(2種資料庫方法)**/
+            
+            //  alert(feedpurchase_id);
+            $("#Modify_val").click(function (e) {
+                e.preventDefault();
+                if ($("#Modify_Medicine_number").val() != '') {
+                    $.ajax({
+                        url: 'database/medicinePurchase/MedicinePurchase_modify2.ashx',
+                        type: 'post',
+                        data: {
+                            Medicine_Purchase_id: id,
+                            number: $("#Modify_Medicine_number").val()
+                        },
+                        async: false,//啟用同步請求
+                        success: function (event) {
+                            /**更新原先數量**/
+                            /**利用sql查詢運算計算加總數量**/
+                            $.ajax({
+                                type: 'post',
+                                url: 'database/medicinePurchase/MedicineSelectSum.ashx',
+                                async: false,
+                                dataType: 'json',
+                                data: {
+                                    Medicine_id: Fodder_id
+                                },
+                                success: function (test_E) {
+                                    /**利用加總之數值Feed_Purchase更改表單數量**/
+                                    fodder_sum = test_E[0].Medicine_Purchase;
+                                    $.ajax({
+                                        type: 'post',
+                                        url: 'database/medicinePurchase/Medicine_number_modify.ashx',
+                                        async: false,
+                                        data: {
+                                            MedicineID: Fodder_id,
+                                            Medicine_number: fodder_sum
+                                        },
+                                        success: function (e) {
+                                            if (event === "success") {
+                                                swal({
+                                                    type: 'success',
+                                                    title: '修改成功!',
+                                                    allowOutsideClick: false //不可點背景關閉
+                                                }).then(function () {
+                                                    location.reload();
+                                                })
+                                            } else {
+                                                notyf.alert('修改失敗，原因不明XD');
+                                            }
+                                        },
+                                        error: function (e) {
+                                            alert(fodder_sum);
+                                            notyf.alert('無法修改總量');
+                                        },
+                                    });
+                                },
+                                error: function (e) {
+                                    //alert(feedpurchase_id);
+                                    notyf.alert('無法利用fooder_id進行數量加總查詢');
+                                },
+                            });
+                        },
+                        error: function (e) {
+                            notyf.alert('不正確的修改ID或數量');
+                        }
+                    });
+                } else {
+                    notyf.alert('請完整輸入！');
+                }
+
+            });
+        });
+        
     </script>
 </body>
 </html>
