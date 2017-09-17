@@ -646,37 +646,12 @@ public class Method_Fish
         SqlCommand cmd = new SqlCommand(@"UPDATE Medicine SET number = number+@Medicine_number
             WHERE (Medicine_id = @Medicine_id)");
         cmd.Parameters.Add("@Medicine_id", SqlDbType.Int).Value = a;
-        cmd.Parameters.Add("@Medicine_number", SqlDbType.Float).Value = b;
+        cmd.Parameters.Add("@Medicine_number", SqlDbType.Int).Value = b;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
     }
     #endregion
-    #endregion
-    #region 添加物總量修改 (翔)
-    public string Medicine_number_modify(string a, string b)
-    {
-        string result = "";
-        SqlCommand cmd = new SqlCommand(@"UPDATE Medicine SET number = @number WHERE (Medicine_id = @Medicine_id)");
-        cmd.Parameters.Add("@Medicine_id", SqlDbType.Int).Value = a;
-        cmd.Parameters.Add("@number", SqlDbType.NVarChar, 10).Value = b;
-        int check_num = Fish.SqlHelper.cmdCheck(cmd);
-        result = (check_num != 0) ? "success" : "fail";
-        return result;
-    }
-    #endregion
-    #region 添加物歷史紀錄修改 (翔)
-    public string MedicinePurchase_modify(string a, string b)
-    {
-        string result = "";
-        SqlCommand cmd = new SqlCommand(@"UPDATE Medicine_Purchase SET number = @number WHERE     
-                    (Medicine_Purchase_id = @Medicine_Purchase_id)");
-        cmd.Parameters.Add("@Medicine_Purchase_id", SqlDbType.Int).Value = a;
-        cmd.Parameters.Add("@number", SqlDbType.Float).Value = b;
-        int check_num = Fish.SqlHelper.cmdCheck(cmd);
-        result = (check_num != 0) ? "success" : "fail";
-        return result;
-    }
     #endregion
     #region 添加物操作
     #region 添加物進貨新增 MedicinePurchase 歷史表(翔)
@@ -687,7 +662,7 @@ public class Method_Fish
                             (Medicine_id, number, date) VALUES
                         (@Medicine_id, @MedicinePurchase_number, @MedicinePurchase_date)");
         cmd.Parameters.Add("@Medicine_id", SqlDbType.Int).Value = a;
-        cmd.Parameters.Add("@MedicinePurchase_number", SqlDbType.Float).Value = b;
+        cmd.Parameters.Add("@MedicinePurchase_number", SqlDbType.Int).Value = b;
         cmd.Parameters.Add("@MedicinePurchase_date", SqlDbType.DateTime2, 7).Value = c;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
@@ -719,15 +694,6 @@ public class Method_Fish
         return dt;
     }
     #endregion
-    #region 添加物總進貨查詢 (翔)
-    public DataTable Medicine_detail_view()
-    {
-        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Medicine INNER JOIN Medicine_Purchase ON (Medicine.Medicine_id = Medicine_Purchase.Medicine_id)
-                                        LEFT JOIN Fish_company ON (Medicine.Fish_company_id = Fish_company.Fish_company_id) WHERE company_item = '添加物供應商'");
-        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
-        return dt;
-    }
-    #endregion
     #region 添加物包數顯示(翔)
     public DataTable MedicinePurchase_View()
     {
@@ -743,15 +709,6 @@ public class Method_Fish
     {
         SqlCommand cmd = new SqlCommand(@"SELECT Medicine.Medicine_name, Medicine.Medicine_id, Fish_company.company_name
                     FROM Medicine INNER JOIN Fish_company ON Medicine.Fish_company_id = Fish_company.Fish_company_id");
-        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
-        return dt;
-    }
-    #endregion
-    #region 添加物更新數量(翔)
-    public DataTable MedicineSelectSum(string a)
-    {
-        SqlCommand cmd = new SqlCommand(@"SELECT SUM (number) Medicine_Purchase FROM Medicine_Purchase WHERE Medicine_id = @Medicine_id");
-        cmd.Parameters.Add("@Medicine_id", SqlDbType.Int).Value = a;
         DataTable dt = Fish.SqlHelper.cmdTable(cmd);
         return dt;
     }
