@@ -23,7 +23,8 @@
     <!-- ================== CSS bootstrap-select ================== -->
     <link href="css/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- ================== CSS 功能樣式 ================== -->
-    <link href="css/tableTools/jquery.dataTables.min.css" rel="stylesheet" />  <link href="css/sen/sen.css" rel="stylesheet" />
+    <link href="css/tableTools/jquery.dataTables.min.css" rel="stylesheet" /> 
+    <link href="css/sen/sen.css" rel="stylesheet" />
 </head>
 
 
@@ -424,6 +425,7 @@
             },
             success: function (measuring_json) {
                 var cssString = "";
+                var Max_date = new Date(Fish_detail_Move_date);
                 console.log(measuring_json)
                 for (var index in measuring_json) {
                     if (measuring_json[index].Fish_AVGweight != '-1') {
@@ -436,7 +438,12 @@
                             '<td>' + measuring_json[index].before_Fish_AVGweight + '</td>         ' +
                             '</tr>'
                     }
+                    if (Max_date < new Date(measuring_json[index].date.slice(0, 10))) {
+                        Max_date = new Date(measuring_json[index].date.slice(0, 10));
+                    }
                 }
+                $("#datepicker-disabled-past1").datepicker({ todayHighlight: true, startDate: Max_date });//限制最小日期。過去日期不可選。
+                $("#datepicker-disabled-past2").datepicker({ todayHighlight: true, startDate: Max_date });//限制最小日期。過去日期不可選。
                 $("#supplier_view").html(cssString);
             },
             error: function (e) {

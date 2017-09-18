@@ -211,7 +211,16 @@ public class Method_Fish
                 Measuring_UP_Pool(Pool_id, number);
             }
             //更新魚群細節資料
-            Measuring_UP_FishDetail(Fish_detail_id, Fish_AVGweight, number);
+            //如果是損益 平均重-1
+            if(Fish_AVGweight == "-1")
+            {
+                Measuring_UP_FishDetail(Fish_detail_id, before_Fish_AVGweight, number);
+            }
+            else
+            {
+                Measuring_UP_FishDetail(Fish_detail_id, Fish_AVGweight, number);
+            }
+
             return result;
         }
         else
@@ -251,7 +260,15 @@ public class Method_Fish
                     Measuring_UP_Pool(Pool_id, number);
                 }
                 //更新魚群細節資料
-                Measuring_UP_FishDetail(Fish_detail_id, Fish_AVGweight, number);
+                //如果是損益 平均重-1
+                if (Fish_AVGweight == "-1")
+                {
+                    Measuring_UP_FishDetail(Fish_detail_id, before_Fish_AVGweight, number);
+                }
+                else
+                {
+                    Measuring_UP_FishDetail(Fish_detail_id, Fish_AVGweight, number);
+                }
                 return result;
             }
             else
@@ -291,7 +308,16 @@ public class Method_Fish
                 DataTable Next_Inventory = select_Inventory(Pool_id, Fish_detail_id, select.Rows[new_position][5].ToString());
                 int id = Int32.Parse(Next_Inventory.Rows[0][0].ToString());
                 Updata_Inventory(Next_Inventory.Rows[0][0].ToString(), Int32.Parse(select.Rows[new_position][3].ToString()) - number);
-                Updata_Measuring(select.Rows[new_position][0].ToString(), number.ToString(), Fish_AVGweight);
+                //如果是損益 平均重-1
+                if (Fish_AVGweight == "-1")
+                {
+                    Updata_Measuring(select.Rows[new_position][0].ToString(), number.ToString(), before_Fish_AVGweight);
+                }
+                else
+                {
+                    Updata_Measuring(select.Rows[new_position][0].ToString(), number.ToString(), Fish_AVGweight);
+                }
+               
                 return result;
             }
         }
@@ -904,12 +930,13 @@ public class Method_Fish
     public string Into_Fish_Detail(string Fish_id, string number, string Pool_id, string into_time2, string Fish_AVGweight)
     {
 
-        SqlCommand cmd = new SqlCommand(@"INSERT INTO Fish_detail (Fish_id, number,Move_date,Fish_AVGweight)  OUTPUT INSERTED.Fish_detail_id  VALUES  
-                (@Fish_id,@number,@Move_date,@Fish_AVGweight)");
+        SqlCommand cmd = new SqlCommand(@"INSERT INTO Fish_detail (Fish_id, number,Move_date,Fish_AVGweight,Stay_Pools)  OUTPUT INSERTED.Fish_detail_id  VALUES  
+                (@Fish_id,@number,@Move_date,@Fish_AVGweight,@Stay_Pools)");
         cmd.Parameters.Add("@Fish_id", SqlDbType.Int).Value = Fish_id;
         cmd.Parameters.Add("@number", SqlDbType.Int).Value = number;
         cmd.Parameters.Add("@Move_date", SqlDbType.DateTime2).Value = into_time2;
         cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
+        cmd.Parameters.Add("@Stay_Pools", SqlDbType.NVarChar, 10).Value = Pool_id;
 
         //int check_num = Fish.SqlHelper.cmdCheck(cmd);
         //result = (check_num != 0) ? "success" : "fail";

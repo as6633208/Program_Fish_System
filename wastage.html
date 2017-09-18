@@ -379,8 +379,6 @@
     <!-- ================== JS IE sweetalert ================== -->
     <script src="javascript/sweetalert2/core-js.js"></script>
     <script>
-        $("#datepicker-disabled-past1").datepicker({ todayHighlight: true, startDate: "2017年09月18日" });//限制最小日期。過去日期不可選。
-
         var bt_id = [];//抓取餵食資料刪除按鈕編號
         var bt_detail = [];
         //表格資料載入
@@ -396,6 +394,7 @@
             success: function (measuring_json) {
                 var cssString = "";
                 console.log(measuring_json)
+                var Max_date = new Date(Fish_detail_Move_date);
                 for (var index in measuring_json) {
                     //耗損日 耗損編號 耗損後數量 耗損前數量
                     //Fish_AVGweight -1 為耗損
@@ -405,9 +404,14 @@
                             '<td>' + measuring_json[index].Measuring_id + '</td>        ' +
                             '<td>' + measuring_json[index].number + '</td>        ' +
                             '<td>' + measuring_json[index].before_number + '</td>         ' +
-                            '</tr>'
+                            '</tr>'                 
+                    }
+                    if (Max_date < new Date(measuring_json[index].date.slice(0, 10))){
+                        Max_date = new Date(measuring_json[index].date.slice(0, 10));
                     }
                 }
+                $("#datepicker-disabled-past1").datepicker({ todayHighlight: true, startDate: Max_date });//限制最小日期。過去日期不可選。
+                $("#datepicker-disabled-past2").datepicker({ todayHighlight: true, startDate: Max_date });//限制最小日期。過去日期不可選。
                 $("#supplier_view").html(cssString);
             },
             error: function (e) {
@@ -429,38 +433,56 @@
             var modify_Measuring_before_number = $.trim(_tr.find("td:eq(3)").text())
             //刪除功能
             $("#modify_del").click(function (e) {
-                e.preventDefault();                 
-                $.ajax({
-                    url: 'database/measuring/measuring_delete.ashx',
-                     type: 'post',
-                     data: {
-                         Pool_id: Page_Pool_id,
-                         Fish_detail_id: Fish_detail_id,
-                         id: modify_Measuring_id
-                     },
-                     async: false,//啟用同步請求
-                     success: function (event) {
-                         if (event === "success") {
-                             swal({
-                                 type: 'success',
-                                 title: '刪除成功!',
-                                 allowOutsideClick: false //不可點背景關閉
-                             }).then(function () {
-                                 location.reload();
-                             })
-                         } else {
-                             notyf.alert('刪除失敗');
-                         }
-                     },
-                     error: function (e) {
-                         notyf.alert('伺服器錯誤,無法載入');
-                     }
-                 });
+                e.preventDefault();            
+
+                swal({
+                    title: '確認刪除此筆耗損紀錄？',
+                    text: "",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    allowOutsideClick: false,//不可點背景關閉
+                    confirmButtonText: '確認！',
+                    cancelButtonText: '取消'
+                }).then(function (isConfirm) {
+                    if (isConfirm) {
+                        /**耗損紀錄刪除**/
+                        //   Fish_detail_Fish_AVGweight = 0;
+                        $.ajax({
+                            url: 'database/measuring/measuring_delete.ashx',
+                            type: 'post',
+                            data: {
+                                Pool_id: Page_Pool_id,
+                                Fish_detail_id: Fish_detail_id,
+                                id: modify_Measuring_id
+                            },
+                            async: false,//啟用同步請求
+                            success: function (event) {
+                                if (event === "success") {
+                                    swal({
+                                        type: 'success',
+                                        title: '刪除成功!',
+                                        allowOutsideClick: false //不可點背景關閉
+                                    }).then(function () {
+                                        location.reload();
+                                    })
+                                } else {
+                                    notyf.alert('刪除失敗');
+                                }
+                            },
+                            error: function (e) {
+                                notyf.alert('伺服器錯誤,無法載入');
+                            }
+                        });
+                    }
+                })
+
             });
             $("#modify_UP").click(function (e) {
                 var table_number = document.getElementById('modify_Measuring_number').value;
-                var table_Fish_AVGweight = document.getElementById('modify_Measuring_Fish_AVGweight').value;;
-                var table_date = document.getElementById('modify_Measuring_time').value;;
+                var table_Fish_AVGweight = -1;
+                var table_date = document.getElementById('modify_Measuring_time').value;
                 e.preventDefault();
                 $.ajax({
                     url: 'database/measuring/measuring_update.ashx',

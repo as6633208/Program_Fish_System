@@ -233,7 +233,7 @@
             success: function (Pool_Json) {
                 var cssString = "";
                 for (var index in Pool_Json) {
-                    cssString += '<a href="Info.html?Pool_id=' + Pool_Json[index].Pool_id + '&Fish_company_id=' + Pool_Json[index].Fish_company_id + '" class="button button1" ><font size="40" >' + Pool_Json[index].Pool_id + '</font></a>'
+                    cssString += '<a href="Info.html?Pool_id=' + Pool_Json[index].Pool_id  + '" class="button button1" ><font size="40" >' + Pool_Json[index].Pool_id + '</font></a>'
                   //  cssString += '<button type="button" class="button button1" onclick="location.href="Info.html?Pool_id=' + Pool_Json[index].Pool_id + '&Fish_company_id=' + Pool_Json[index].Fish_company_id + '"; />';
                 }
                 $("#pool_view").html(cssString);
