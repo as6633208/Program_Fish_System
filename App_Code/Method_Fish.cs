@@ -930,12 +930,12 @@ public class Method_Fish
     #endregion  
     #region 餵食操作
     #region 餵養紀錄新增(建)
-    public string feed_insert(string Fodder_id, string Pool_id, string Fish_detail_id, string Fodder_number, string date, string Bait, string Medicine_id, string medicine_number)
+    public string feed_insert(string Fodder_id, string Pool_id, string Fish_detail_id, string Fodder_number, string date, string Bait, string Medicine_id, string medicine_number,string DayTime)
     {
         string result = "";
         SqlCommand cmd = new SqlCommand
-       (@"INSERT INTO Feed (Fodder_id, Pool_id, Fish_detail_id, Fodder_number, date, Bait, Medicine_id,medicine_number)
-                VALUES (@Fodder_id,@Pool_id,@Fish_detail_id,@Fodder_number,@date,@Bait,@Medicine_id,@medicine_number)");
+       (@"INSERT INTO Feed (Fodder_id, Pool_id, Fish_detail_id, Fodder_number, date, Bait, Medicine_id,medicine_number,DayTime)
+                VALUES (@Fodder_id,@Pool_id,@Fish_detail_id,@Fodder_number,@date,@Bait,@Medicine_id,@medicine_number,@DayTime)");
         cmd.Parameters.Add("@Fodder_id", SqlDbType.Int).Value = Fodder_id;
         cmd.Parameters.Add("@Pool_id", SqlDbType.NVarChar, 10).Value = Pool_id;
         cmd.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value = Fish_detail_id;
@@ -944,6 +944,7 @@ public class Method_Fish
         cmd.Parameters.Add("@Bait", SqlDbType.NVarChar, 10).Value = Bait;
         cmd.Parameters.Add("@Medicine_id", SqlDbType.Int).Value = Medicine_id;
         cmd.Parameters.Add("@medicine_number", SqlDbType.NVarChar, 10).Value = medicine_number;
+        cmd.Parameters.Add("@DayTime", SqlDbType.NVarChar, 10).Value = DayTime;
         int check_num = Fish.SqlHelper.cmdCheck(cmd);
         result = (check_num != 0) ? "success" : "fail";
         return result;
@@ -994,7 +995,7 @@ public class Method_Fish
     public DataTable feed_view(string Pool_id, string Fish_detail_id)
     {
 
-        SqlCommand cmd = new SqlCommand(@"SELECT Feed.Feed_id, Feed.Fodder_id, Fish_company.company_name AS F_Comp_name, Fodder.Fodder_name, 
+        SqlCommand cmd = new SqlCommand(@"SELECT Feed.Feed_id, Feed.Fodder_id,Feed.DayTime, Fish_company.company_name AS F_Comp_name, Fodder.Fodder_name, 
                                                  Feed.Pool_id, Feed.Fish_detail_id, Feed.Fodder_number, Feed.date, Feed.Bait, Feed.Medicine_id, 
                                                  Fish_company_1.company_name AS M_Comp_name, Medicine.Medicine_name, Feed.medicine_number, 
                                                  Medicine.Fish_company_id
