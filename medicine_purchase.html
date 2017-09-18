@@ -383,11 +383,14 @@
             success: function (Supplier_Json) {
                 var cssString = "";
                 for (var index in Supplier_Json) {
-                    cssString +=   '<tr data-toggle="modal" data-target="#jump-feed_items">' +
-                                    '<td>' + Supplier_Json[index].company_name + '</td>        ' +
-                                    '<td>' + Supplier_Json[index].Medicine_name + '</td>   ' +
-                                    '<td>' + Supplier_Json[index].number + '</td>          ' +
-                                    '</tr>     '
+                    if (Supplier_Json[index].company_name != '無'){
+                        cssString += '<tr data-toggle="modal" data-target="#jump-feed_items">' +
+                            '<td>' + Supplier_Json[index].company_name + '</td>        ' +
+                            '<td>' + Supplier_Json[index].Medicine_name + '</td>   ' +
+                            '<td>' + Supplier_Json[index].number + '</td>          ' +
+                            '</tr>     '
+                    }
+
                 }
                 $("#supplier_view").html(cssString);
             },
