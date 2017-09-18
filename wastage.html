@@ -131,7 +131,7 @@
                         <li><span>首頁</span></li>
                         <li><span>魚池管理</span></li>
                         <li><span>魚池詳細</span></li>
-                        <li class="active"><span>測量</span></li>
+                        <li class="active"><span>耗損</span></li>
                     </ol>
                     <!--Breadcrumb-->
                 </div>
@@ -202,13 +202,13 @@
 
                                             <div class="form-wrap">
                                                 <form class="form-horizontal" id="Measuring" method="post">
-                                                    <!-- 測量資訊 -->
+                                                    <!-- 耗損資訊 -->
                                                     <div class="form-group">
-                                                        <label class="col-sm-3 control-label">測量日期</label>
+                                                        <label class="col-sm-3 control-label">耗損日期</label>
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <div class="input-group date" id="datepicker-disabled-past1" data-date-format="yyyy-mm-dd">
-                                                                    <input type="text" class="form-control" placeholder="請選擇日期" id="Measuring_time" />
+                                                                    <input type="text" class="form-control" placeholder="請選擇日期" id="Measuring_time" required />
                                                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                                                 </div>
                                                             </div>
@@ -222,17 +222,7 @@
                                                                 <input  type="number" min="0"   class="form-control" id="Measuring_number" placeholder="隻" required>
                                                             </div>
                                                         </div>
-                                                    </div>                           
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">魚隻平均重量：</label>
-                                                        <div class="col-sm-9">
-                                                            <div class="input-group">
-                                                                <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                                <input   type="number" step="0.01" min="0"    class="form-control" id="Measuring_Fish_AVGweight" placeholder="KG" required>
-                                                            </div>
-                                                        </div>
-                                                    </div>                              
-                                                  
+                                                    </div>                                                                                                    
                                                     <div class="form-group mb-0">
                                                         <div class="col-sm-offset-3 col-sm-9">
                                                             <button type="submit" class="btn btn-success ">新增</button>
@@ -258,12 +248,10 @@
                                             <table id="datable_1" class="table table-hover display  pb-30">
                                                 <thead>
                                                     <tr>
-                                                        <th>測量日期</th>
-                                                        <th>測量編號</th>
-                                                        <th>測量後數量</th>
-                                                        <th>測量後平均重量</th>          
-                                                        <th>測量前數量</th>    
-                                                        <th>測量前平均重量</th>                                                  
+                                                        <th>耗損日期</th>
+                                                        <th>耗損編號</th>
+                                                        <th>耗損後數量</th>    
+                                                        <th>耗損前數量</th>                                                   
                                                     </tr>
                                                 </thead>
                                                 <tbody id="supplier_view"></tbody>
@@ -303,16 +291,16 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title" id="myModalLabel">測量紀錄查看</h4>
+                    <h4 class="modal-title" id="myModalLabel">耗損紀錄查看</h4>
                 </div>
                 <div class="modal-body">
                     <div class="panel-body">
                         <form class="form-horizontal" id="supplier_insert" method="post">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">測量日期：</label>
+                                <label class="col-sm-3 control-label">耗損日期：</label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
-                                        <div class="input-group date" id="datepicker-disabled-past2" data-date-format="yyyy-mm-dd">
+                                        <div class="input-group date" id="datepicker-disabled-past2" data-date-format="yyyy-mm-dd"  minDate="0" >
                                             <input type="text" class="form-control" placeholder="請選擇日期" id="modify_Measuring_time" />
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                         </div>
@@ -320,7 +308,7 @@
                                 </div>
                             </div>          
                           <div class="form-group">
-                                <label for="modify_Measuring_id" class="col-sm-3 control-label">測量編號：</label>
+                                <label for="modify_Measuring_id" class="col-sm-3 control-label">耗損編號：</label>
                                 <div class="col-sm-7">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="icon-user"></i></div>
@@ -338,15 +326,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="Fish_AVGweight" class="col-sm-3 control-label">測後重量：</label>
-                                <div class="col-sm-7">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="icon-user"></i></div>
-                                        <input  type="number" step="0.01" min="0" class="form-control" id="modify_Measuring_Fish_AVGweight">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label for="before_number" class="col-sm-3 control-label">測前數量：</label>
                                 <div class="col-sm-7">
                                     <div class="input-group">
@@ -354,17 +333,7 @@
                                         <input  type="number" step="0.01" min="0"  class="form-control" id="modify_Measuring_before_number" disabled>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="before_Fish_AVGweight" class="col-sm-3 control-label">測前重量：</label>
-                                <div class="col-sm-7">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="icon-user"></i></div>
-                                        <input type="text" class="form-control" id="modify_Measuring_before_Fish_AVGweight" disabled >
-                                    </div>
-                                </div>
-                            </div>
-                         
+                            </div>                         
                         </form>
                     </div>
 
@@ -410,6 +379,8 @@
     <!-- ================== JS IE sweetalert ================== -->
     <script src="javascript/sweetalert2/core-js.js"></script>
     <script>
+        $("#datepicker-disabled-past1").datepicker({ todayHighlight: true, startDate: "2017年09月18日" });//限制最小日期。過去日期不可選。
+
         var bt_id = [];//抓取餵食資料刪除按鈕編號
         var bt_detail = [];
         //表格資料載入
@@ -426,14 +397,14 @@
                 var cssString = "";
                 console.log(measuring_json)
                 for (var index in measuring_json) {
-                    if (measuring_json[index].Fish_AVGweight != '-1') {
+                    //耗損日 耗損編號 耗損後數量 耗損前數量
+                    //Fish_AVGweight -1 為耗損
+                    if (measuring_json[index].Fish_AVGweight == '-1'){
                         cssString += '<tr data-toggle="modal" data-target="#jump-Measuring">' +
                             '<td>' + measuring_json[index].date.slice(0, 10) + '</td>           ' +
                             '<td>' + measuring_json[index].Measuring_id + '</td>        ' +
                             '<td>' + measuring_json[index].number + '</td>        ' +
-                            '<td>' + measuring_json[index].Fish_AVGweight + '</td>         ' +
                             '<td>' + measuring_json[index].before_number + '</td>         ' +
-                            '<td>' + measuring_json[index].before_Fish_AVGweight + '</td>         ' +
                             '</tr>'
                     }
                 }
@@ -444,21 +415,18 @@
             }
         });        
         $('table > tbody > tr').click(function () {
-            //最後一筆
+            //最後一筆  //耗損日 耗損編號 耗損後數量 耗損前數量
             var _tr = $("#supplier_view").children("tr:last");
             var Measuring_id = $.trim(_tr.find("td:eq(1)").text());
+
             $("#modify_Measuring_time").val($.trim(_tr.find("td:eq(0)").text()))
             $("#modify_Measuring_id").val($.trim(_tr.find("td:eq(1)").text()))
             $("#modify_Measuring_number").val($.trim(_tr.find("td:eq(2)").text()))
-            $("#modify_Measuring_Fish_AVGweight").val($.trim(_tr.find("td:eq(3)").text()))
-            $("#modify_Measuring_before_number").val($.trim(_tr.find("td:eq(4)").text()))
-            $("#modify_Measuring_before_Fish_AVGweight").val($.trim(_tr.find("td:eq(5)").text()))
+            $("#modify_Measuring_before_number").val($.trim(_tr.find("td:eq(3)").text()))
             var modify_Measuring_time = $.trim(_tr.find("td:eq(0)").text())
             var modify_Measuring_id = $.trim(_tr.find("td:eq(1)").text())
             var modify_Measuring_number = $.trim(_tr.find("td:eq(2)").text())
-            var modify_Measuring_Fish_AVGweight = $.trim(_tr.find("td:eq(3)").text())
-            var modify_Measuring_before_number = $.trim(_tr.find("td:eq(4)").text())
-            var modify_Measuring_before_Fish_AVGweight = $.trim(_tr.find("td:eq(5)").text())
+            var modify_Measuring_before_number = $.trim(_tr.find("td:eq(3)").text())
             //刪除功能
             $("#modify_del").click(function (e) {
                 e.preventDefault();                 
@@ -532,12 +500,12 @@
         $(document).ready(function () {
             FormPlugins.init();
         });
-                $(document).ready(function () {
-            /**測量紀錄新增**/
+        $(document).ready(function () {
+            /**耗損紀錄新增**/
             $("#Measuring").submit(function (e) {
                 e.preventDefault();              
                 swal({                   
-                    title: '確認新增此筆測量紀錄？' ,
+                    title: '確認新增此筆耗損紀錄？' ,
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -548,7 +516,7 @@
                     cancelButtonText: '取消'
                 }).then(function (isConfirm) {
                     if (isConfirm) {
-                        /**測量紀錄新增**/
+                        /**耗損紀錄新增**/
                      //   Fish_detail_Fish_AVGweight = 0;
                         $.ajax({
                             url: 'database/measuring/measuring_insert.ashx',
@@ -558,7 +526,7 @@
                                 Pool_id: Page_Pool_id,
                                 Fish_detail_id: Fish_detail_id,
                                 number: $("#Measuring_number").val(),
-                                Measuring_Fish_AVGweight: $("#Measuring_Fish_AVGweight").val(),                              
+                                Measuring_Fish_AVGweight: '-1',                              
                                 date: $("#Measuring_time").val(),
                                 Fish_detail_before_number: Fush_Pool_Pool_number,
                                 Fish_detail_before_Fish_AVGweight: Fish_detail_Fish_AVGweight
@@ -568,7 +536,7 @@
                                 if (e == "success") {
                                     swal({
                                         type: 'success',
-                                        title: '新增測量記錄成功!',
+                                        title: '新增耗損記錄成功!',
                                         allowOutsideClick: false //不可點背景關閉
                                     }).then(function () {
                                         location.reload();
