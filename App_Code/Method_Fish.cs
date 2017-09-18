@@ -1193,7 +1193,7 @@ public class Method_Fish
         SqlCommand cmd = new SqlCommand(@"UPDATE Out SET number=@number,Waistline=@Waistline,bust=@bust,Tail=@Tail, Fish_AVGweight=@Fish_AVGweight WHERE (Outside_id = @Out_id)");
         cmd.Parameters.Add("@Out_id", SqlDbType.Int).Value = Out_id;
         cmd.Parameters.Add("@number", SqlDbType.Int).Value = out_number;
-        cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.Int).Value = Out_Fish_AVGweight;
+        cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar).Value = Out_Fish_AVGweight;
         cmd.Parameters.Add("@Waistline", SqlDbType.NVarChar, 10).Value = Waistline;
         cmd.Parameters.Add("@bust", SqlDbType.NVarChar, 10).Value = bust;
         cmd.Parameters.Add("@Tail", SqlDbType.NVarChar, 10).Value = Tail;

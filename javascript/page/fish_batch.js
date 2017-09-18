@@ -15,6 +15,7 @@ var Fish_Fish_company_id = -1; //魚群供應商編號
 var Fish_company_company_abbreviation = -1;//魚群供應商簡稱 5
 var Fish_Fish_kind_id = -1;//魚種編號
 var Fush_Pool_Pool_number = -1;//魚池數量
+var Fish_Pool_Pool_number = -1;//魚池數量
 var Fish_detail_Fish_AVGweight = 0;//測量用
 //抓網址變數
 $.UrlParam = function (name) {
