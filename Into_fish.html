@@ -632,9 +632,9 @@
                                         Fish_AVGweight: ($("#fry_weight").val()) / 1000
                                     },
                                     success: function (e) {
-
-                                    },
-                                    error: function (e) {
+                                        location.reload();
+                                    },                                          
+                                    error: function (e) {                       
                                     }
                                 });
                                 console.log(data_num[i] + "," + data_pools[i])
@@ -644,9 +644,7 @@
                             notyf.alert('錯誤');
                         }
                     });
-
-
-                    //location.reload();
+                    //
                 })
             }
         }
@@ -663,7 +661,6 @@
             }
         }
         $("#FishName_view").html(cssString);
-
         /**bootstrap modal 載入資料**/
         $('table > tbody > tr').click(function () {
             $("#Modify_Fish_name").val($.trim($(this).find("td:eq(1)").text()))

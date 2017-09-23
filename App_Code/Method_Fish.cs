@@ -937,19 +937,25 @@ public class Method_Fish
         cmd.Parameters.Add("@Move_date", SqlDbType.DateTime2).Value = into_time2;
         cmd.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
         cmd.Parameters.Add("@Stay_Pools", SqlDbType.NVarChar, 10).Value = Pool_id;
-
-        //int check_num = Fish.SqlHelper.cmdCheck(cmd);
-        //result = (check_num != 0) ? "success" : "fail";
-        //if (result == "success") {
-        //    Pool_status(Pool_id , number);
-        //}
-        //return result;
-
         int result = Fish.SqlHelper.Return_IDENTITY(cmd);
+        /**加入入苗測量資料**/
+        SqlCommand cmd_measure = new SqlCommand(@"INSERT INTO Measuring (Pool_id, Fish_detail_id, number, Fish_AVGweight, date, before_number, before_Fish_AVGweight, status)
+            VALUES (@id,@Fish_detail_id,@number,@Fish_AVGweight,@date,@before_number,@before_Fish_AVGweight,@status)");
+        cmd_measure.Parameters.Add("@id", SqlDbType.NVarChar,10).Value = Pool_id;
+        cmd_measure.Parameters.Add("@Fish_detail_id", SqlDbType.Int).Value = result;
+        cmd_measure.Parameters.Add("@number", SqlDbType.Int).Value = number;
+        cmd_measure.Parameters.Add("@Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
+        cmd_measure.Parameters.Add("@date", SqlDbType.DateTime2).Value = into_time2;
+        cmd_measure.Parameters.Add("@before_number", SqlDbType.NVarChar, 10).Value = number;
+        cmd_measure.Parameters.Add("@before_Fish_AVGweight", SqlDbType.NVarChar, 10).Value = Fish_AVGweight;
+        cmd_measure.Parameters.Add("@status", SqlDbType.NVarChar, 10).Value = "入苗";
+        int measure = Fish.SqlHelper.cmdCheck(cmd_measure);
+        /**end加入入苗測量資料**/
         if (result != 0)
         {
             Pool_status(Pool_id, number, result);
         }
+       
         return "success";
 
     }
@@ -1248,4 +1254,34 @@ public class Method_Fish
     #endregion
     #endregion
 
-}
+
+    #region Measuring修改status欄位  .bat
+    public string modify_ststus()
+    {
+        int result = 0;
+        SqlCommand cmd = new SqlCommand(@"SELECT * FROM Measuring ");
+        DataTable dt = Fish.SqlHelper.cmdTable(cmd);
+        for(int i = 0; i< dt.Rows.Count;i++)
+        {
+            if(dt.Rows[i][4].ToString() == "-1")
+            {
+                SqlCommand cmd_modify = new SqlCommand(@"UPDATE Measuring SET
+                    status = @status WHERE (Measuring_id = @Measuring_id)");
+                cmd_modify.Parameters.Add("@status", SqlDbType.NVarChar, 50).Value = "耗損";
+                cmd_modify.Parameters.Add("@Measuring_id", SqlDbType.Int).Value = dt.Rows[i][0];
+                int check_num = Fish.SqlHelper.cmdCheck(cmd_modify);
+                result += 1;
+            }else
+            {
+                SqlCommand cmd_modify = new SqlCommand(@"UPDATE Measuring SET
+                    status = @status WHERE (Measuring_id = @Measuring_id)");
+                cmd_modify.Parameters.Add("@status", SqlDbType.NVarChar, 50).Value = "測量";
+                cmd_modify.Parameters.Add("@Measuring_id", SqlDbType.Int).Value = dt.Rows[i][0];
+                int check_num = Fish.SqlHelper.cmdCheck(cmd_modify);
+                result += 1;
+            }
+        }
+        return result.ToString();
+    }
+    #endregion
+    }
