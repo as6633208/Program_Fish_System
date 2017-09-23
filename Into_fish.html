@@ -148,7 +148,7 @@
                                                         <label for="fish_classification" class="col-sm-3 control-label">魚種：</label>
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
-                                                                <select class="selectpicker" data-style="btn-primary btn-outline" id="fish_classification">
+                                                                <select class="selectpicker" data-style="btn-primary btn-outline" id="fish_classification" required>
                                                                     <option value="" selected>請選擇分類</option>
                                                                 </select>
                                                             </div>
@@ -158,7 +158,7 @@
                                                         <label for="supplier_classification" class="col-sm-3 control-label">供應商：</label>
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
-                                                                <select class="selectpicker" data-style="btn-primary btn-outline" id="supplier_classification">
+                                                                <select class="selectpicker" data-style="btn-primary btn-outline" id="supplier_classification" required>
                                                                     <option value="" selected>請選擇分類</option>
                                                                 </select>
                                                             </div>
@@ -187,7 +187,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="exampleInputpwd_4" class="col-sm-3 control-label">魚苗重量</label>
+                                                        <label for="exampleInputpwd_4" class="col-sm-3 control-label">魚苗重量(g)</label>
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <div class="input-group-addon"><i class="icon-check"></i></div>
@@ -358,18 +358,20 @@
     <script src="javascript/sweetalert2/core-js.js"></script>
     <script>
         var notyf = new Notyf();//notyf.js宣告使用
-
+        var fisf_name;
+        var inputOptions = {};//放池號
+        var data_num = Array();//魚隻數量
+        var data_pools = Array();//池號
         /**設定權限**/
         $(document).ready(function () {
             if (Cookies.get('authority') == 3) {
                 location.href = '404.html';
             }
         });
-        var fisf_name;
+        /**插件**/
         $(document).ready(function () {
             FormPlugins.init();
             var Today = new Date();
-           // $("#into_time2").val(Today.getFullYear() + "-" + (Today.getMonth() + 1) + "-" + Today.getDate()) 不選今日
         });
         /**載入下拉式魚種資料**/
         $.ajax({
@@ -455,54 +457,60 @@
                 }
             });
         });
-        /****/
-        var return_id = 0;
+        /**下一步**/
         $(document).ready(function () {
             /**into_fish_insert新增**/
             $("#into_fish_insert").submit(function (e) {
                 e.preventDefault();  
                 if ($("#into_time1").val() != '' && $("#into_time2").val() != '') {
-                    $.ajax({
-                        type: 'post',
-                        url: 'database/Into_fish/Into_fish_insert.ashx',
-                        async: false,
-                        data: {
-                            fish_classification: $("#fish_classification").val(),
-                            supplier_classification: $("#supplier_classification").val(),
-                            into_time1: $("#into_time1").val(),
-                            into_time2: $("#into_time2").val(),
-                            fry_weight: $("#fry_weight").val(),
-                            start_number: $("#start_number").val()
-                        },
-                        success: function (e) {
-                            /**新增Fish 表單**/
-                            if (e != null) {
-                                return_id = e//Fish_id  
-                                swal({
-                                    type: 'success',
-                                    title: '新增成功，下一步分配魚隻!',
-                                    confirmButtonText: '下一步',
-                                    allowOutsideClick: false //不可點背景關閉
-                                }).then(function () {
-                                    var testnum = $("#start_number").val();
-                                    insert_name(testnum)
-                                })
-                            } else {
-                                notyf.alert('新增失敗');
-                            }
-                        },
-                        error: function (e) {
-                            notyf.alert('請填寫完整資料');
-                        }
-                    });
+                    swal({
+                        type: 'success',
+                        title: '新增成功，下一步分配魚隻!',
+                        confirmButtonText: '下一步',
+                        allowEscapeKey: false,//防止esc
+                        allowOutsideClick: false //不可點背景關閉
+                    }).then(function () {
+                        var testnum = $("#start_number").val();
+                        insert_name(testnum)
+                    })
+                    //$.ajax({
+                    //    type: 'post',
+                    //    url: 'database/Into_fish/Into_fish_insert.ashx',
+                    //    async: false,
+                    //    data: {
+                    //        fish_classification: $("#fish_classification").val(),
+                    //        supplier_classification: $("#supplier_classification").val(),
+                    //        into_time1: $("#into_time1").val(),
+                    //        into_time2: $("#into_time2").val(),
+                    //        fry_weight: $("#fry_weight").val(),
+                    //        start_number: $("#start_number").val()
+                    //    },
+                    //    success: function (e) {
+                    //        /**新增Fish 表單**/
+                    //        if (e != null) {
+                    //            return_id = e//Fish_id  
+                    //            swal({
+                    //                type: 'success',
+                    //                title: '新增成功，下一步分配魚隻!',
+                    //                confirmButtonText: '下一步',
+                    //                allowOutsideClick: false //不可點背景關閉
+                    //            }).then(function () {
+                    //                var testnum = $("#start_number").val();
+                    //                insert_name(testnum)
+                    //            })
+                    //        } else {
+                    //            notyf.alert('新增失敗');
+                    //        }
+                    //    },
+                    //    error: function (e) {
+                    //        notyf.alert('請填寫完整資料');
+                    //    }
+                    //});
                 } else {
                     notyf.alert('選擇時間！');
-                }
-              
-
+                }           
             });
         });
-        var inputOptions = {};
         /**下拉是魚池資料**/
         function update_poolview() {
             inputOptions = {}
@@ -533,8 +541,9 @@
                     confirmButtonText: 'Next &rarr;',
                     showCancelButton: false,
                     confirmButtonText: '下一步',
+                    allowEscapeKey: false,//防止esc                   
                     cancelButtonText: '取消',
-                    animation: false,
+                    animation: false,                    
                     progressSteps: ['1', '2'],
                     allowOutsideClick: false //不可點背景關閉
                 })
@@ -543,50 +552,48 @@
                       title: '選擇：魚池',
                       input: 'select',
                       inputOptions: inputOptions
-                  },
-                  '輸入魚隻數量，剩餘' + testnum + '隻可入池'
+                  },{
+                      title: '輸入魚隻數量，剩餘' + testnum + '隻可入池',
+                      inputAttributes: { 'min': 1, 'onkeyup':"value = value.replace(/[^[0-9]*[1-9][0-9]*$]/g,'')" }                      
+                  }                  
                 ]
                 swal.queue(steps).then(function (result) {// +1 +1
                     swal.resetDefaults()
-                    //alert(result[1])
                     /**數量異常超額**/
-                    if (result[1] > testnum || result[1] == 0 || result[1] < 0 || result[1] == '') {
-                        swal({
-                            type: 'error',
-                            title: '數量錯誤，請輸入剩餘數量內數值',
-                            confirmButtonText: '確認',
-                            allowOutsideClick: false //不可點背景關閉
-                        }).then(function () {
-                            update_poolview()
-                            insert_name(testnum)
-                        })
-                      
-                       
+                    //console.log(result[1].length + "check");
+                    if (result[1] <= testnum && result[1].length !== 0) {
+                        data_num.push(result[1])//數量       
+                        data_pools.push(result[0])//池號     
+                        update_poolview()
+                        /**分配剩餘魚隻**/
+                        testnum = testnum - result[1] // 1 0
+                        insert_name(testnum)
                     } else {
+                        notyf.alert('數量錯誤，請輸入剩餘數量內數值！');
+                        update_poolview()
+                        insert_name(testnum)
                         /**魚群細節**/
-                        $.ajax({
-                            type: 'post',
-                            url: 'database/Into_fish/Into_fish_detail.ashx',
-                            async: false,
-                            data: {
-                                Fish_id: return_id,//原先ID
-                                number: result[1],//魚隻數量
-                                Pool_id: result[0],//池號
-                                into_time2: $("#into_time2").val(),
-                                Fish_AVGweight: ($("#fry_weight").val()) / 1000
-                            },
-                            success: function (e) {
-                                update_poolview()
-                                /**分配剩餘魚隻**/
-                                testnum = testnum - result[1] // 1 0
-                                insert_name(testnum)
-                            },
-                            error: function (e) {
-                            }
-                        });
+                        //$.ajax({
+                        //    type: 'post',
+                        //    url: 'database/Into_fish/Into_fish_detail.ashx',
+                        //    async: false,
+                        //    data: {
+                        //        Fish_id: return_id,//原先ID
+                        //        number: result[1],//魚隻數量
+                        //        Pool_id: result[0],//池號
+                        //        into_time2: $("#into_time2").val(),
+                        //        Fish_AVGweight: ($("#fry_weight").val()) / 1000
+                        //    },
+                        //    success: function (e) {
+                        //        update_poolview()
+                        //        /**分配剩餘魚隻**/
+                        //        testnum = testnum - result[1] // 1 0
+                        //        insert_name(testnum)
+                        //    },
+                        //    error: function (e) {
+                        //    }
+                        //});
                     }
-              
-
                 }, function () {
                     swal.resetDefaults()
                 })
@@ -595,8 +602,51 @@
                     type: 'success',
                     title: '入魚成功!',
                     allowOutsideClick: false //不可點背景關閉
-                }).then(function () {
-                    location.reload();
+                }).then(function () {                      
+                    /**新增魚的Fish表單**/
+                    $.ajax({
+                        type: 'post',
+                        url: 'database/Into_fish/Into_fish_insert.ashx',
+                        async: false,
+                        data: {
+                            fish_classification: $("#fish_classification").val(),
+                            supplier_classification: $("#supplier_classification").val(),
+                            into_time1: $("#into_time1").val(),
+                            into_time2: $("#into_time2").val(),
+                            fry_weight: $("#fry_weight").val(),
+                            start_number: $("#start_number").val()
+                        },
+                        success: function (e) {
+                            /**新增Fish 表單  成功**/                           
+                            /**增加魚群細節**/
+                            for (var i = 0 ; i < data_num.length; i++) { //撈list資料 ，一次存
+                                $.ajax({
+                                    type: 'post',
+                                    url: 'database/Into_fish/Into_fish_detail.ashx',
+                                    async: false,
+                                    data: {
+                                        Fish_id: e,//原先ID
+                                        number: data_num[i],//魚隻數量
+                                        Pool_id: data_pools[i],//池號
+                                        into_time2: $("#into_time2").val(),
+                                        Fish_AVGweight: ($("#fry_weight").val()) / 1000
+                                    },
+                                    success: function (e) {
+
+                                    },
+                                    error: function (e) {
+                                    }
+                                });
+                                console.log(data_num[i] + "," + data_pools[i])
+                            }     
+                        },
+                        error: function (e) {
+                            notyf.alert('錯誤');
+                        }
+                    });
+
+
+                    //location.reload();
                 })
             }
         }
@@ -653,6 +703,7 @@
 
             });
         });
+        
     </script>
 </body>
 </html>
