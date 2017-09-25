@@ -413,6 +413,7 @@
     <script>
         var bt_id = [];//抓取餵食資料刪除按鈕編號
         var bt_detail = [];
+        var Max_date; //最大日期
         //表格資料載入
         $.ajax({
             url: 'database/measuring/measuring_view.ashx',
@@ -425,10 +426,10 @@
             },
             success: function (measuring_json) {
                 var cssString = "";
-                var Max_date = new Date(Fish_detail_Move_date);
+                Max_date = new Date(Fish_detail_Move_date);
                 console.log(measuring_json)
                 for (var index in measuring_json) {
-                    if (measuring_json[index].Fish_AVGweight != '-1') {
+                    if (measuring_json[index].status == '測量') {
                         cssString += '<tr data-toggle="modal" data-target="#jump-Measuring">' +
                             '<td>' + measuring_json[index].date.slice(0, 10) + '</td>           ' +
                             '<td>' + measuring_json[index].Measuring_id + '</td>        ' +
@@ -468,83 +469,103 @@
             var modify_Measuring_before_Fish_AVGweight = $.trim(_tr.find("td:eq(5)").text())
             //刪除功能
             $("#modify_del").click(function (e) {
-                e.preventDefault();                 
-                $.ajax({
-                    url: 'database/measuring/measuring_delete.ashx',
-                     type: 'post',
-                     data: {
-                         Pool_id: Page_Pool_id,
-                         Fish_detail_id: Fish_detail_id,
-                         id: modify_Measuring_id
-                     },
-                     async: false,//啟用同步請求
-                     success: function (event) {
-                         if (event === "success") {
-                             swal({
-                                 type: 'success',
-                                 title: '刪除成功!',
-                                 allowOutsideClick: false //不可點背景關閉
-                             }).then(function () {
-                                 location.reload();
-                             })
-                         } else {
-                             notyf.alert('刪除失敗');
-                         }
-                     },
-                     error: function (e) {
-                         notyf.alert('伺服器錯誤,無法載入');
-                     }
-                 });
+                e.preventDefault();
+                if ((Date.parse(Max_date)).valueOf() === (Date.parse(new Date(modify_Measuring_time.slice(0, 10)))).valueOf()) {
+                    $.ajax({
+                        url: 'database/measuring/measuring_delete.ashx',
+                        type: 'post',
+                        data: {
+                            Pool_id: Page_Pool_id,
+                            Fish_detail_id: Fish_detail_id,
+                            id: modify_Measuring_id,
+                            Measuring_Fish_AVGweight: Fish_detail_Fish_AVGweight,
+                            number: modify_Measuring_before_number
+                        },
+                        async: false,//啟用同步請求
+                        success: function (event) {
+                            if (event === "success") {
+                                swal({
+                                    type: 'success',
+                                    title: '刪除成功!',
+                                    allowOutsideClick: false //不可點背景關閉
+                                }).then(function () {
+                                    location.reload();
+                                })
+                            } else {
+                                notyf.alert('刪除失敗');
+                            }
+                        },
+                        error: function (e) {
+                            notyf.alert('伺服器錯誤,無法載入');
+                        }
+                    });
+                }else{
+                    swal({
+                        title: "這不是最後一筆資料，不能刪除",
+                        type: "warning"
+                    })
+                }               
             });
             $("#modify_UP").click(function (e) {
                 var table_number = document.getElementById('modify_Measuring_number').value;
-                var table_Fish_AVGweight = document.getElementById('modify_Measuring_Fish_AVGweight').value;;
-                var table_date = document.getElementById('modify_Measuring_time').value;;
+                var table_Fish_AVGweight = document.getElementById('modify_Measuring_Fish_AVGweight').value;
+
+
+                var table_date = document.getElementById('modify_Measuring_time').value;
+                var modify_Measuring_before_Fish_AVGweight = $("#modify_Measuring_before_Fish_AVGweight").val();
+                
                 e.preventDefault();
-                $.ajax({
-                    url: 'database/measuring/measuring_update.ashx',
-                    type: 'post',
-                    data: {
+                if ((Date.parse(Max_date)).valueOf() === (Date.parse(new Date(modify_Measuring_time.slice(0, 10)))).valueOf()) {
+                    $.ajax({
+                        url: 'database/measuring/measuring_update.ashx',
+                        type: 'post',
+                        data: {
 
-                        Pool_id: Page_Pool_id,
-                        Fish_detail_id: Fish_detail_id,
-                        number: table_number,
-                        Measuring_Fish_AVGweight: table_Fish_AVGweight,
-                        date: table_date,
-                        Fish_detail_before_number: Fush_Pool_Pool_number,
-                        Fish_detail_before_Fish_AVGweight: Fish_detail_Fish_AVGweight,
-                        id: modify_Measuring_id
-                    },
-                    async: false,//啟用同步請求
-                    success: function (event) {
-                        if (event === "success") {
-                            swal({
-                                type: 'success',
-                                title: '修改成功!',
-                                allowOutsideClick: false //不可點背景關閉
-                            }).then(function () {
-                                location.reload();
-                            })
-                        } else {
-                            notyf.alert('修改失敗');
+                            Pool_id: Page_Pool_id,
+                            Fish_detail_id: Fish_detail_id,
+                            number: table_number,
+                            Measuring_Fish_AVGweight: table_Fish_AVGweight,
+                            date: table_date,
+                            Fish_detail_before_number: modify_Measuring_before_number,
+                            Fish_detail_before_Fish_AVGweight: modify_Measuring_before_Fish_AVGweight,
+                            status: '測量',
+                            id: modify_Measuring_id
+                        },
+                        async: false,//啟用同步請求
+                        success: function (event) {
+                            if (event === "success") {
+                                swal({
+                                    type: 'success',
+                                    title: '修改成功!',
+                                    allowOutsideClick: false //不可點背景關閉
+                                }).then(function () {
+                                    location.reload();
+                                })
+                            } else {
+                                notyf.alert('修改失敗');
+                            }
+                        },
+                        error: function (e) {
+                            notyf.alert('伺服器錯誤,無法載入');
                         }
-                    },
-                    error: function (e) {
-                        notyf.alert('伺服器錯誤,無法載入');
-                    }
-                });
+                    });
+                } else {
+                    swal({
+                        title: "這不是最後一筆資料，不能修改",
+                        type: "warning"
+                    })
+                }
             });
-
         });
         $(document).ready(function () {
             FormPlugins.init();
         });
-                $(document).ready(function () {
+        $(document).ready(function () {
             /**測量紀錄新增**/
             $("#Measuring").submit(function (e) {
-                e.preventDefault();              
-                swal({                   
-                    title: '確認新增此筆測量紀錄？' ,
+                e.preventDefault();
+                swal({
+                    title: '確認新增此筆測量紀錄？',
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -556,7 +577,7 @@
                 }).then(function (isConfirm) {
                     if (isConfirm) {
                         /**測量紀錄新增**/
-                     //   Fish_detail_Fish_AVGweight = 0;
+                        //   Fish_detail_Fish_AVGweight = 0;
                         $.ajax({
                             url: 'database/measuring/measuring_insert.ashx',
                             type: 'post',
@@ -565,8 +586,9 @@
                                 Pool_id: Page_Pool_id,
                                 Fish_detail_id: Fish_detail_id,
                                 number: $("#Measuring_number").val(),
-                                Measuring_Fish_AVGweight: $("#Measuring_Fish_AVGweight").val(),                              
+                                Measuring_Fish_AVGweight: $("#Measuring_Fish_AVGweight").val(),
                                 date: $("#Measuring_time").val(),
+                                status: '測量',
                                 Fish_detail_before_number: Fush_Pool_Pool_number,
                                 Fish_detail_before_Fish_AVGweight: Fish_detail_Fish_AVGweight
 

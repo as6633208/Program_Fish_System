@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.Collections;
 public class move_fish : IHttpHandler {
 
-    public void ProcessRequest(HttpContext context)
+   public void ProcessRequest(HttpContext context)
     {
         string array = context.Request.Form["Fish_Diver_Arrray"].ToString();
         string Fish_detail_Fish_id = context.Request.Form["Fish_detail_Fish_id"].ToString(); //魚群編號
@@ -15,6 +15,7 @@ public class move_fish : IHttpHandler {
         string Page_Pool_id = context.Request.Form["Page_Pool_id"].ToString(); //原池編號
         string Fish_amount = context.Request.Form["count"].ToString(); //總魚數
         string Fish_Pool_number = context.Request.Form["Fush_Pool_Pool_number"].ToString(); //魚池數量
+        string status = context.Request.Form["status"].ToString(); //status
         string[] fish_diver = array.Split('&');
         ArrayList all_varible = new ArrayList();
         foreach (var fish in fish_diver)
@@ -35,10 +36,12 @@ public class move_fish : IHttpHandler {
                 if (dt_fish_detail.Rows[0]["Fish_size"].ToString() == "0")
                 {
                     size = all_varible[index + 3].ToString();
+                }else if(all_varible[index + 3].ToString().Equals("null")){  //轉池 沒體態
+                    size = dt_fish_detail.Rows[0]["Fish_size"].ToString();
                 }
                 else
                 {
-                    size = dt_fish_detail.Rows[0]["Fish_size"].ToString() + all_varible[index + 3].ToString();
+                    size =  all_varible[index + 3].ToString(); //轉池體型不換
                 }
                 int re_ = method.Fish_detail_insert(Fish_detail_Fish_id,
                 Fish_detail_id,
@@ -73,9 +76,13 @@ public class move_fish : IHttpHandler {
                     {
                         size = all_varible[index + 3].ToString();
                     }
+                    else if(all_varible[index + 3].ToString().Equals("null")) //轉池 沒體態
+                    {  //轉池 沒體態
+                        size = dt_fish_detail.Rows[0]["Fish_size"].ToString();
+                    }
                     else
                     {
-                        size = dt_fish_detail.Rows[0]["Fish_size"].ToString() + all_varible[index + 3].ToString();
+                        size =  all_varible[index + 3].ToString();
                     }
                     //新增細節
                     int result_num = method.Fish_detail_insert(Fish_detail_Fish_id,
@@ -96,18 +103,23 @@ public class move_fish : IHttpHandler {
                 Fish_detail_id,
                 all_varible[index + 4].ToString(),
                 all_varible[index].ToString(),
-                all_varible[index + 3].ToString(),
+                dt_fish_detail.Rows[0]["Fish_size"].ToString(),
                 all_varible[index + 2].ToString(),
-                all_varible[index + 1].ToString());
+                all_varible[index + 1].ToString(),
+                status);
         }
         Method_Fish method_pool = new Method_Fish();
         //更新原魚池
         string source_pool = method_pool.Pool_update(Page_Pool_id,
-            false,
-            0,
-            "0");
+            true,
+             int.Parse(Fish_Pool_number) -  int.Parse(Fish_amount),
+            Fish_detail_id);
         //計算損益   a=池編號 b=魚池細節編號 c=分養池加總的數量 d=被分養池原本數量 e日期
-       // method_pool.Inventory(Page_Pool_id, int.Parse(Fish_detail_id),int.Parse(Fish_amount), int.Parse(Fish_Pool_number), DateTime.Now.ToString());
+        /*  method_pool.Inventory(Page_Pool_id,
+              int.Parse(Fish_detail_id),
+              int.Parse(Fish_amount), 
+              int.Parse(Fish_Pool_number), 
+              DateTime.Now.ToString());*/
     }
     public bool IsReusable {
         get {

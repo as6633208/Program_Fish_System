@@ -23,7 +23,8 @@
     <!-- ================== CSS bootstrap-select ================== -->
     <link href="css/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <!-- ================== CSS 功能樣式 ================== -->
-    <link href="css/tableTools/jquery.dataTables.min.css" rel="stylesheet" />  <link href="css/sen/sen.css" rel="stylesheet" />
+    <link href="css/tableTools/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="css/sen/sen.css" rel="stylesheet" />
 </head>
 
 
@@ -43,7 +44,7 @@
                     <a href="#" class="dropdown-toggle pr-0" data-toggle="dropdown">歡迎登入系統  <img src="image/user.png" alt="user_auth" class="user-auth-img img-circle" /><span class="user-online-status"></span></a>
                     <ul class="dropdown-menu user-auth-dropdown" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
                         <li>
-                            <a href="" id="Sign_out"><i class="fa fa-fw fa-power-off" ></i> 登出</a>
+                            <a href="" id="Sign_out"><i class="fa fa-fw fa-power-off"></i> 登出</a>
                         </li>
                     </ul>
                 </li>
@@ -208,26 +209,27 @@
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <div class="input-group date" id="datepicker-disabled-past1" data-date-format="yyyy-mm-dd">
-                                                                    <input type="text" class="form-control" placeholder="請選擇日期" id="Measuring_time" required />
+                                                                    <input type="text" class="form-control" placeholder="請選擇日期" id="Measuring_time" />
                                                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>                                                
+                                                    </div>
                                                     <div class="form-group">
-                                                        <label class="col-sm-3 control-label">魚隻數量：</label>
+                                                        <label class="col-sm-3 control-label">少幾隻魚</label>
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
                                                                 <div class="input-group-addon"><i class="icon-user"></i></div>
-                                                                <input  type="number" min="0"   class="form-control" id="Measuring_number" placeholder="隻" required>
+                                                                <input type="number" min="0" class="form-control" id="Measuring_number" placeholder="隻" required>
                                                             </div>
                                                         </div>
-                                                    </div>                                                                                                    
+                                                    </div>
+
                                                     <div class="form-group mb-0">
                                                         <div class="col-sm-offset-3 col-sm-9">
                                                             <button type="submit" class="btn btn-success ">新增</button>
                                                         </div>
-                                                    </div>                                              
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -250,8 +252,8 @@
                                                     <tr>
                                                         <th>耗損日期</th>
                                                         <th>耗損編號</th>
-                                                        <th>耗損後數量</th>    
-                                                        <th>耗損前數量</th>                                                   
+                                                        <th>耗損後數量</th>
+                                                        <th>耗損前數量</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="supplier_view"></tbody>
@@ -265,7 +267,6 @@
                 </div>
 
                 <!---Table--->
-               
                 <!-- Footer -->
                 <footer class="footer container-fluid pl-30 pr-30">
                     <div class="row">
@@ -300,14 +301,14 @@
                                 <label class="col-sm-3 control-label">耗損日期：</label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
-                                        <div class="input-group date" id="datepicker-disabled-past2" data-date-format="yyyy-mm-dd"  minDate="0" >
+                                        <div class="input-group date" id="datepicker-disabled-past2" data-date-format="yyyy-mm-dd">
                                             <input type="text" class="form-control" placeholder="請選擇日期" id="modify_Measuring_time" />
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>          
-                          <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <label for="modify_Measuring_id" class="col-sm-3 control-label">耗損編號：</label>
                                 <div class="col-sm-7">
                                     <div class="input-group">
@@ -321,19 +322,20 @@
                                 <div class="col-sm-7">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="icon-user"></i></div>
-                                        <input  type="number" step="0.01" min="0"  class="form-control" id="modify_Measuring_number" >
+                                        <input type="number" step="0.01" min="0" class="form-control" id="modify_Measuring_number">
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="before_number" class="col-sm-3 control-label">測前數量：</label>
                                 <div class="col-sm-7">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="icon-user"></i></div>
-                                        <input  type="number" step="0.01" min="0"  class="form-control" id="modify_Measuring_before_number" disabled>
+                                        <input type="number" step="0.01" min="0" class="form-control" id="modify_Measuring_before_number" disabled>
                                     </div>
                                 </div>
-                            </div>                         
+                            </div>
                         </form>
                     </div>
 
@@ -381,6 +383,7 @@
     <script>
         var bt_id = [];//抓取餵食資料刪除按鈕編號
         var bt_detail = [];
+        var Max_date;
         //表格資料載入
         $.ajax({
             url: 'database/measuring/measuring_view.ashx',
@@ -393,20 +396,18 @@
             },
             success: function (measuring_json) {
                 var cssString = "";
+                Max_date = new Date(Fish_detail_Move_date);
                 console.log(measuring_json)
-                var Max_date = new Date(Fish_detail_Move_date);
                 for (var index in measuring_json) {
-                    //耗損日 耗損編號 耗損後數量 耗損前數量
-                    //Fish_AVGweight -1 為耗損
-                    if (measuring_json[index].Fish_AVGweight == '-1'){
+                    if (measuring_json[index].status == '耗損') {
                         cssString += '<tr data-toggle="modal" data-target="#jump-Measuring">' +
                             '<td>' + measuring_json[index].date.slice(0, 10) + '</td>           ' +
                             '<td>' + measuring_json[index].Measuring_id + '</td>        ' +
                             '<td>' + measuring_json[index].number + '</td>        ' +
                             '<td>' + measuring_json[index].before_number + '</td>         ' +
-                            '</tr>'                 
+                            '</tr>'
                     }
-                    if (Max_date < new Date(measuring_json[index].date.slice(0, 10))){
+                    if (Max_date < new Date(measuring_json[index].date.slice(0, 10))) {
                         Max_date = new Date(measuring_json[index].date.slice(0, 10));
                     }
                 }
@@ -417,45 +418,35 @@
             error: function (e) {
                 notyf.alert('伺服器錯誤,無法載入' + e);
             }
-        });        
+        });
         $('table > tbody > tr').click(function () {
-            //最後一筆  //耗損日 耗損編號 耗損後數量 耗損前數量
+            //最後一筆
             var _tr = $("#supplier_view").children("tr:last");
             var Measuring_id = $.trim(_tr.find("td:eq(1)").text());
-
             $("#modify_Measuring_time").val($.trim(_tr.find("td:eq(0)").text()))
             $("#modify_Measuring_id").val($.trim(_tr.find("td:eq(1)").text()))
             $("#modify_Measuring_number").val($.trim(_tr.find("td:eq(2)").text()))
             $("#modify_Measuring_before_number").val($.trim(_tr.find("td:eq(3)").text()))
+
             var modify_Measuring_time = $.trim(_tr.find("td:eq(0)").text())
             var modify_Measuring_id = $.trim(_tr.find("td:eq(1)").text())
             var modify_Measuring_number = $.trim(_tr.find("td:eq(2)").text())
             var modify_Measuring_before_number = $.trim(_tr.find("td:eq(3)").text())
-            //刪除功能
-            $("#modify_del").click(function (e) {
-                e.preventDefault();            
 
-                swal({
-                    title: '確認刪除此筆耗損紀錄？',
-                    text: "",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    allowOutsideClick: false,//不可點背景關閉
-                    confirmButtonText: '確認！',
-                    cancelButtonText: '取消'
-                }).then(function (isConfirm) {
-                    if (isConfirm) {
-                        /**耗損紀錄刪除**/
-                        //   Fish_detail_Fish_AVGweight = 0;
+           
+                //刪除功能
+                $("#modify_del").click(function (e) {
+                    e.preventDefault();
+                    if ((Date.parse(Max_date)).valueOf() === (Date.parse(new Date(modify_Measuring_time.slice(0, 10)))).valueOf()) {
                         $.ajax({
                             url: 'database/measuring/measuring_delete.ashx',
                             type: 'post',
                             data: {
                                 Pool_id: Page_Pool_id,
                                 Fish_detail_id: Fish_detail_id,
-                                id: modify_Measuring_id
+                                id: modify_Measuring_id,
+                                Measuring_Fish_AVGweight: Fish_detail_Fish_AVGweight,
+                                number: Fush_Pool_Pool_number
                             },
                             async: false,//啟用同步請求
                             success: function (event) {
@@ -475,49 +466,58 @@
                                 notyf.alert('伺服器錯誤,無法載入');
                             }
                         });
+                    } else {
+                        swal({
+                            title: "這不是最後一筆資料，不能刪除",
+                            type: "warning"
+                        })
                     }
-                })
-
-            });
-            $("#modify_UP").click(function (e) {
-                var table_number = document.getElementById('modify_Measuring_number').value;
-                var table_Fish_AVGweight = -1;
-                var table_date = document.getElementById('modify_Measuring_time').value;
-                e.preventDefault();
-                $.ajax({
-                    url: 'database/measuring/measuring_update.ashx',
-                    type: 'post',
-                    data: {
-
-                        Pool_id: Page_Pool_id,
-                        Fish_detail_id: Fish_detail_id,
-                        number: table_number,
-                        Measuring_Fish_AVGweight: table_Fish_AVGweight,
-                        date: table_date,
-                        Fish_detail_before_number: Fush_Pool_Pool_number,
-                        Fish_detail_before_Fish_AVGweight: Fish_detail_Fish_AVGweight,
-                        id: modify_Measuring_id
-                    },
-                    async: false,//啟用同步請求
-                    success: function (event) {
-                        if (event === "success") {
-                            swal({
-                                type: 'success',
-                                title: '修改成功!',
-                                allowOutsideClick: false //不可點背景關閉
-                            }).then(function () {
-                                location.reload();
-                            })
-                        } else {
-                            notyf.alert('修改失敗');
-                        }
-                    },
-                    error: function (e) {
-                        notyf.alert('伺服器錯誤,無法載入');
-                    }
+                    
                 });
-            });
-
+                $("#modify_UP").click(function (e) {
+                    var table_number = document.getElementById('modify_Measuring_number').value;
+                    var table_date = document.getElementById('modify_Measuring_time').value;
+                    e.preventDefault();
+                    if ((Date.parse(Max_date)).valueOf() === (Date.parse(new Date(modify_Measuring_time.slice(0, 10)))).valueOf()) {
+                        $.ajax({
+                            url: 'database/measuring/measuring_update.ashx',
+                            type: 'post',
+                            data: {
+                                Pool_id: Page_Pool_id,
+                                Fish_detail_id: Fish_detail_id,
+                                number: table_number,
+                                Measuring_Fish_AVGweight: Fish_detail_Fish_AVGweight,
+                                date: table_date,
+                                Fish_detail_before_number: modify_Measuring_before_number,
+                                Fish_detail_before_Fish_AVGweight: Fish_detail_Fish_AVGweight,
+                                status: '耗損',
+                                id: modify_Measuring_id
+                            },
+                            async: false,//啟用同步請求
+                            success: function (event) {
+                                if (event === "success") {
+                                    swal({
+                                        type: 'success',
+                                        title: '修改成功!',
+                                        allowOutsideClick: false //不可點背景關閉
+                                    }).then(function () {
+                                        location.reload();
+                                    })
+                                } else {
+                                    notyf.alert('修改失敗');
+                                }
+                            },
+                            error: function (e) {
+                                notyf.alert('伺服器錯誤,無法載入');
+                            }
+                        });
+                    } else {
+                        swal({
+                            title: "這不是最後一筆資料，不能修改",
+                            type: "warning"
+                        })
+                    }                
+                });
         });
         $(document).ready(function () {
             FormPlugins.init();
@@ -525,9 +525,9 @@
         $(document).ready(function () {
             /**耗損紀錄新增**/
             $("#Measuring").submit(function (e) {
-                e.preventDefault();              
-                swal({                   
-                    title: '確認新增此筆耗損紀錄？' ,
+                e.preventDefault();
+                swal({
+                    title: '確認新增此筆耗損紀錄？',
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
@@ -539,45 +539,51 @@
                 }).then(function (isConfirm) {
                     if (isConfirm) {
                         /**耗損紀錄新增**/
-                     //   Fish_detail_Fish_AVGweight = 0;
-                        $.ajax({
-                            url: 'database/measuring/measuring_insert.ashx',
-                            type: 'post',
-                            async: false,
-                            data: {
-                                Pool_id: Page_Pool_id,
-                                Fish_detail_id: Fish_detail_id,
-                                number: $("#Measuring_number").val(),
-                                Measuring_Fish_AVGweight: '-1',                              
-                                date: $("#Measuring_time").val(),
-                                Fish_detail_before_number: Fush_Pool_Pool_number,
-                                Fish_detail_before_Fish_AVGweight: Fish_detail_Fish_AVGweight
+                        //防呆 耗損數量大於池
+                        if ($("#Measuring_number").val() >= Fush_Pool_Pool_number) {
+                            notyf.alert('數量錯誤');
+                        } else {
+                            $.ajax({
+                                url: 'database/measuring/measuring_insert.ashx',
+                                type: 'post',
+                                async: false,
+                                data: {
+                                    Pool_id: Page_Pool_id,
+                                    Fish_detail_id: Fish_detail_id,
+                                    number: (Fush_Pool_Pool_number - $("#Measuring_number").val()),
+                                    Measuring_Fish_AVGweight: Fish_detail_Fish_AVGweight,
+                                    date: $("#Measuring_time").val(),
+                                    status: '耗損',
+                                    Fish_detail_before_number: Fush_Pool_Pool_number,
+                                    Fish_detail_before_Fish_AVGweight: Fish_detail_Fish_AVGweight
 
-                            },
-                            success: function (e) {
-                                if (e == "success") {
-                                    swal({
-                                        type: 'success',
-                                        title: '新增耗損記錄成功!',
-                                        allowOutsideClick: false //不可點背景關閉
-                                    }).then(function () {
-                                        location.reload();
-                                    })
-                                } else {
-                                    notyf.alert('新增失敗');
+                                },
+                                success: function (e) {
+                                    if (e == "success") {
+                                        swal({
+                                            type: 'success',
+                                            title: '新增耗損記錄成功!',
+                                            allowOutsideClick: false //不可點背景關閉
+                                        }).then(function () {
+                                            location.reload();
+                                        })
+                                    } else {
+                                        notyf.alert('新增失敗');
+                                    }
+                                    console.log(Fish_detail_id)
+                                },
+                                error: function (e) {
+                                    notyf.alert('伺服器錯誤,無法載入' + e);
                                 }
-                                console.log(Fish_detail_id)
-                            },
-                            error: function (e) {
-                                notyf.alert('伺服器錯誤,無法載入' + e);
-                            }
-                        });
+                            });
+                        }
+                       
                     }
                 })
             });
         });
-        /**bootstrap modal 載入資料**/       
-   
+        /**bootstrap modal 載入資料**/
+
 
     </script>
 </body>
