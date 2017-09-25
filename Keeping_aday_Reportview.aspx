@@ -33,13 +33,13 @@
       
 
         <rsweb:ReportViewer ID="Keeping_aday_Viewer" runat="server" Font-Names="Verdana" Font-Size="8pt" Height="698px" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="1376px">
-            <LocalReport ReportPath="Feeds_Aday.rdlc">
+            <LocalReport ReportPath="Feed_Reportview.rdlc">
                 <DataSources>
                     <rsweb:ReportDataSource DataSourceId="Feeds_Aday" Name="DataSet1" />
                 </DataSources>
             </LocalReport>
         </rsweb:ReportViewer>
-        <asp:ObjectDataSource ID="Feeds_Aday" runat="server" SelectMethod="Get" TypeName="Feed_aday">
+        <asp:ObjectDataSource ID="Feeds_Aday" runat="server" SelectMethod="Get" TypeName="Feed_Reportview">
             <SelectParameters>
                 <asp:CookieParameter CookieName="Feed_aday_time" Name="str1" Type="String" />
             </SelectParameters>
