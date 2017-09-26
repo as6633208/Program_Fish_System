@@ -22,9 +22,10 @@ public class measuring_update : IHttpHandler {
         string date =context.Request.Form["date"].ToString();
         string before_number =context.Request.Form["Fish_detail_before_number"].ToString();
         string before_Fish_AVGweight =context.Request.Form["Fish_detail_before_Fish_AVGweight"].ToString();
+        string status = context.Request.Form["status"].ToString();
         string id=context.Request.Form["id"].ToString();
         Method_Fish method = new Method_Fish();
-        string re_ = method.Measuring_update(Pool_id,Fish_detail_id,number,Fish_AVGweight,date,before_number,before_Fish_AVGweight,id);        
+        string re_ = method.Measuring_update(Pool_id,Fish_detail_id,number,Fish_AVGweight,date,before_number,before_Fish_AVGweight,id,status);        
         context.Response.Write(re_);//回傳資料
         }
     }

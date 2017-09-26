@@ -362,8 +362,11 @@
                             location.href = './Measuring.html?Pool_id=' + Page_Pool_id + '';
                         });
                     } else {
+                        console.log($(".move_select").val());
+                        $(".move_select").val(Fish_detail_Fish_size);
+                        console.log($(".move_select").val());
                         $.ajax({
-                            url: 'database/Diver_Fish/diver_fish.ashx',
+                            url: 'database/Move_fish/move_fish.ashx',
                             type: 'post',
                             dataType: 'text',
                             data: {
@@ -371,7 +374,8 @@
                                 Fish_detail_id: Fish_detail_id,
                                 Page_Pool_id: Page_Pool_id,
                                 count: count,
-                                Fush_Pool_Pool_number: Fush_Pool_Pool_number
+                                Fush_Pool_Pool_number: Fush_Pool_Pool_number,
+                                status: '轉池'
                             },
                             async: false,//啟用同步請求
                             success: function (Fish_kind_Json) {
@@ -459,7 +463,7 @@
                     '                                        <div class="col-sm-9">                                                                                                ' +
                     '                                            <div class="input-group">                                                                                         ' +
                     '                                                <select  name="fish_size" data-style="btn-primary btn-outline" required >                                       ' +
-                    '                                                    <option value="null" selected>請選擇體態</option>                                                             ' +
+                    '                                                    <option class="move_select" value="null" selected>請選擇體態</option>                                                             ' +
                     '                                                    <option data-tokens="S">S</option>                                                                      ' +
                     '                                                </select>                                                                                                     ' +
                     '                                            </div>                                                                                                            ' +
