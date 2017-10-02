@@ -76,6 +76,7 @@ public class Feed_Reportview
 							 FROM  Feed T5 INNER JOIN
                                              Fodder ON T5.Fodder_id = Fodder.Fodder_id    
 							 WHERE   (T5.date = @time) AND T5.Pool_id = @pools FOR XML PATH('')), 1, 1, '')) AS [Fodder_name], sum( cast (Feed.Bait as float)) as tatal_bait
+	                        , sum( cast (Feed.Fodder_number as float)) as tatal_fodder
                              FROM              Feed INNER JOIN
                                                          Fodder ON Feed.Fodder_id = Fodder.Fodder_id INNER JOIN
                                                          Medicine ON Feed.Medicine_id = Medicine.Medicine_id
@@ -157,14 +158,11 @@ public class Feed_Reportview
                 Inventory_check = "0";
             }
             dr[COL_10] = Inventory_check;//損益
-            dr[COL_11] = (
-                            (  Int32.Parse(dt_Feed_batch.Rows[0][13].ToString()) +
-                             ( Int32.Parse(dt_Feed_data.Rows[0][8].ToString())  *0.25 )    
-                                                                                     )  
-                            /  Int32.Parse(dt_Feed_batch.Rows[0][2].ToString())
-                            / Int32.Parse(dt_Feed_batch.Rows[0][3].ToString()) * 100  
+
+            dr[COL_11] = ( Math.Round(((float.Parse(dt_Feed_data.Rows[0][9].ToString()) * 30 + (Int32.Parse(dt_Feed_data.Rows[0][8].ToString()) * 0.25))
+                            / Int32.Parse(dt_Feed_batch.Rows[0][2].ToString()) / float.Parse(dt_Feed_batch.Rows[0][3].ToString()) * 100), 2)
                          ).ToString();
-            //投餌率  ( 總重 + 生餌/4 ) / 尾數 / 平均魚種 * 100
+            //投餌率  ( 總重 + 生餌/4 ) / 尾數 / 平均魚種 * 100   1 4
             dr[COL_12] = dt_Feed_data.Rows[0][3];//添加物劑量
             dr[COL_13] = dt_Feed_data.Rows[0][6];//添加物名稱
             dr[COL_14] = dt_Feed_data.Rows[0][5];//生餌

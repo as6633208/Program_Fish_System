@@ -16,18 +16,15 @@
     <!-- Data table CSS -->
     <!-- CSS Main -->
     <link href="css/style.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
     <!-- ================== CSS notify樣式 ================== -->
     <link href="css/notify/notyf.min.css" rel="stylesheet" />
     <!-- ================== CSS sweetalert2 ================== -->
     <link href="css/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <!-- ================== CSS 功能樣式 ================== -->
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
 
-    <style>
-        .ui-datepicker-calendar {
-            display: none;
-        }  
-    </style>
 </head>
+
 
 <body>
     <!--Preloader-->
@@ -129,8 +126,9 @@
                 <div class="row heading-bg  bg-blue">
                     <!--Breadcrumb-->
                     <ol class="breadcrumb">
+                        <li><span>首頁</span></li>
                         <li><span>報表管理</span></li>
-                        <li><span>月報表(飼料耗用)</span></li>
+                        <li class="active"><span>魚隻變動表</span></li>
                     </ol>
                     <!--Breadcrumb-->
                 </div>
@@ -144,22 +142,12 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-xs-12">
                                             <div class="form-wrap">
-                                                <form class="form-horizontal" id="feed_consumption_select" method="post">
+                                                <form class="form-horizontal" id="supplier_insert" method="post">
                                                     <div class="form-group">
-                                                        <label for="supplier_classification" class="col-sm-3 control-label">供應商：</label>
+                                                        <label for="supplier_classification" class="col-sm-3 control-label">池號：</label>
                                                         <div class="col-sm-9">
                                                             <div class="input-group">
-                                                                <select class="selectpicker" data-style="btn-primary btn-outline" id="supplier_classification" onchange="changed(this)">
-                                                                    <option value="" selected>請選擇分類</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="feed_classification" class="col-sm-3 control-label">飼料名稱：</label>
-                                                        <div class="col-sm-9">
-                                                            <div class="input-group">
-                                                                <select class="selectpicker" data-style="btn-primary btn-outline" id="feed_classification" onchange="changed_feed(this)">
+                                                                <select class="selectpicker" data-style="btn-primary btn-outline" id="supplier_classification">
                                                                     <option value="" selected>請選擇分類</option>
                                                                 </select>
                                                             </div>
@@ -218,22 +206,6 @@
     <script src="javascript/init.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
     <script src="javascript/jquery-ui.min.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('.date-picker').datepicker({
-               changeMonth: true,
-               changeYear: true,
-               showButtonPanel: true,
-               dateFormat: 'yy-MM',
-               onClose: function (dateText, inst) {
-                   var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-                   var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                   $(this).datepicker('setDate', new Date(year, month));
-               }
-            });
-        });
-    </script>
-    
     <!-- Slimscroll JavaScript -->
     <script src="javascript/jquery.slimscroll.js"></script>
     <!-- Init -->
@@ -249,79 +221,83 @@
     <!-- ================== JS IE sweetalert ================== -->
     <script src="javascript/sweetalert2/core-js.js"></script>
     <script>
-        /**設定權限**/
-        $(document).ready(function () {
-            if (Cookies.get('authority') == 3) {
-                location.href = '404.html';
+        var notyf = new Notyf();//notyf.js宣告使用
+        /**時間**/
+        $(function () {
+            $('.date-picker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'yy-MM',
+                onClose: function (dateText, inst) {
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    $(this).datepicker('setDate', new Date(year, month));
+                }
+            });
+        });
+        //魚池ajax
+        $.ajax({
+            url: 'database/pool/pool_view.ashx',
+            type: 'post',
+            dataType: 'json',
+            async: false,//啟用同步請求
+            success: function (Pool_Json) {
+                Fish_Pool_id = Pool_Json;
+                var Json_Pool_id = -1; //JSON 索引值
+                //搜尋池號
+                for (var Pool_id in Pool_Json) {
+                    if (Pool_Json[Pool_id]["Pool_id"] == Page_Pool_id) {
+                        Json_Pool_id = Pool_id;
+                    }
+                }
+                if (Json_Pool_id == -1) { //找不到池號為-1
+                    notyf.alert('伺服器錯誤,無法載入池號');
+                } else { //有魚池號的話，魚群細節
+                    //魚群細節編號
+                    Fish_detail_id = Pool_Json[Json_Pool_id]["Fish_detail_id"];
+                    //數量
+                    $('#pool_number').html(Pool_Json[Json_Pool_id]["Pool_number"] + "隻");
+                    Fush_Pool_Pool_number = Pool_Json[Json_Pool_id]["Pool_number"];
+                }
+            },
+            error: function (e) {
+                notyf.alert('伺服器錯誤,無法載入池號' + e);
             }
         });
+        //選擇魚池加入Pool_id
+        $.each($('#supplier_classification'), function () {
+            //判斷有沒有空
+            if (!$(this).val()) {
+                $(this).html('<option value="" selected>請選擇魚池</option>');
+                for (var Pool in Fish_Pool_id) {
+                    if (Fish_Pool_id[Pool]["Pool_id"]) {
+                        $(this).append(
+                            '<option data-tokens=' + Fish_Pool_id[Pool]["Pool_id"] + '>' + Fish_Pool_id[Pool]["Pool_id"] + '</option>'
+                        );
+                    }
+                }
+            }
+        });
+
         //Confirm_date
-        $("#document").ready(function(){
+        $("#document").ready(function () {
             $("#Confirm_date").click(function (e) {
+                if ($('#supplier_classification').val() != '' && $("#startDate").val() != '') {
+                    // alert($('#supplier_classification').val())
+                    sendVaule();
+
+                } else {
+                    notyf.alert('請選擇池號和日期！');
+                }
                 //alert($('#supplier_classification option:selected').text()+ "/" + $('#feed_classification option:selected').text())
-                sendVaule();
+
             });
         });
         function sendVaule() {
-            window.open("feed_Consumption.aspx/" +$('#supplier_classification option:selected').text()+ "-" + $('#feed_classification option:selected').text()+"-"+ $("#startDate").val(), "_blank");
-        }
-        /**載入下拉式供應商資料**/
-        $.ajax({
-            url: 'database/supplier/select_supplier.ashx',
-            type: 'post',
-            dataType: 'json',
-            data: { company_item: '飼料商' },
-            async: false,//啟用同步請求
-            success: function (Supplier_Json) {
-                for (var index in Supplier_Json) {
-                    var s = document.getElementById('supplier_classification');//取得id給予值
-                    var new_option = new Option(Supplier_Json[index].company_name, Supplier_Json[index].Fish_company_id);
-                    s.options.add(new_option);
-                }
-
-            },
-            error: function (e) {
-                notyf.alert('伺服器錯誤,無法載入' + e);
-            }
-        });
-        /**載入下拉式，連動供應商的飼料名稱**/
-        function changed(theselect) {
-            //$('#feed_classification').empty();
-            console.log(theselect.value)
-            update_company_time = theselect.value
-            $.ajax({
-                url: 'database/feedPurchase/feed_select.ashx',
-                type: 'post',
-                dataType: 'json',
-                data: { Fish_company_id: theselect.value },
-                async: false,//啟用同步請求
-                success: function (Supplier_Json) {
-                    if (Supplier_Json != "") {
-                        var s = document.getElementById('feed_classification');//取得id給予值
-                        $('#feed_classification').empty();//清空
-                        $('#feed_classification').append('<option value="" selected>請選擇分類</option>');
-                        for (var index in Supplier_Json) {
-                            var new_option = new Option(Supplier_Json[index].Fodder_name, Supplier_Json[index].Fodder_id);
-                            s.options.add(new_option);
-                            console.log(new_option);
-                            //$('#feed_classification').selectpicker('refresh');//refresh
-                        }
-                    } else {
-                        $('#feed_classification').empty();//清空
-                        $('#feed_classification').append('<option value="" selected>請選擇分類</option>');
-                        $('#feed_classification').selectpicker('refresh');//refresh
-                    }
-                },
-                error: function (e) {
-                    notyf.alert('伺服器錯誤,無法載入' + e);
-                }
-            });
-        }
-        /**catch id**/
-        function changed_feed(theselect) {
-            console.log($('#feed_classification option:selected').text())
-            feed_name = $('#feed_classification option:selected').text()
+            window.open("fish_change.aspx/" + $('#supplier_classification').val() + "-" + $("#startDate").val(), "_blank");
         }
     </script>
+    
 </body>
 </html>
