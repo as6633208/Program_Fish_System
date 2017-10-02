@@ -540,7 +540,8 @@
                     if (isConfirm) {
                         /**耗損紀錄新增**/
                         //防呆 耗損數量大於池
-                        if ($("#Measuring_number").val() >= Fush_Pool_Pool_number) {
+                        //可以將魚池 清空 >= 改為 > by sen 930 
+                        if ($("#Measuring_number").val() > Fush_Pool_Pool_number) {
                             notyf.alert('數量錯誤');
                         } else {
                             $.ajax({
