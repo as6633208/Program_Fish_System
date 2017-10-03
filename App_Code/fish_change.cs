@@ -34,7 +34,6 @@ public class fish_change
         int total_num = 0;
         DataTable dt = new DataTable();
         dt.Columns.Add(new DataColumn(COL_1));
-        dt.Columns.Add(new DataColumn(COL_2));
         dt.Columns.Add(new DataColumn(COL_3));
         dt.Columns.Add(new DataColumn(COL_4));
         dt.Columns.Add(new DataColumn(COL_5));
